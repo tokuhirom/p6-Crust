@@ -1,9 +1,14 @@
 {
   "name" : "Crust",
-  "source-url" : "",
+  "source-url" : "git://github.com/tokuhirom/p6-Crust.git",
   "perl" : "v6",
   "provides" : {
-    "Crust" : "lib/Crust.pm6"
+    "Crust::Request::Upload" : "lib/Crust/Request/Upload.pm",
+    "Crust::Utils" : "lib/Crust/Utils.pm",
+    "Crust" : "lib/Crust.pm6",
+    "Crust::Request" : "lib/Crust/Request.pm",
+    "Crust::Response" : "lib/Crust/Response.pm6",
+    "Crust::Headers" : "lib/Crust/Headers.pm6"
   },
   "depends" : [ ],
   "description" : "",
