@@ -6,7 +6,7 @@ unit class Crust;
 
 =head1 NAME
 
-Crust - blah blah blah
+Crust - Perl6 Superglue for Web frameworks and Web Servers
 
 =head1 SYNOPSIS
 
@@ -15,6 +15,12 @@ Crust - blah blah blah
 =head1 DESCRIPTION
 
 Crust is ...
+
+=head1 AUTHORS
+
+=item Tokuhiro Matsuno
+
+=item mattn
 
 =head1 COPYRIGHT AND LICENSE
 

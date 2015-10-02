@@ -3,7 +3,7 @@
 NAME
 ====
 
-Crust - blah blah blah
+Crust - Perl6 Superglue for Web frameworks and Web Servers
 
 SYNOPSIS
 ========
@@ -14,6 +14,13 @@ DESCRIPTION
 ===========
 
 Crust is ...
+
+AUTHORS
+=======
+
+  * Tokuhiro Matsuno
+
+  * mattn
 
 COPYRIGHT AND LICENSE
 =====================
