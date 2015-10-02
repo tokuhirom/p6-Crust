@@ -1,0 +1,8 @@
+use v6;
+
+use Crust::Request;
+
+sub app($env) {
+    my $req = Crust::Request.new($env);
+    return [200, [], [$req.path-info.encode('utf-8')]];
+}

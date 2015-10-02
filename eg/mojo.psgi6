@@ -1,0 +1,46 @@
+use v6;
+
+use Template::Mojo;
+use Crust::Request;
+
+my $tmpl = Template::Mojo.new(q:heredoc/END/);
+% my ($name) = @_;
+<!doctype html>
+<html>
+Hello, <%= $name %>
+<form method="post" action="/upload" enctype="multipart/form-data">
+    <input type="file" name="foo">
+    <input type="submit" name="upload">
+</form>
+</html>
+END
+
+sub app($env) {
+    my $req = Crust::Request.new($env);
+    given $req.path-info {
+        when "/" {
+            my $content = $tmpl.render($req.query-parameters<name> // 'unknown').encode('utf-8');
+            return [200,
+                [
+                        'Content-Type' => 'text/html; charset=utf-8'
+                ],
+                [$content]
+            ];
+        }
+        when "/upload" {
+            my $content = $req.uploads<foo>.path.slurp(:bin);
+            $content.perl.say;
+            return [200,
+                [
+                        'Content-Type' => 'text/plain',
+                        'content-length' => $content.bytes,
+                ],
+                [$content]
+            ];
+        }
+        default {
+            return [400, [], ['not found'.encode('utf-8')]];
+        }
+    }
+}
+

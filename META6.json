@@ -1,0 +1,14 @@
+{
+  "name" : "Crust",
+  "source-url" : "",
+  "perl" : "v6",
+  "provides" : {
+    "Crust" : "lib/Crust.pm6"
+  },
+  "depends" : [ ],
+  "description" : "",
+  "version" : "*",
+  "authors" : [
+    "Tokuhiro Matsuno"
+  ]
+}

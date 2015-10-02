@@ -1,0 +1,13 @@
+use v6;
+
+sub app($env) {
+    if ($env<PATH_INFO> eq '/exit') {
+        say 'good bye!';
+        exit;
+    }
+    return [200,
+        ['Content-Type' => 'text/plain'],
+        ["hello!!!\n".encode('utf-8')]
+    ];
+}
+
