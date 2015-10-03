@@ -10,7 +10,14 @@
     "Crust::Response" : "lib/Crust/Response.pm6",
     "Crust::Headers" : "lib/Crust/Headers.pm6"
   },
-  "depends" : [ ],
+  "depends" : [
+    "HTTP::Server::Tiny",
+    "Cookie::Baker",
+    "File::Temp",
+    "HTTP::MultiPartParser",
+    "Hash::MultiValue",
+    "URI::Escape"
+  ],
   "description" : "",
   "version" : "*",
   "authors" : [
