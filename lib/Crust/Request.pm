@@ -195,10 +195,37 @@ method parameters() {
 }
 
 method base() {
-    self!uri_base;
+    self!uri-base;
 }
 
-method !uri_base() {
+method uri() {
+    my $base = self!uri-base;
+
+    # We have to escape back PATH_INFO in case they include stuff like
+    # ? or # so that the URI parser won't be tricked. However we should
+    # preserve '/' since encoding them into %2f doesn't make sense.
+    # This means when a request like /foo%2fbar comes in, we recognize
+    # it as /foo/bar which is not ideal, but that's how the PSGI PATH_INFO
+    # spec goes and we can't do anything about it. See PSGI::FAQ for details.
+
+    # See RFC 3986 before modifying.
+    my $path_escape_class = rx!(<[^/;:@&= A..Z a..z 0..9 \$_.+!*'(),-]>)!;
+
+    my $path = ($.env<PATH_INFO>// '').subst(
+        $path_escape_class, -> $/ { $/[0].Str.ord.fmt('%%%02X') }
+    );
+    if $.env<QUERY_STRING>.defined && $.env<QUERY_STRING> ne '' {
+        $path ~= '?' ~ $.env<QUERY_STRING>
+    }
+
+    if $path ~~ m/^\// {
+        $base .= subst(/\/$/, '');
+    }
+
+    return $base ~ $path;
+}
+
+method !uri-base() {
     return ($!env<psgi.url_scheme> || "http") ~
         "://" ~
         ($!env<HTTP_HOST> || (($!env<SERVER_NAME> || "") ~ ":" ~ ($!env<SERVER_PORT> || 80))) ~
@@ -217,9 +244,6 @@ method cookies() {
     $!env<crust.cookie.string> = $!env<HTTP_COOKIE>;
 }
 
-# TODO: sub content {
-# TODO: sub raw_body { $_[0]->content }
-# TODO: sub param {
 # TODO: sub uri {
 # TODO: sub new_response {
 
