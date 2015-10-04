@@ -3,10 +3,159 @@ use v6;
 
 use HTTP::Server::Tiny;
 
-sub MAIN(Str $appfile, Str $host='127.0.0.1', Int :$port=5000) {
-    my $httpd = HTTP::Server::Tiny.new($host, $port);
+my class Getopt {
+    has $!matcher = [];
 
-    my $app = EVALFILE($appfile);
-    $httpd.run($app);
-}
+    method !long($opt, $type-name, $re, $callback, $coerece) {
+        my sub call($val is rw) {
+            if $re.defined {
+                unless $val ~~ $re {
+                    self.usage("--$opt requires $type-name parameter, but got $val");
+                }
+            }
+            if $coerece.defined {
+                $val = $coerece($val);
+            }
+            $callback($val);
+            True
+        };
+        $!matcher.append: -> $a {
+            if $a[0] eq "--$opt" {
+                $a.shift;
+                if $a.elems == 0 {
+                    self.usage("--$opt requires $type-name parameter");
+                }
+                call($a.shift);
+            } elsif $a[0] ~~ /^\-\-$opt\=(.*)$/ { # -h=3
+                my $val = $/[0].Str;
+                $a.shift;
+                call($val);
+            } else {
+                False;
+            }
+        };
+    }
 
+    method !short($opt, $type-name, $re, $callback, $coerece) {
+        my sub call($val is rw) {
+            if $re.defined {
+                unless $val ~~ $re {
+                    self.usage("-$opt requires $type-name parameter, but got $val");
+                }
+            }
+            if $coerece.defined {
+                $val = $coerece($val);
+            }
+            $callback($val);
+            True
+        };
+        $!matcher.append: -> $a {
+            if $a[0] eq "-$opt" {
+                $a.shift;
+                if $a.elems == 0 {
+                    self.usage("-$opt requires $type-name parameter");
+                }
+                call($a.shift);
+            } elsif $a[0] ~~ /^\-$opt\=(.*)$/ { # -h=3
+                my $val = $/[0].Str;
+                $a.shift;
+                call($val);
+            } else {
+                False;
+            }
+        };
+    }
+
+    method opt-str-long($long, $callback) {
+        self!long($long, 'str', Nil, $callback, Nil);
+        self;
+    }
+
+    method opt-str-short($short, $callback) {
+        self!short($short, 'str', Nil, $callback, Nil);
+        self;
+    }
+
+    method opt-int-short($short, $callback) {
+        self!short($short, 'int', rx/^<[0..9]>+$/, $callback, -> $v { $v.Int });
+        self;
+    }
+
+    method opt-int-long($long, $callback) {
+        self!long($long, 'int', rx/^<[0..9]>+$/, $callback, -> $v { $v.Int });
+        self;
+    }
+
+    method usage(Str $msg='') {
+        # TODO: auto gen
+        say $msg if $msg;
+
+        say q:to:c/EOF/;
+
+            crustup -e 'sub ($env) { 200, [], ['OK'] }'
+            crustup app.psgi
+
+            OPTIONS:
+
+                --port={PORT}
+                --host={HOST}
+
+        EOF
+
+        exit 1
+    }
+
+    method parse($args is copy) {
+        my @positional;
+
+        LOOP: while +@$args {
+            if $args[0] eq '--' {
+                $args.shift;
+                @positional.append: @$args;
+                last;
+            }
+            if $args[0] eq '-h' || $args[0] eq '--help' {
+                self.usage();
+                exit 1;
+            }
+
+            for @$!matcher -> $matcher {
+                if $matcher($args) {
+                    next LOOP
+                }
+            }
+
+            @positional.push: $args.shift;
+        }
+
+        # $PROCESS::ARGFILES = IO::ArgFiles.new(:args($args));
+
+        return @positional;
+    }
+};
+
+my Str $e;
+my Str $host = '127.0.0.1';
+my int $port = 5000;
+
+my @args = Getopt.new()
+    .opt-str-short('e',   -> $v { $e = $v })
+    .opt-int-short('p',   -> $v { $port = $v })
+    .opt-int-long('port', -> $v { $port = $v })
+    .opt-str-short('h',   -> $v { $host = $v })
+    .opt-str-long('host', -> $v { $host = $v })
+    .parse(@*ARGS);
+
+my $httpd = HTTP::Server::Tiny.new($host, $port);
+
+# eval
+my $app = do {
+    if $e {
+        EVAL($e);
+    } elsif @args.elems > 0 {
+        EVALFILE(@args[0])
+    } else {
+        EVALFILE('app.psgi')
+    }
+};
+$httpd.run($app);
