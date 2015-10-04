@@ -24,7 +24,7 @@ method protocol()     { $.env<SERVER_PROTOCOL> }
 method method()       { $.env<REQUEST_METHOD> }
 method port()         { $.env<SERVER_PORT> }
 method user()         { $.env<REMOTE_USER> }
-method request_-ri()  { $.env<REQUEST_URI> }
+method request-uri()  { $.env<REQUEST_URI> }
 method path-info()    { $.env<PATH_INFO> }
 method path()         { $.env<PATH_INFO> || '/' }
 method query-string() { $.env<QUERY_STRING> }
