@@ -56,7 +56,7 @@ my class Getopt {
                     self.usage("-$opt requires $type-name parameter");
                 }
                 call($a.shift);
-            } elsif $a[0] ~~ /^\-$opt\=(.*)$/ { # -h=3
+            } elsif $a[0] ~~ /^\-$opt(.*)$/ { # -h=3
                 my $val = $/[0].Str;
                 $a.shift;
                 call($val);
@@ -66,23 +66,15 @@ my class Getopt {
         };
     }
 
-    method opt-str-long($long, $callback) {
-        self!long($long, 'str', Nil, $callback, Nil);
+    method opt-str($short, $long, $callback) {
+        self!short($short, 'str', Nil, $callback, Nil) if $short;
+        self!long($long, 'str', Nil, $callback, Nil) if $long;
         self;
     }
 
-    method opt-str-short($short, $callback) {
-        self!short($short, 'str', Nil, $callback, Nil);
-        self;
-    }
-
-    method opt-int-short($short, $callback) {
-        self!short($short, 'int', rx/^<[0..9]>+$/, $callback, -> $v { $v.Int });
-        self;
-    }
-
-    method opt-int-long($long, $callback) {
-        self!long($long, 'int', rx/^<[0..9]>+$/, $callback, -> $v { $v.Int });
+    method opt-int($short, $long, $callback) {
+        self!short($short, 'int', rx/^<[0..9]>+$/, $callback, -> $v { $v.Int }) if $short;
+        self!long($long, 'int', rx/^<[0..9]>+$/, $callback, -> $v { $v.Int }) if $long;
         self;
     }
 
@@ -99,6 +91,7 @@ my class Getopt {
 
                 --port={PORT}
                 --host={HOST}
+                -Ilib
 
         EOF
 
@@ -139,11 +132,10 @@ my Str $host = '127.0.0.1';
 my int $port = 5000;
 
 my @args = Getopt.new()
-    .opt-str-short('e',   -> $v { $e = $v })
-    .opt-int-short('p',   -> $v { $port = $v })
-    .opt-int-long('port', -> $v { $port = $v })
-    .opt-str-short('h',   -> $v { $host = $v })
-    .opt-str-long('host', -> $v { $host = $v })
+    .opt-str('e', Nil,    -> $v { $e = $v })
+    .opt-str('I', Nil,    -> $v { @*INC.push: $v })
+    .opt-int('p', 'port', -> $v { $port = $v })
+    .opt-str('h', 'host', -> $v { $host = $v })
     .parse(@*ARGS);
 
 my $httpd = HTTP::Server::Tiny.new($host, $port);
