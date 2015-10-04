@@ -3,7 +3,7 @@ use v6;
 unit class Crust::Request;
 
 use URI::Escape;
-use Hash::MultiValue;
+use Crust::MultiValue;
 use HTTP::MultiPartParser;
 use Crust::Headers;
 use Crust::Utils;
@@ -46,7 +46,7 @@ method query-parameters() {
     my @pairs = $query_string.defined
         ?? parse-uri-query($query_string)
         !! ();
-    return Hash::MultiValue.from-pairs(|@pairs);
+    return Crust::MultiValue.from-pairs(|@pairs);
 }
 
 my sub parse-uri-query(Str $query_string is copy) {
@@ -101,7 +101,7 @@ method body-parameters() {
             given $type {
                 when 'application/x-www-form-urlencoded' {
                     my @q = parse-uri-query(self.content.decode('ascii'));
-                    Hash::MultiValue.from-pairs(@q);
+                    Crust::MultiValue.from-pairs(@q);
                 }
                 when 'multipart/form-data' {
                     my ($params, $uploads) = self!parse-multipart-parser(%opts<boundary>.encode('ascii'));
@@ -109,11 +109,11 @@ method body-parameters() {
                     $params;
                 }
                 default {
-                    Hash::MultiValue.new
+                    Crust::MultiValue.new
                 }
             }
         } else {
-            Hash::MultiValue.new
+            Crust::MultiValue.new
         }
     }
 }
@@ -121,7 +121,7 @@ method body-parameters() {
 method uploads() {
     unless $!env<crust.request.upload>:exists {
         self.body-parameters();
-        $!env<crust.request.upload> //= Hash::MultiValue.new;
+        $!env<crust.request.upload> //= Crust::MultiValue.new;
     }
     return $!env<crust.request.upload>;
 }
@@ -139,7 +139,7 @@ method !parse-multipart-parser(Blob $boundary) {
             @$h ==> map {
                 parse-header-line($_)
             } ==> my @pairs;
-            $headers = Hash::MultiValue.from-pairs: |@pairs;
+            $headers = Crust::MultiValue.from-pairs: |@pairs;
             my ($cd) = $headers<content-disposition>;
             die "missing content-disposition header in multipart" unless $cd;
             ($first, %opts) = parse-header-item($cd);
@@ -179,18 +179,18 @@ method !parse-multipart-parser(Blob $boundary) {
     );
     $parser.parse(self.content);
     $parser.finish();
-    my $params = Hash::MultiValue.from-pairs: @parameters;
-    return $params, Hash::MultiValue.from-pairs(@uploads);
+    my $params = Crust::MultiValue.from-pairs: @parameters;
+    return $params, Crust::MultiValue.from-pairs(@uploads);
 }
 
 method parameters() {
     $!env<crust.request.merged> //= do {
-        my Hash::MultiValue $q = self.query-parameters();
-        my Hash::MultiValue $b = self.body-parameters();
+        my Crust::MultiValue $q = self.query-parameters();
+        my Crust::MultiValue $b = self.body-parameters();
 
         my @pairs = |$q.all-pairs;
         @pairs.push(|$b.all-pairs);
-        Hash::MultiValue.from-pairs(|@pairs);
+        Crust::MultiValue.from-pairs(|@pairs);
     };
 }
 

@@ -2,7 +2,6 @@ use v6;
 
 use Test;
 use Crust::Request;
-use Hash::MultiValue;
 
 # body-parameters: multipart/form-data
 subtest {

@@ -2,9 +2,9 @@ use v6;
 
 unit class Crust::Headers;
 
-use Hash::MultiValue;
+use Crust::MultiValue;
 
-has $!env = Hash::MultiValue.new;
+has $!env = Crust::MultiValue.new;
 
 # $env is PSGI's env header.
 method new(Hash $env) {
