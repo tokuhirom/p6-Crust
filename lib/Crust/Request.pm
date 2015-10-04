@@ -209,7 +209,7 @@ method uri() {
     # spec goes and we can't do anything about it. See PSGI::FAQ for details.
 
     # See RFC 3986 before modifying.
-    my $path_escape_class = rx!(<[^/;:@&= A..Z a..z 0..9 \$_.+!*'(),-]>)!;
+    my $path_escape_class = rx!(<-[/;:@&= A..Z a..z 0..9 \$_.+!*'(),-]>)!;
 
     my $path = ($.env<PATH_INFO>// '').subst(
         $path_escape_class, -> $/ { $/[0].Str.ord.fmt('%%%02X') }
