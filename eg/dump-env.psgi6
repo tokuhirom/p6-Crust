@@ -1,0 +1,10 @@
+use v6;
+
+sub app(%env) {
+    my @lines;
+    for %env.kv -> $key, $value {
+        push @lines, "$key => $value"
+    }
+    my $content = @lines.join("\n").encode('utf-8');
+    return 200, ['content-length' => $content.bytes], [$content];
+}
