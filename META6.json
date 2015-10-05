@@ -16,6 +16,7 @@
     "Cookie::Baker",
     "File::Temp",
     "HTTP::MultiPartParser",
+    "Getopt::Tiny",
     "URI::Escape"
   ],
   "description" : "",
