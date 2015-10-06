@@ -1,5 +1,4 @@
 use v6;
-use Crust::Middleware;
 
 unit class Crust::Middleware::AccessLog does Callable;
 
