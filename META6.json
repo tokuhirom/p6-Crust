@@ -2,10 +2,14 @@
   "name" : "Crust",
   "source-url" : "git://github.com/tokuhirom/p6-Crust.git",
   "perl" : "v6",
+  "build-depends" : [ ],
   "provides" : {
-    "Crust::Request::Upload" : "lib/Crust/Request/Upload.pm",
     "Crust::Utils" : "lib/Crust/Utils.pm",
+    "Crust::Request::Upload" : "lib/Crust/Request/Upload.pm",
+    "Crust::Middleware::AccessLog" : "lib/Crust/Middleware/AccessLog.pm6",
+    "Crust::App::File" : "lib/Crust/App/File.pm6",
     "Crust" : "lib/Crust.pm6",
+    "Crust::MIME" : "lib/Crust/MIME.pm6",
     "Crust::Request" : "lib/Crust/Request.pm",
     "Crust::Response" : "lib/Crust/Response.pm6",
     "Crust::MultiValue" : "lib/Crust/MultiValue.pm",
@@ -20,6 +24,7 @@
     "URI::Escape"
   ],
   "description" : "",
+  "test-depends" : [ ],
   "version" : "*",
   "authors" : [
     "Tokuhiro Matsuno"
