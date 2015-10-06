@@ -2,11 +2,13 @@
 use v6;
 
 use HTTP::Server::Tiny;
+use Crust;
 use Getopt::Tiny;
 
 my $opts = {
     host => '127.0.0.1',
     port => 5000,
+    I => [],
 };
 
 get-options(
@@ -16,8 +18,17 @@ get-options(
         p|port=i
         h|host=s
         accesslog=!
+        v|version=!
     >
 );
+
+@*INC.prepend: @($opts<I>);
+
+if $opts<version> {
+    say "perl6 version {$*PERL.compiler.version} built on {$*VM.name} version {$*VM.version}";
+    # TODO: show crust's version. but I don't know how to get it.
+    exit 1;
+}
 
 my $httpd = HTTP::Server::Tiny.new($opts<host>, $opts<port>);
 
