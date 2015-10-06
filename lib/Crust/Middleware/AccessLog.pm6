@@ -29,7 +29,7 @@ method CALL-ME(%env) {
     my @ret = $.app()(%env);
 
     # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
-    %env<psgi.error>.print: sprintf(
+    %env<p6sgi.error>.print: sprintf(
         "%s - %s [%s] \"%s %s %s\" %s %s \"%s\" \"%s\"\n",
         %env<REMOTE_ADDR>//'-', # %h
         %env<REMOTE_USER> // '-', # %u

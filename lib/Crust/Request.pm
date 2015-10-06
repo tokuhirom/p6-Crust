@@ -29,10 +29,10 @@ method path-info()    { $.env<PATH_INFO> }
 method path()         { $.env<PATH_INFO> || '/' }
 method query-string() { $.env<QUERY_STRING> }
 method script-name()  { $.env<SCRIPT_NAME> }
-method scheme()       { $.env<psgi.url_scheme> }
+method scheme()       { $.env<p6sgi.url_scheme> }
 method secure()       { $.scheme eq 'https' }
-method body()         { $.env<psgi.input> }
-method input()        { $.env<psgi.input> }
+method body()         { $.env<p6sgi.input> }
+method input()        { $.env<p6sgi.input> }
 
 method content-length()   { $.env<CONTENT_LENGTH> }
 method content-type()     { $.env<CONTENT_TYPE> }
@@ -82,7 +82,7 @@ method header(Str $name) {
 
 method content() {
     # TODO: we should support buffering in Crust layer
-    my $input = $!env<psgi.input>;
+    my $input = $!env<p6sgi.input>;
     $input.seek(0,0); # rewind
     my Blob $content = $input.slurp-rest(:bin);
     return $content;
@@ -226,7 +226,7 @@ method uri() {
 }
 
 method !uri-base() {
-    return ($!env<psgi.url_scheme> || "http") ~
+    return ($!env<p6sgi.url_scheme> || "http") ~
         "://" ~
         ($!env<HTTP_HOST> || (($!env<SERVER_NAME> || "") ~ ":" ~ ($!env<SERVER_PORT> || 80))) ~
         ($!env<SCRIPT_NAME> || '/');

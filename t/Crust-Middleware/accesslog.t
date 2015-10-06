@@ -12,7 +12,7 @@ use IO::Blob;
         :REQUEST_METHOD<GET>,
         :REQUEST_URI</apache_pb.gif>,
         :SERVER_PROTOCOL<HTTP/1.1>,
-        'psgi.error' => $io
+        'p6sgi.error' => $io
     );
     my $code = Crust::Middleware::AccessLog.new(
         app => sub (%env) {
