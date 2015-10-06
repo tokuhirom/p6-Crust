@@ -18,3 +18,14 @@ method run(Callable $app) {
     $http.handle($app);
 }
 
+=begin pod
+
+=head1 NAME
+
+Crust::Handler::HTTPEasy - Crust adapter for HTTP::Easy::PSGI
+
+=head1 SYNOPSIS
+
+    crustup -s HTTPEasy app.psgi
+
+=end pod
