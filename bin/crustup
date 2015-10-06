@@ -9,6 +9,7 @@ my $opts = {
     host => '127.0.0.1',
     port => 5000,
     I => [],
+    s => 'HST',
 };
 
 get-options(
@@ -19,6 +20,7 @@ get-options(
         h|host=s
         accesslog=!
         v|version=!
+        s=s
     >
 );
 
@@ -30,7 +32,6 @@ if $opts<version> {
     exit 1;
 }
 
-my $httpd = HTTP::Server::Tiny.new($opts<host>, $opts<port>);
 
 # eval
 my $app = do {
@@ -46,4 +47,9 @@ if $opts<accesslog> {
     require Crust::Middleware::AccessLog;
     $app = ::('Crust::Middleware::AccessLog').new(app => $app);
 }
+
+# XXX I don't want to use string eval. please tell me the right way!
+EVAL "use Crust::Handler::{$opts<s>}";
+my $httpd = ::("Crust::Handler::{$opts<s>}").new(|$opts);
 $httpd.run($app);
+
