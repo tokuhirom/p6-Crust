@@ -15,6 +15,7 @@ get-options(
         I=s@
         p|port=i
         h|host=s
+        accesslog=!
     >
 );
 
@@ -30,4 +31,8 @@ my $app = do {
         EVALFILE('app.psgi')
     }
 };
+if $opts<accesslog> {
+    require Crust::Middleware::AccessLog;
+    $app = ::('Crust::Middleware::AccessLog').new(app => $app);
+}
 $httpd.run($app);
