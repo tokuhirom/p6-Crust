@@ -1,0 +1,36 @@
+=begin pod
+
+=head1 NAME
+
+Crust::Handler - Connects P6SGI applications and Web servers
+
+=head1 SYNOPSIS
+
+    use v6;
+    unit class Crust::Handler::AwesomeWebServer;
+
+    method new(*%opt) {
+        return self.bless(|%opt);
+    }
+
+    method run(Crust::Handler::AwesomeWebServer:D: Callable $app) {
+        # launch the AwesomeWebServer and run $app in the loop
+    }
+
+    # then from command line
+    crustup -s AwesomeWebServer -a app.psgi
+
+
+=head1 DESCRIPTION
+
+Crust::Handler defines an adapter (connector) interface to adapt L<crustup> and L<Crust::Runner> to various PSGI web servers, such as FCGI and Standalone for HTTP::Server::PSGI.
+
+It is an empty class, and as long as they implement the methods defined as an Server adapter interface, they do not need to inherit Crust::Handler.
+
+If you write a new handler for existing web servers, I recommend you to include the full name of the server module after Crust::Handler prefix, like Crust::Handler::Net::Server::Coro if you write a handler for Net::Server::Coro. That way you'll be using plackup command line option like:
+
+    plackup -s Net::Server::Coro
+
+that makes it easy to figure out which web server you're going to use.
+
+=end pod
