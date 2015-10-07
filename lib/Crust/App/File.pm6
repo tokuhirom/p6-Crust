@@ -1,5 +1,5 @@
 use v6;
-unit class Crust::App::File;
+unit class Crust::App::File does Callable;
 use Crust::MIME;
 
 # TODO: need to set path-info for Crust::App::CGIBin etc...
@@ -13,8 +13,8 @@ method should-handle(Str $file) {
     $file.IO.f;
 }
 
-method to-app() {
-    sub ($env) { self.call($env) };
+method CALL-ME($env) {
+    self.call($env);
 }
 
 method call(Hash $env) {
@@ -107,7 +107,7 @@ Crust::App::File - Serve static files from root directory
 
 =head1 SYNOPSIS
 
-  > crustup -e 'use Crust::App::File; Crust::App::File.new.to-app'
+  > crustup -MCrust::App::File -e 'Crust::App::File.new'
 
 =head1 DESCRIPTION
 

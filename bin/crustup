@@ -9,6 +9,7 @@ my $opts = {
     host => '127.0.0.1',
     port => 5000,
     I => [],
+    M => [],
     s => 'HTTP::Server::Tiny',
 };
 
@@ -16,6 +17,7 @@ get-options(
     $opts, <
         e=s
         I=s@
+        M=s@
         p|port=i
         h|host=s
         accesslog=!
@@ -25,6 +27,11 @@ get-options(
 );
 
 @*INC.prepend: @($opts<I>);
+
+for $opts<M> {
+    # XXX I don't want to use string eval. please tell me the right way!
+    EVAL "use $_";
+}
 
 if $opts<version> {
     say "perl6 version {$*PERL.compiler.version} built on {$*VM.name} version {$*VM.version}";
