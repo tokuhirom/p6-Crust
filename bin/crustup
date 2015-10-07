@@ -29,9 +29,8 @@ get-options(
 @*INC.prepend: @($opts<I>);
 
 if $opts<M> {
-    for $opts<M> {
-        # XXX I don't want to use string eval. please tell me the right way!
-        EVAL "use $_";
+    for @($opts<M>) {
+        require ::($_);
     }
 }
 
@@ -58,7 +57,8 @@ if $opts<accesslog> {
 }
 
 # XXX I don't want to use string eval. please tell me the right way!
-EVAL "use Crust::Handler::{$opts<s>}";
-my $httpd = ::("Crust::Handler::{$opts<s>}").new(|$opts);
+my $handler = "Crust::Handler::{$opts<s>}";
+require ::($handler);
+my $httpd = ::($handler).new(|$opts);
 $httpd.run($app);
 
