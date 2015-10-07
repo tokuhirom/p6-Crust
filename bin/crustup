@@ -9,7 +9,7 @@ my $opts = {
     host => '127.0.0.1',
     port => 5000,
     I => [],
-    s => 'HST',
+    s => 'HTTP::Server::Tiny',
 };
 
 get-options(

@@ -3,13 +3,13 @@ use Test;
 
 use lib 't/lib/';
 use Test::TCP;
-use Crust::Handler::HST;
+use Crust::Handler::HTTP::Server::Tiny;
 use HTTP::Tinyish;
 
 my $port = 15555;
 
 Thread.start({
-    my $handler = Crust::Handler::HST.new(
+    my $handler = Crust::Handler::HTTP::Server::Tiny.new(
         host => '127.0.0.1',
         port => $port
     );
@@ -25,3 +25,4 @@ ok $resp<success>;
 is $resp<content>, 'ok';
 
 done-testing;
+

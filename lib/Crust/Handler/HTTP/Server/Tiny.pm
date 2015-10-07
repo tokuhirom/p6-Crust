@@ -1,6 +1,6 @@
 use v6;
 
-unit class Crust::Handler::HST;
+unit class Crust::Handler::HTTP::Server::Tiny;
 
 use HTTP::Server::Tiny;
 
@@ -13,7 +13,7 @@ method new(*%args) {
     self.bless(host => $host, port => $port);
 }
 
-method run(Crust::Handler::HST:D: Callable $app) {
+method run(Crust::Handler::HTTP::Server::Tiny:D: Callable $app) {
     my $httpd = HTTP::Server::Tiny.new(host => $.host, port => $.port);
     $httpd.run($app);
 }
@@ -22,10 +22,10 @@ method run(Crust::Handler::HST:D: Callable $app) {
 
 =head1 NAME
 
-Crust::Handler::HST - Crust adapter for HTTP::Server::Tiny
+Crust::Handler::HTTP::Server::Tiny - Crust adapter for HTTP::Server::Tiny
 
 =head1 SYNOPSIS
 
-    crustup -s HST app.psgi
+    crustup -s HTTP::Server::Tiny app.psgi
 
 =end pod
