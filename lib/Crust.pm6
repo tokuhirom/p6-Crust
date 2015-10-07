@@ -20,11 +20,26 @@ See L<PSGI> for the PSGI specification.
 
 =head2 Crust::Handler
 
-TODO
+Crust::Handler and its subclasses contains adapters for web servers. We
+have adapters for the built-in standalone web server HTTP::Easy::PSGI,
+and HTTP::Server::Tiny included in the core Crust distribution.
+
+See L<Crust::Handler> when writing your own adapters.
 
 =head2 Crust::Middleware
 
-TODO
+P6SGI middleware is a P6SGI application that wraps an existing P6SGI
+application and plays both side of application and servers. From the
+servers the wrapped code reference still looks like and behaves exactly
+the same as P6SGI applications.
+
+=head2 Crust::Request, Crust::Response
+
+Crust::Request gives you a nice wrapper API around PSGI $env hash to get
+headers, cookies and query parameters much like Apache::Request in
+mod_perl.
+
+Crust::Response does the same to construct the response array reference.
 
 =head2 .psgi6 files
 
@@ -61,6 +76,8 @@ reference. See "eg/" directory for more examples of ".psgi" files.
 =item Tokuhiro Matsuno
 
 =item mattn
+
+=item Shoichi Kaji
 
 =head1 COPYRIGHT AND LICENSE
 

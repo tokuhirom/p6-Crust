@@ -26,7 +26,7 @@
     "HTTP::Easy",
     "URI::Escape"
   ],
-  "description" : "",
+  "description" : "Perl6 Superglue for Web frameworks and Web Servers",
   "test-depends" : [ ],
   "version" : "*",
   "authors" : [
