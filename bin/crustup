@@ -56,9 +56,31 @@ if $opts<accesslog> {
     $app = ::('Crust::Middleware::AccessLog').new(app => $app);
 }
 
-# XXX I don't want to use string eval. please tell me the right way!
 my $handler = "Crust::Handler::{$opts<s>}";
 require ::($handler);
 my $httpd = ::($handler).new(|$opts);
 $httpd.run($app);
 
+=begin pod
+
+=head1 NAME
+
+crustup -  Run PSGI application with Crust handlers
+
+=head1 SYNOPSIS
+
+    # read your app from app.psgi file
+    crustup
+
+    # choose .psgi file from ARGV[0] (or with -a option)
+    crustup hello.psgi
+
+    # switch server implementation with --server (or -s)
+    crustup --server HTTP::Server::Simple --port 9090 --host 127.0.0.1 test.psgi
+
+=head1 DESCRIPTION
+
+crustup is a command line utility to run PSGI applications from the
+command line.
+
+=end pod

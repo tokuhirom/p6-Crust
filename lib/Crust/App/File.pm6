@@ -117,8 +117,13 @@ Crust::App::File is perl6 port of perl5 Plack::App::File.
 
 L<Plack::App::File|https://metacpan.org/pod/Plack::App::File>
 
+=head1 AUTHOR
+
+Shoichi Kaji
+
 =head1 ORIGNAL AUTHOR
 
-Tatsuhiko Miyagawa
+This module is port of Perl5's Palck::App::File.
+Tatsuhiko Miyagawa is an original author of Plack::App::File.
 
 =end pod

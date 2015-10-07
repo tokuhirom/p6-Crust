@@ -41,6 +41,7 @@ method session()         { $.env<psgix.session> }
 method session-options() { $.env<psgix.session.options> }
 method logger()          { $.env<psgix.logger> }
 
+# TODO cache
 method query-parameters() {
     my Str $query_string = $.env<QUERY_STRING>;
     my @pairs = $query_string.defined
@@ -244,6 +245,116 @@ method cookies() {
     $!env<crust.cookie.string> = $!env<HTTP_COOKIE>;
 }
 
-# TODO: sub uri {
-# TODO: sub new_response {
+=begin pod
 
+=head1 NAME
+
+Crust::Request - Request object
+
+=head1 DESCRIPTION
+
+PSGI request object
+
+=head1 METHODS
+
+=head2 C<method new(Hash $env)>
+
+Create new instance of this class by P6SGI's env.
+
+=head2 C<method address()      { $.env<REMOTE_ADDR> }>
+=head2 C<method remote-host()  { $.env<REMOTE_HOST> }>
+=head2 C<method protocol()     { $.env<SERVER_PROTOCOL> }>
+=head2 C<method method()       { $.env<REQUEST_METHOD> }>
+=head2 C<method port()         { $.env<SERVER_PORT> }>
+=head2 C<method user()         { $.env<REMOTE_USER> }>
+=head2 C<method request-uri()  { $.env<REQUEST_URI> }>
+=head2 C<method path-info()    { $.env<PATH_INFO> }>
+=head2 C<method path()         { $.env<PATH_INFO> || '/' }>
+=head2 C<method query-string() { $.env<QUERY_STRING> }>
+=head2 C<method script-name()  { $.env<SCRIPT_NAME> }>
+=head2 C<method scheme()       { $.env<p6sgi.url_scheme> }>
+=head2 C<method secure()       { $.scheme eq 'https' }>
+=head2 C<method body()         { $.env<p6sgi.input> }>
+=head2 C<method input()        { $.env<p6sgi.input> }>
+=head2 C<method content-length()   { $.env<CONTENT_LENGTH> }>
+=head2 C<method content-type()     { $.env<CONTENT_TYPE> }>
+=head2 C<method session()         { $.env<psgix.session> }>
+=head2 C<method session-options() { $.env<psgix.session.options> }>
+=head2 C<method logger()          { $.env<psgix.logger> }>
+
+Short-hand to access.
+
+=head2 C<method query-parameters(:D:)>
+
+Get parsing result of QUERY_STRING in L<Hash::MultiValue>.
+
+=head2 C<method headers()>
+
+Get a instance of L<Crust::Headers>.
+
+=head2 C<method header(Str $name)>
+
+Get header value by C<$name>.
+
+=head2 C<method user-agent()>
+
+Get C<User-Agent> header value.
+
+=head2 C<method content-encoding()>
+
+Get C<Content-Encoding> header value.
+
+=head2 C<method referer()>
+
+Get C<Referer> header value.
+
+=head2 C<method body-parameters()>
+
+Return parsing result of content-body.
+
+Current implementation supports application/x-www-form-urlencoded and multipart/form-data.
+
+Return value's type is Hash::MultiValue.
+
+=head2 C<method uploads()>
+
+Get uploaded file map in Hash::MultiValue. This hash's values are instance of L<Crust::Request::Upload>.
+
+=head2 C<method parameters()>
+
+Get merged result of C<body-parameters> and C<query-parameters>.
+
+=head2 C<method base()>
+
+Returns the base path of current request. This is
+like "uri" but only contains up to "SCRIPT_NAME" where your
+application is hosted at.
+
+=head2 C<method uri()>
+
+Returns the current request URI.
+
+The URI is constructed
+using various environment values such as "SCRIPT_NAME", "PATH_INFO",
+"QUERY_STRING", "HTTP_HOST", "SERVER_NAME" and "SERVER_PORT"
+
+=head2 C<method cookies()>
+
+Get parsing result of cookies.
+
+=head1 AUTHOR
+
+Tokuhiro Matsuno
+
+=head1 ORIGINAL AUTHOR
+
+This file is port of Plack's.
+Plack::Request is written by
+
+=item Tatsuhiko Miyagawa
+
+=item Kazuhiro Osawa
+
+=item Tokuhiro Matsuno
+
+=end pod

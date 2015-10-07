@@ -2,6 +2,8 @@ use v6;
 
 unit module Crust::Utils;
 
+# internal use only. we'll change this file without notice.
+
 sub parse-header-line(Str $header) is export {
     $header ~~ /^ (<-[: \s]>*) \s* \: \s* (.*) $/;
     return $/[0].Str.lc => $/[1].Str;

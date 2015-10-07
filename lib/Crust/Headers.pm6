@@ -51,3 +51,52 @@ method Str() {
     $!env.all-kv.map(-> $k, $v { "$k: $v" }).join("\n");
 }
 
+=begin pod
+
+=head1 NAME
+
+Crust::Headers - headers
+
+=head1 DESCRIPTION
+
+This is a container class for list of HTTP headers.
+
+=head1 METHODS
+
+=head2 C<method new(Hash $env)>
+
+Create new instance from hash.
+
+=head2 C<multi method header(Str $key)>
+
+Get header value by C<$key>.
+
+=head2 C<multi method header(Str $key, $val)>
+
+Set header value.
+
+=head2 C<method content-type()>
+
+Get content-type header's value.
+
+=head2 C<method content-length()>
+
+Get content-length header's value.
+
+=head2 C<method content-encoding()>
+
+Get content-encoding header's value.
+
+=head2 C<method user-agent()>
+
+Get user-agent header's value.
+
+=head2 C<method referer()>
+
+Get referer header's value.
+
+=head1 AUTHORS
+
+Tokuhiro Matsuno
+
+=end pod

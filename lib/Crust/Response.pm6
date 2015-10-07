@@ -7,5 +7,6 @@ has Array $.headers;
 has $.body;
 
 method finalize() {
-    return [ $.status, $.headers, $.body ];
+    return $.status, $.headers, $.body;
 }
+

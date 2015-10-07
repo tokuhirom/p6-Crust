@@ -5,6 +5,7 @@ unit class Crust::Middleware::AccessLog does Callable;
 has $.app;
 
 # TODO: configurable access log format
+# TODO: Port Apache::LogFormat::Compile from Perl5.
 
 my sub content-length(@ret) {
     for @(@ret[1]) -> $pair {
