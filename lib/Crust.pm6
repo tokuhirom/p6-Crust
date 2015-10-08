@@ -65,12 +65,6 @@ to automatically generate these ".psgi" files for you, such as:
 It's important that the return value of ".psgi" file is the code
 reference. See "eg/" directory for more examples of ".psgi" files.
 
-=head1 TODO
-
-=item Middleware support
-
-=item Handler support
-
 =head1 AUTHORS
 
 =item Tokuhiro Matsuno

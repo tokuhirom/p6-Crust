@@ -53,13 +53,6 @@ If you use a web framework, chances are that they provide a helper utility to au
 
 It's important that the return value of ".psgi" file is the code reference. See "eg/" directory for more examples of ".psgi" files.
 
-TODO
-====
-
-  * Middleware support
-
-  * Handler support
-
 AUTHORS
 =======
 
