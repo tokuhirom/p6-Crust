@@ -14,7 +14,6 @@
     "Crust::Handler::HTTP::Server::Tiny" : "lib/Crust/Handler/HTTP/Server/Tiny.pm",
     "Crust::Request" : "lib/Crust/Request.pm",
     "Crust::Response" : "lib/Crust/Response.pm6",
-    "Crust::MultiValue" : "lib/Crust/MultiValue.pm",
     "Crust::Headers" : "lib/Crust/Headers.pm6"
   },
   "depends" : [
@@ -22,6 +21,7 @@
     "Cookie::Baker",
     "File::Temp",
     "HTTP::MultiPartParser",
+    "Hash::MultiValue",
     "Getopt::Tiny",
     "HTTP::Easy",
     "URI::Escape"
