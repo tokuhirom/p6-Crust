@@ -6,12 +6,15 @@
   "provides" : {
     "Crust::Utils" : "lib/Crust/Utils.pm",
     "Crust::Request::Upload" : "lib/Crust/Request/Upload.pm",
+    "Crust::Test::MockHTTP" : "lib/Crust/Test/MockHTTP.pm6",
     "Crust::Middleware::AccessLog" : "lib/Crust/Middleware/AccessLog.pm6",
     "Crust::Handler::HTTP::Easy" : "lib/Crust/Handler/HTTP/Easy.pm",
     "Crust::App::File" : "lib/Crust/App/File.pm6",
     "Crust" : "lib/Crust.pm6",
     "Crust::MIME" : "lib/Crust/MIME.pm6",
+    "HTTP::Message::PSGI" : "lib/HTTP/Message/PSGI.pm6",
     "Crust::Handler::HTTP::Server::Tiny" : "lib/Crust/Handler/HTTP/Server/Tiny.pm",
+    "Crust::Test" : "lib/Crust/Test.pm6",
     "Crust::Request" : "lib/Crust/Request.pm",
     "Crust::Response" : "lib/Crust/Response.pm6",
     "Crust::Headers" : "lib/Crust/Headers.pm6"
@@ -24,7 +27,8 @@
     "Hash::MultiValue",
     "Getopt::Tiny",
     "HTTP::Easy",
-    "URI::Escape"
+    "URI::Escape",
+    "HTTP::UserAgent"
   ],
   "description" : "Perl6 Superglue for Web frameworks and Web Servers",
   "test-depends" : [ ],
