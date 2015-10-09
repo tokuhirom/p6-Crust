@@ -203,3 +203,5 @@ subtest {
     }, 'Should die because response body is invalid type';
 }, 'Test for ret validation';
 
+done-testing;
+
