@@ -109,3 +109,34 @@ method CALL-ME(%env) {
     return validate-ret(@ret);
 }
 
+=begin pod
+
+=head1 NAME
+
+Crust::Middleware::Lint - Validate request and response
+
+=head1 SYNOPSIS
+
+  use Crust::Middleware::Lint;
+
+  my $app = sub { ... }; # your app
+  $app = ::('Crust::Middleware::Lint').new(app => $app);
+
+  # Or from crustup
+  crustup --lint myapp.psgi6
+
+=head1 DESCRIPTION
+
+Crust::Middleware::Lint is a middleware component to validate request
+and response environment formats. You are strongly suggested to use
+this middleware when you develop a new framework adapter or a new P6SGI
+web server that implements the P6SGI interface.
+
+This middleware is inspired by L<Plack::Middleware::Lint|https://metacpan.org/pod/Plack::Middleware::Lint> and most of code is taken from that.
+
+=head1 AUTHOR
+
+moznion E<lt>moznion@gmail.comE<gt>
+
+=end pod
+
