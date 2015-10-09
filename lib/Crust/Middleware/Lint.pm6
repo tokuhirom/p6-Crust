@@ -20,31 +20,31 @@ my sub validate-env(%env) {
     unless %env<PATH_INFO>.defined { # allows empty string
         die 'Missing mandatory env param: PATH_INFO';
     }
-    if (%env<PATH_INFO> ne '' && %env<PATH_INFO> !~~ m!^'/'!) {
+    if %env<PATH_INFO> ne '' && %env<PATH_INFO> !~~ m!^'/'! {
         die "PATH_INFO must begin with / (%env<PATH_INFO>)";
     }
-    unless (%env<SERVER_NAME>.defined) {
+    unless %env<SERVER_NAME>.defined {
         die 'Missing mandatory env param: SERVER_NAME';
     }
-    if (%env<SERVER_NAME> eq '') {
+    if %env<SERVER_NAME> eq '' {
         die 'SERVER_NAME must not be empty string';
     }
-    unless (%env<SERVER_PORT>.defined) {
+    unless %env<SERVER_PORT>.defined {
         die 'Missing mandatory env param: SERVER_PORT';
     }
-    if (%env<SERVER_PORT> eq '') {
+    if %env<SERVER_PORT> eq '' {
         die 'SERVER_PORT must not be empty string';
     }
-    if (%env<SERVER_PROTOCOL>.defined && %env<SERVER_PROTOCOL> !~~ m{^HTTP'/'\d}) {
+    if %env<SERVER_PROTOCOL>.defined && %env<SERVER_PROTOCOL> !~~ m{^HTTP'/'\d} {
         die "Invalid SERVER_PROTOCOL: %env<SERVER_PROTOCOL>";
     }
 
     # TODO validate p6sgi.xxx
 
-    if (%env<HTTP_CONTENT_TYPE>) {
+    if %env<HTTP_CONTENT_TYPE> {
         die 'HTTP_CONTENT_TYPE should not exist';
     }
-    if (%env<HTTP_CONTENT_LENGTH>) {
+    if %env<HTTP_CONTENT_LENGTH> {
         die 'HTTP_CONTENT_LENGTH should not exist';
     }
 }
@@ -54,11 +54,11 @@ my sub validate-ret(@ret) {
         die 'Response needs to be 3 element array';
     }
 
-    unless (@ret[0] ~~ /^\d+$/ && @ret[0] >= 100) {
+    unless @ret[0] ~~ /^\d+$/ && @ret[0] >= 100 {
         die "Status code needs to be an integer greater than or equal to 100: @ret[0]";
     }
 
-    unless (@ret[1].isa(List)) {
+    unless @ret[1].isa(List) {
         die "Headers needs to be an list: @ret[1]";
     }
 
@@ -90,13 +90,13 @@ my sub validate-ret(@ret) {
             die 'Response headers MUST be a defined string';
         }
 
-        if ($val ~~ /<[\o00..\o37]>/) {
+        if $val ~~ /<[\o00..\o37]>/ {
             die("Response headers MUST NOT contain characters below octal \o37: $val");
         }
     }
 
     my $res-body = @ret[2];
-    unless ($res-body.isa(List) || $res-body.isa(Supply) || $res-body.isa(Channel) || $res-body.isa(IO::Handle)) {
+    unless $res-body.isa(List) || $res-body.isa(Supply) || $res-body.isa(Channel) || $res-body.isa(IO::Handle) {
         die 'Body is not suitable type: ' ~ $res-body.WHAT.perl;
     }
 
