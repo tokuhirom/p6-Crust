@@ -91,7 +91,7 @@ my sub validate-ret(@ret) {
         }
 
         if $val ~~ /<[\o00..\o37]>/ {
-            die("Response headers MUST NOT contain characters below octal \o37: $val");
+            die "Response headers MUST NOT contain characters below octal \o37: $val";
         }
     }
 
