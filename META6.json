@@ -9,6 +9,7 @@
     "Crust::Middleware::AccessLog" : "lib/Crust/Middleware/AccessLog.pm6",
     "Crust::Handler::HTTP::Easy" : "lib/Crust/Handler/HTTP/Easy.pm",
     "Crust::App::File" : "lib/Crust/App/File.pm6",
+    "Crust::Middleware::Lint" : "lib/Crust/Middleware/Lint.pm6",
     "Crust" : "lib/Crust.pm6",
     "Crust::MIME" : "lib/Crust/MIME.pm6",
     "Crust::Handler::HTTP::Server::Tiny" : "lib/Crust/Handler/HTTP/Server/Tiny.pm",
