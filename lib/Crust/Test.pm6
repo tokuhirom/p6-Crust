@@ -8,10 +8,6 @@ method create(Crust::Test:U: Callable $app, *@args) {
     my $subclass = "Crust::Test::$Impl";
     require ::($subclass);
 
-    # do we need this?
-    if my $test-psgi = &::($subclass ~ "::test-psgi") {
-        return $test-psgi;
-    }
     ::($subclass).new(:$app); # @args
 }
 
