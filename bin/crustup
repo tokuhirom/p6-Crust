@@ -21,6 +21,7 @@ get-options(
         p|port=i
         h|host=s
         accesslog=!
+        lint=!
         v|version=!
         s=s
     >
@@ -54,6 +55,10 @@ my $app = do {
 if $opts<accesslog> {
     require Crust::Middleware::AccessLog;
     $app = ::('Crust::Middleware::AccessLog').new(app => $app);
+}
+if $opts<lint> {
+    require Crust::Middleware::Lint;
+    $app = ::('Crust::Middleware::Lint').new(app => $app);
 }
 
 my $handler = "Crust::Handler::{$opts<s>}";
