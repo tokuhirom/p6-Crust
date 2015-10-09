@@ -36,7 +36,7 @@ my sub validate-env(%env) {
         die 'SERVER_PORT must not be empty string';
     }
     if (%env<SERVER_PROTOCOL>.defined && %env<SERVER_PROTOCOL> !~~ m{^HTTP'/'\d}) {
-        die "Invalid SERVER_PROTOCOL: $env->{SERVER_PROTOCOL}";
+        die "Invalid SERVER_PROTOCOL: %env<SERVER_PROTOCOL>";
     }
 
     # TODO validate p6sgi.xxx
@@ -58,25 +58,23 @@ my sub validate-ret(@ret) {
         die "Status code needs to be an integer greater than or equal to 100: @ret[0]";
     }
 
-    unless (@ret[1].isa(Array)) {
-        die "Headers needs to be an array: @ret[1]";
+    unless (@ret[1].isa(List)) {
+        die "Headers needs to be an list: @ret[1]";
     }
 
-    my @copy = @ret[1];
+    my $copy = @ret[1];
 
     {
-        @copy.pairup();
+        $copy.pairup();
         CATCH {
             default {
-                die 'The number of response headers needs to be even, not odd(', @copy, ')';
+                die 'The number of response headers needs to be even, not odd(', $copy, ')';
             }
         }
     }
 
-
-    for @copy.kv -> $i, $v {
-        next if $v.defined;
-        my ($key, $val) = @copy[$i].kv;
+    for $copy.kv -> $i, $v {
+        my ($key, $val) = $v.kv;
 
         if $key.lc eq 'status' {
             die 'Response headers MUST NOT contain a key named Status';
@@ -84,22 +82,25 @@ my sub validate-ret(@ret) {
         if $key ~~ /[<[: \r \n]> | <[- _]>]$/ {
             die "Response headers MUST NOT contain a key with : or newlines, or that end in - or _: $key";
         }
-        unless $key ~~ /^<[a..z A..Z]><[0..9 a..z A..Z - _]>*$/ {
+        unless $key ~~ /^<[a..z A..Z]><[0..9 a..z A..Z \- _]>*$/ {
             die "Response headers MUST consist only of letters, digits, _ or - and MUST start with a letter: $key";
         }
-        if ($val =~ /<[\o00..\o37]>/) {
-            die("Response headers MUST NOT contain characters below octal \o37: $val");
-        }
+
         unless $val.defined {
             die 'Response headers MUST be a defined string';
         }
+
+        if ($val ~~ /<[\o00..\o37]>/) {
+            die("Response headers MUST NOT contain characters below octal \o37: $val");
+        }
     }
 
-    unless @ret[2].isa(Array) { # TODO filehandle
-        die "Body should be an array ref or filehandle: @res[2]";
+    my $res-body = @ret[2];
+    unless ($res-body.isa(List) || $res-body.isa(Supply) || $res-body.isa(Channel) || $res-body.isa(IO::Handle)) {
+        die 'Body is not suitable type: ' ~ $res-body.WHAT.perl;
     }
 
-    return $res;
+    return @ret;
 }
 
 method CALL-ME(%env) {
