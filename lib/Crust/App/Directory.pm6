@@ -39,8 +39,8 @@ method should-handle(Str $dir) {
 }
 
 method call(Hash $env) {
-	# Directory traversal should be avoided by Crust::App::File.locate-file.
-	# It should be returned as the root directory.
+    # Directory traversal should be avoided by Crust::App::File.locate-file.
+    # It should be returned as the root directory.
     my ($file, $path-info, $error-res) = $!dir || self.locate-file($env);
     return |$error-res if $error-res;
 
