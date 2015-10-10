@@ -1,6 +1,7 @@
 use v6;
 use Crust::App::File;
 use Crust::MIME;
+use Crust::Utils;
 
 unit class Crust::App::Directory is Crust::App::File;
 
@@ -63,10 +64,7 @@ method serve-dir(Hash $env, Str $dir) {
     for $dir.IO.dir -> $file {
         my $ct = $file.d ?? '' !! Crust::MIME.mime-type($file.abspath) || 'text/plain';
         my $size = $file.d ?? '' !! $file.s;
-        my $name = $file.basename.trans(
-            [ '&',     '<',    '>',    '"'      ] =>
-            [ '&amp;', '&lt;', '&gt;', '&quot;' ]
-        );
+        my $name = encode-html($file.basename);
         $files ~= sprintf($dir_file, $name, $name, $size, $ct, DateTime.new($file.modified));
     }
 

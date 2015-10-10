@@ -21,3 +21,10 @@ sub parse-header-item(Str $header) is export {
     return $first.trim, %opts;
 }
 
+sub encode-html(Str $raw) is export {
+    return $raw.trans(
+        [ '&',     '<',    '>',    '"',      q{'}    ] =>
+        [ '&amp;', '&lt;', '&gt;', '&quot;', '&#39;' ]
+    );
+}
+
