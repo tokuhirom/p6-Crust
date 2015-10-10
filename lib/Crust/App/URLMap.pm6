@@ -51,7 +51,6 @@ method call(Hash $env) {
     return [404, ['Content-Type' => 'text/plain'], ["Not Found".encode('ascii')]];
 }
 
-# TODO inherit Crust::Component
 method to-app() {
     sub ($env) { self.call($env) }
 }
