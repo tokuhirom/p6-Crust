@@ -32,7 +32,11 @@ my $client = -> $cb {
     #$req = HTTP::Request.new(GET => "http://127.0.0.1:5000/world");
     #$res = $cb($req);
     #is $res.code, 200;
-    #is $res.content.decode, "こんにちわ";
+    #is $res.content.decode, "世界";
+
+    $req = HTTP::Request.new(GET => "/zoo");
+    $res = $cb($req);
+    is $res.code, 404;
 };
 
 test-psgi $app, $client;

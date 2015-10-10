@@ -56,3 +56,33 @@ method to-app() {
     sub ($env) { self.call($env) }
 }
 
+=begin pod
+
+=head1 NAME
+
+Crust::Middleware::URLMap - Map multiple apps in different paths
+
+=head1 SYNOPSIS
+
+  use Crust::Middleware::URLMap;
+
+  my $urlmap = sub { ... }; # your app
+  $urlmap = ::('Crust::Middleware::URLMap').new($app);
+  $urlmap.map "/", sub { ... };
+  $urlmap.to-app;
+
+=head1 DESCRIPTION
+
+Crust::Middleware::URLMap privides URL map.
+
+This middleware is perl6 port of L<Plack::Middleware::URLMap|https://metacpan.org/pod/Plack::Middleware::URLMap>.
+
+=head1 AUTHOR
+
+mattn <mattn.jp@gmail.com>
+
+=head1 SEE ALSO
+
+=item L<Plack::Middleware::URLMap|https://metacpan.org/pod/Plack::Middleware::URLMap>
+
+=end pod
