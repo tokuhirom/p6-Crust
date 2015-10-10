@@ -6,8 +6,6 @@ use Crust;
 use Getopt::Tiny;
 
 my $opts = {
-    host => '127.0.0.1',
-    port => 5000,
     I => [],
     M => [],
     s => 'HTTP::Server::Tiny',
@@ -18,13 +16,11 @@ get-options(
         e=s
         I=s@
         M=s@
-        p|port=i
-        h|host=s
         accesslog=!
         lint=!
         v|version=!
         s=s
-    >
+    >, :pass-through
 );
 
 @*INC.prepend: @($opts<I>);
@@ -41,13 +37,42 @@ if $opts<version> {
     exit 1;
 }
 
+my %handler-opts;
+my @args;
+while @*ARGS {
+    given @*ARGS[0] {
+        when '--' {
+            @*ARGS.shift;
+            @args.append: @*ARGS;
+            last;
+        }
+        when /^\-\-(<-[\=]>+)\=(.*)$/ {
+            %handler-opts{$/[0].Str} = $/[1].Str;
+            @*ARGS.shift;
+        }
+        when /^\-\-(<-[\=]>+)$/ {
+            my $key   = $/[0].Str;
+            my $value = @*ARGS.shift;
+            %handler-opts{$key} = $value;
+        }
+        default {
+            @args.push: @*ARGS.shift;
+        }
+    }
+}
+
+for %handler-opts.kv -> $k, $v {
+    if $v ~~ /^<[0 .. 9]>+$/ {
+        %handler-opts{$k} = IntStr.new($v.Int, $v);
+    }
+}
 
 # eval
 my $app = do {
     if $opts<e> {
         EVAL($opts<e>);
-    } elsif @*ARGS.elems > 0 {
-        EVALFILE(@*ARGS[0])
+    } elsif @args.elems > 0 {
+        EVALFILE(@args[0])
     } else {
         EVALFILE('app.psgi')
     }
@@ -63,7 +88,7 @@ if $opts<lint> {
 
 my $handler = "Crust::Handler::{$opts<s>}";
 require ::($handler);
-my $httpd = ::($handler).new(|$opts);
+my $httpd = ::($handler).new(|%handler-opts);
 $httpd.run($app);
 
 =begin pod
