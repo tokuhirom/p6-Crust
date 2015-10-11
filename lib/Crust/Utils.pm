@@ -28,3 +28,28 @@ sub encode-html(Str $raw) is export {
     );
 }
 
+sub status-with-no-entity-body(Int $status) returns Bool is export {
+    return $status < 200 || $status == 204 || $status == 304;
+}
+
+sub content-length($body) is export {
+    return Nil unless $body.defined;
+
+    if $body.isa(List) {
+        my $cl = 0;
+        for @$body -> $chunk {
+            my $length;
+            given $chunk {
+                when Str { $length = $chunk.chars }
+                when Blob { $length = $chunk.elems }
+            }
+            $cl += $length;
+        }
+        return $cl;
+    } elsif $body.isa(IO::Handle) {
+        return $body.s - $body.tell;
+    }
+
+    return Nil;
+}
+
