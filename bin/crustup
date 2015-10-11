@@ -51,6 +51,7 @@ while @*ARGS {
             @*ARGS.shift;
         }
         when /^\-\-(<-[\=]>+)$/ {
+            @*ARGS.shift;
             my $key   = $/[0].Str;
             my $value = @*ARGS.shift;
             %handler-opts{$key} = $value;
