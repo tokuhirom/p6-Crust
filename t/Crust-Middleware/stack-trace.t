@@ -33,8 +33,8 @@ subtest {
     is $ret[2].elems, 1;
     like $ret[2][0], rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:16'};
 
-    like %env<p6sgi.stacktrace.text>, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:16'};
-    like %env<p6sgi.stacktrace.html>, rx{'Error:' \s+ 'in block &lt;unit&gt; at t/Crust-Middleware/stack-trace.t:16'};
+    like %env<crust.stacktrace.text>, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:16'};
+    like %env<crust.stacktrace.html>, rx{'Error:' \s+ 'in block &lt;unit&gt; at t/Crust-Middleware/stack-trace.t:16'};
 
     $io.seek(0, 0); # rewind
     like $io.slurp-rest, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:16'};
@@ -59,8 +59,10 @@ subtest {
     is %$res-headers<Content-Type>, 'text/html; charset=utf-8';
 
     is $ret[2].elems, 1;
-    like %env<p6sgi.stacktrace.text>, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:43'};
     like $ret[2][0], rx{'Error:' \s+ 'in block &lt;unit&gt; at t/Crust-Middleware/stack-trace.t:43'};
+
+    like %env<crust.stacktrace.text>, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:43'};
+    like %env<crust.stacktrace.html>, rx{'Error:' \s+ 'in block &lt;unit&gt; at t/Crust-Middleware/stack-trace.t:43'};
 
     $io.seek(0, 0); # rewind
     like $io.slurp-rest, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:43'};
