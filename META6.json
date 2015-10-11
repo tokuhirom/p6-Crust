@@ -10,10 +10,12 @@
     "Crust::Middleware::AccessLog" : "lib/Crust/Middleware/AccessLog.pm6",
     "Crust::Handler::HTTP::Easy" : "lib/Crust/Handler/HTTP/Easy.pm",
     "Crust::App::File" : "lib/Crust/App/File.pm6",
+    "Crust::App::Directory" : "lib/Crust/App/Directory.pm6",
     "Crust::Middleware::Lint" : "lib/Crust/Middleware/Lint.pm6",
     "Crust" : "lib/Crust.pm6",
     "Crust::MIME" : "lib/Crust/MIME.pm6",
     "HTTP::Message::PSGI" : "lib/HTTP/Message/PSGI.pm6",
+    "Crust::Middleware::StackTrace" : "lib/Crust/Middleware/StackTrace.pm6",
     "Crust::Handler::HTTP::Server::Tiny" : "lib/Crust/Handler/HTTP/Server/Tiny.pm",
     "Crust::Test" : "lib/Crust/Test.pm6",
     "Crust::Request" : "lib/Crust/Request.pm",
@@ -29,7 +31,8 @@
     "Getopt::Tiny",
     "HTTP::Easy",
     "URI::Escape",
-    "HTTP::UserAgent"
+    "HTTP::UserAgent",
+    "Backtrace::AsHTML"
   ],
   "description" : "Perl6 Superglue for Web frameworks and Web Servers",
   "test-depends" : [ ],
