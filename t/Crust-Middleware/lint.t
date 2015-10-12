@@ -110,6 +110,7 @@ subtest {
                 ], ['hello'.encode('ascii')]
             }
         );
+        lives-ok({$code(%env)});
     }, 'Should works fine';
 
     subtest {

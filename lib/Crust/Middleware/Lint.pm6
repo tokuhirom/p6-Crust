@@ -136,7 +136,7 @@ This middleware is inspired by L<Plack::Middleware::Lint|https://metacpan.org/po
 
 =head1 AUTHOR
 
-moznion E<lt>moznion@gmail.comE<gt>
+moznion <moznion@gmail.com>
 
 =end pod
 
