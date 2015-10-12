@@ -154,3 +154,5 @@ for @tests -> Pair $test {
     run($tag, %test);
 }
 
+done-testing;
+
