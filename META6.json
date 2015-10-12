@@ -7,6 +7,7 @@
     "Crust::Utils" : "lib/Crust/Utils.pm",
     "Crust::Request::Upload" : "lib/Crust/Request/Upload.pm",
     "Crust::Test::MockHTTP" : "lib/Crust/Test/MockHTTP.pm6",
+    "Crust::Middleware::ContentLength" : "lib/Crust/Middleware/ContentLength.pm6",
     "Crust::Middleware::AccessLog" : "lib/Crust/Middleware/AccessLog.pm6",
     "Crust::Handler::HTTP::Easy" : "lib/Crust/Handler/HTTP/Easy.pm",
     "Crust::App::File" : "lib/Crust/App/File.pm6",
