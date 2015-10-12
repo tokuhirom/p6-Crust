@@ -3,6 +3,7 @@ use v6;
 unit class Crust::Middleware::AccessLog does Callable;
 
 has $.app;
+has Callable $.logger is rw;
 
 # TODO: configurable access log format
 # TODO: Port Apache::LogFormat::Compile from Perl5.
@@ -30,7 +31,14 @@ method CALL-ME(%env) {
     my @ret = $.app()(%env);
 
     # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
-    %env<p6sgi.error>.print: sprintf(
+    my $logger = $.logger();
+    if !$logger {
+        $logger = sub { %env<p6sgi.error>.print(@_) };
+        # Also, set it so that we don't have to do this a second time
+        $.logger = $logger;
+    }
+
+    $logger(sprintf(
         "%s - %s [%s] \"%s %s %s\" %s %s \"%s\" \"%s\"\n",
         %env<REMOTE_ADDR>//'-', # %h
         %env<REMOTE_USER> // '-', # %u
@@ -42,7 +50,7 @@ method CALL-ME(%env) {
         content-length(@ret),
         %env<HTTP_REFERER> // '-',
         %env<HTTP_USER_AGENT> // '-',
-    );
+    ));
 
     return @ret;
 }
