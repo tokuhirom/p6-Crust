@@ -5,6 +5,10 @@ unit class Crust::Middleware::ContentLength does Callable;
 
 has $.app;
 
+method new(Callable $app, *%opts) {
+    self.bless(app => $app, |%opts);
+}
+
 method CALL-ME(%env) {
     my @ret = $.app()(%env);
 

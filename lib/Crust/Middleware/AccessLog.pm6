@@ -5,6 +5,10 @@ unit class Crust::Middleware::AccessLog does Callable;
 has $.app;
 has Callable $.logger is rw;
 
+method new(Callable $app, *%opts) {
+    self.bless(app => $app, |%opts);
+}
+
 # TODO: configurable access log format
 # TODO: Port Apache::LogFormat::Compile from Perl5.
 

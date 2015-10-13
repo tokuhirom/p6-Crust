@@ -7,6 +7,11 @@ has $.app;
 
 has Bool $.no-print-errors = False;
 
+method new(Callable $app, *%opts) {
+    self.bless(app => $app, |%opts);
+}
+
+
 method CALL-ME(%env) {
     my $ret = sub {
         return $.app()(%env);
