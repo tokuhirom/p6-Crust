@@ -17,6 +17,7 @@
     "Crust::MIME" : "lib/Crust/MIME.pm6",
     "HTTP::Message::PSGI" : "lib/HTTP/Message/PSGI.pm6",
     "Crust::Middleware::StackTrace" : "lib/Crust/Middleware/StackTrace.pm6",
+    "Crust::Middleware::ReverseProxy" : "lib/Crust/Middleware/ReverseProxy.pm6",
     "Crust::Handler::HTTP::Server::Tiny" : "lib/Crust/Handler/HTTP/Server/Tiny.pm",
     "Crust::Test" : "lib/Crust/Test.pm6",
     "Crust::Request" : "lib/Crust/Request.pm",
