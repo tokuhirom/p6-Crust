@@ -15,6 +15,13 @@ sub run(Str $tag, %arg) {
                 GET => 'http://example.com/?foo=bar',
                 |%input,
             );
+
+            # FIXME [WORKAROUND] overwrite http header 'Host'
+            # https://github.com/sergot/http-useragent/issues/85
+            if %input.keys.first({.lc eq "host"}) -> $host {
+                $req.field(Host => %input{$host});
+            }
+
             my $res = $cb($req);
         },
         app => -> %env {
