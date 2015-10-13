@@ -3,7 +3,7 @@ use v6;
 unit class Crust::Middleware::AccessLog does Callable;
 
 has $.app;
-has Callable $.logger is rw;
+has Callable $.logger;
 
 method new(Callable $app, *%opts) {
     self.bless(app => $app, |%opts);
@@ -38,8 +38,6 @@ method CALL-ME(%env) {
     my $logger = $.logger();
     if !$logger {
         $logger = sub { %env<p6sgi.error>.print(@_) };
-        # Also, set it so that we don't have to do this a second time
-        $.logger = $logger;
     }
 
     $logger(sprintf(
