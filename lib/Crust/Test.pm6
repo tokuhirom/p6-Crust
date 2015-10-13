@@ -4,6 +4,11 @@ unit class Crust::Test;
 our $Impl;
 $Impl ||= %*ENV<CRUST_TEST_IMPL> || "MockHTTP";
 
+# This is not required. But perl6.beta@20151013 is broken.
+# perl6-m dumps core without following line.
+# This is workaround for the issue. We should remove following line before christmas.
+use Crust::Test::MockHTTP;
+
 method create(Crust::Test:U: Callable $app, *@args) {
     my $subclass = "Crust::Test::$Impl";
     require ::($subclass);
