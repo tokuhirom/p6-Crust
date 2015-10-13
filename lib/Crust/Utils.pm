@@ -40,7 +40,7 @@ sub content-length($body) is export {
         for @$body -> $chunk {
             my $length;
             given $chunk {
-                when Str { $length = $chunk.chars }
+                when Str { $length = $chunk.encode.elems }
                 when Blob { $length = $chunk.elems }
             }
             $cl += $length;
