@@ -35,8 +35,8 @@ method CALL-ME(%env) {
     my @ret = $.app()(%env);
 
     # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
-    my $logger = $.logger();
-    if !$logger {
+    my $logger = $.logger;
+    if !$logger.defined {
         $logger = sub { %env<p6sgi.error>.print(@_) };
     }
 
