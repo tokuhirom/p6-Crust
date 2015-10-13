@@ -14,7 +14,7 @@ my %env = (
 
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
-        app => sub (%env) {
+        sub (%env) {
             200, [], [
                 'hello'.encode('ascii'),
                 'goodbye'.encode('ascii'),
@@ -30,7 +30,7 @@ subtest {
 
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
-        app => sub (%env) {
+        sub (%env) {
             200, [], ['hello', 'goodbye']
         }
     );
@@ -45,7 +45,7 @@ subtest {
     my $io = $*PROGRAM.open;
 
     my $code = Crust::Middleware::ContentLength.new(
-        app => sub (%env) {
+        sub (%env) {
             200, [], $io,
         }
     );
@@ -61,7 +61,7 @@ subtest {
 
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
-        app => sub (%env) {
+        sub (%env) {
             100, [], ['hello', 'goodbye']
         }
     );
@@ -74,7 +74,7 @@ subtest {
 
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
-        app => sub (%env) {
+        sub (%env) {
             200, [Content-Length => 10000], ['hello', 'goodbye']
         }
     );
@@ -87,7 +87,7 @@ subtest {
 
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
-        app => sub (%env) {
+        sub (%env) {
             200, [Transfer-Encoding => 'chunked'], ['hello', 'goodbye']
         }
     );
@@ -102,7 +102,7 @@ subtest {
     # XXX maybe invalid response body type...
     {
         my $code = Crust::Middleware::ContentLength.new(
-            app => sub (%env) {
+             sub (%env) {
                 200, [], Nil
             }
         );
@@ -115,7 +115,7 @@ subtest {
 
     {
         my $code = Crust::Middleware::ContentLength.new(
-            app => sub (%env) {
+            sub (%env) {
                 200, [], 42
             }
         );

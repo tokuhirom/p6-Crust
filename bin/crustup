@@ -80,11 +80,11 @@ my $app = do {
 };
 if $opts<accesslog> {
     require Crust::Middleware::AccessLog;
-    $app = ::('Crust::Middleware::AccessLog').new(app => $app);
+    $app = ::('Crust::Middleware::AccessLog').new($app);
 }
 if $opts<lint> {
     require Crust::Middleware::Lint;
-    $app = ::('Crust::Middleware::Lint').new(app => $app);
+    $app = ::('Crust::Middleware::Lint').new($app);
 }
 
 my $handler = "Crust::Handler::{$opts<s>}";

@@ -20,7 +20,7 @@ subtest {
     %env<p6sgi.error> = $io;
 
     my $code = Crust::Middleware::StackTrace.new(
-        app => sub (%env) {
+        sub (%env) {
             die 'Oops!';
         }
     );
@@ -48,7 +48,7 @@ subtest {
     %env<HTTP_ACCEPT> = 'text/html';
 
     my $code = Crust::Middleware::StackTrace.new(
-        app => sub (%env) {
+        sub (%env) {
             die 'Oops!';
         }
     );
@@ -75,7 +75,7 @@ subtest {
     %env<p6sgi.error> = $io;
 
     my $code = Crust::Middleware::StackTrace.new(
-        app => sub (%env) {
+        sub (%env) {
             die 'Oops!';
         },
         no-print-errors => True,
@@ -89,7 +89,7 @@ subtest {
 
 subtest {
     my $code = Crust::Middleware::StackTrace.new(
-        app => sub (%env) {
+        sub (%env) {
             200, [], ['hello'.encode('ascii')]
         }
     );

@@ -15,7 +15,7 @@ use IO::Blob;
         'p6sgi.error' => $io
     );
     my $code = Crust::Middleware::AccessLog.new(
-        app => sub (%env) {
+        sub (%env) {
             404, [], ['hello'.encode('ascii')]
         },
     );
@@ -38,7 +38,7 @@ use IO::Blob;
         :SERVER_PROTOCOL<HTTP/1.1>,
     );
     my $code = Crust::Middleware::AccessLog.new(
-        app => sub (%env) {
+        sub (%env) {
             404, [], ['hello'.encode('ascii')]
         },
         logger => sub { $io.print(@_) },

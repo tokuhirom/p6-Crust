@@ -4,6 +4,10 @@ unit class Crust::Middleware::Lint does Callable;
 
 has $.app;
 
+method new(Callable $app, *%opts) {
+    self.bless(app => $app, |%opts);
+}
+
 my sub validate-env(%env) {
     unless %env<REQUEST_METHOD> {
         die 'Missing env param: REQUEST_METHOD';
