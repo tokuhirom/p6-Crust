@@ -3,6 +3,11 @@ use v6;
 unit class Crust::Middleware::ReverseProxy does Callable;
 
 has $.app;
+has Regex $.ip-pattern = rx{\d ** 1..3 '.' \d ** 1..3 '.' \d ** 1..3 '.' \d ** 1..3};
+
+method new(Callable $app, *%opts) {
+    self.bless(app => $app, |%opts);
+}
 
 method CALL-ME(%env) {
     # in apache2 httpd.conf (RequestHeader set X-Forwarded-HTTPS %{HTTPS}s)
@@ -22,6 +27,11 @@ method CALL-ME(%env) {
     if %env<HTTP_X_FORWARDED_FOR> {
         my ($ip) = %env<HTTP_X_FORWARDED_FOR> ~~ /(<-[, \s]>+)$/;
         %env<REMOTE_ADDR> = $ip;
+    }
+
+    # validate remote address
+    if $.ip-pattern.defined && %env<REMOTE_ADDR> && %env<REMOTE_ADDR> !~~ $.ip-pattern {
+        die sprintf 'Invalid remote address has come (got: %s, expected pattern: %s)', %env<REMOTE_ADDR>, $.ip-pattern.perl;
     }
 
     if %env<HTTP_X_FORWARDED_HOST> {
@@ -75,13 +85,28 @@ Crust::Middleware::ReverseProxy - Supports app to run as a reverse proxy backend
   use Crust::Middleware::ReverseProxy;
 
   my $app = sub { ... }; # your app
-  $app = ::('Crust::Middleware::ReverseProxy').new(app => $app);
+  $app = ::('Crust::Middleware::ReverseProxy').new($app);
 
 =head1 DESCRIPTION
 
 Crust::Middleware::ReverseProxy resets some HTTP headers, which changed by reverse-proxy.
 
 This middleware is perl6 port of L<Plack::Middleware::ReverseProxy|https://metacpan.org/pod/Plack::Middleware::ReverseProxy>.
+
+=head1 C<REMOTE_ADDR> validation
+
+Crust::Middleware::ReverseProxy validates C<REMOTE_ADDR> by regular expression
+pattern (this middleware uses C<rx{\d ** 1..3 '.' \d ** 1..3 '.' \d ** 1..3 '.' \d ** 1..3}> as default pattern).
+
+You can specify such pattern. Pass C<ip-pattern> argument through constructor, e.g.
+
+  my $app = sub { ... }; # your app
+  $app = Crust::Middleware::ReverseProxy.new(
+    $app,
+    ip-pattern => rx{'127.0.0.1'},
+  );
+
+If you give undefined value to C<ip-pattern>, this middleware doesn't validate C<REMOTE_ADDR> any more.
 
 =head1 AUTHOR
 

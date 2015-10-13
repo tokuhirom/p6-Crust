@@ -22,11 +22,11 @@ sub run(Str $tag, %arg) {
                 $req.field(Host => %input{$host});
             }
 
-            my $res = $cb($req);
+            $cb($req);
         },
         app => -> %env {
             my $code = Crust::Middleware::ReverseProxy.new(
-                app => sub (%env) {
+                sub (%env) {
                     my $req = Crust::Request.new(%env);
 
                     if %arg<address>.defined {
@@ -160,6 +160,81 @@ for @tests -> Pair $test {
     my ($tag, %test) = $test.kv;
     run($tag, %test);
 }
+
+subtest {
+    subtest {
+        my %input = (x-forwarded-for => q{I'm not a IP address});
+
+        test-psgi
+            client => -> $cb {
+                my $req = HTTP::Request.new(
+                    GET => 'http://example.com/?foo=bar',
+                    |%input,
+                );
+                my $res = $cb($req);
+                is $res.code, 500;
+                like $res.content.decode, /^'Invalid remote address has come'/;
+            },
+            app => -> %env {
+                my $code = Crust::Middleware::ReverseProxy.new(
+                    sub (%env) {
+                        my $req = Crust::Request.new(%env);
+                        return [200, ['Content-Type' => 'text/plain'], [ 'OK' ]];
+                    },
+                );
+                $code(%env);
+            };
+    }, 'Invalid ip';
+
+    subtest {
+        my %input = (x-forwarded-for => '1.1.1.1');
+
+        test-psgi
+            client => -> $cb {
+                my $req = HTTP::Request.new(
+                    GET => 'http://example.com/?foo=bar',
+                    |%input,
+                );
+                my $res = $cb($req);
+                is $res.code, 500;
+                like $res.content.decode, /^'Invalid remote address has come'/;
+            },
+            app => -> %env {
+                my $code = Crust::Middleware::ReverseProxy.new(
+                    sub (%env) {
+                        my $req = Crust::Request.new(%env);
+                        return [200, ['Content-Type' => 'text/plain'], [ 'OK' ]];
+                    },
+                    ip-pattern => rx{'127.0.0.1'},
+                );
+                $code(%env);
+            };
+    }, 'Specify own pattern';
+
+    subtest {
+        my %input = (x-forwarded-for => q{I'm not a IP address});
+
+        test-psgi
+            client => -> $cb {
+                my $req = HTTP::Request.new(
+                    GET => 'http://example.com/?foo=bar',
+                    |%input,
+                );
+                my $res = $cb($req);
+                is $res.code, 200;
+            },
+            app => -> %env {
+                my $code = Crust::Middleware::ReverseProxy.new(
+                    sub (%env) {
+                        my $req = Crust::Request.new(%env);
+                        return [200, ['Content-Type' => 'text/plain'], [ 'OK' ]];
+                    },
+                    ip-pattern => Nil,
+                );
+                $code(%env);
+            };
+    }, 'Ignore invalid IP';
+}, 'Test for validate REMOTE_ADDR';
 
 done-testing;
 
