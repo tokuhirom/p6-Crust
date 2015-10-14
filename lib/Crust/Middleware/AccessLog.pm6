@@ -49,7 +49,7 @@ method CALL-ME(%env) {
 
     my $cl = content-length(@res);
     my $now = DateTime.now;
-    my $line = $.formatter().format(%env, @res, $cl, $t0 - $now.Instant, $now);
+    my $line = $.formatter().format(%env, @res, $cl, $now.Instant - $t0, $now);
     $logger($line);
 
     return @res;
