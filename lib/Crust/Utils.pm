@@ -53,3 +53,14 @@ sub content-length($body) is export {
     return Nil;
 }
 
+sub get-header(@hdrs, $key) is export {
+    my $lkey = $key.lc;
+    my @copy = @hdrs;
+    for @hdrs -> $pair {
+        if $pair.key.lc eq $lkey {
+            return $pair.value;
+        }
+    }
+    return;
+}
+
