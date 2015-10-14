@@ -10,8 +10,7 @@ has $!url-map;
 
 multi method add-middleware(Str $middleware, *%args) {
     my $middleware-class = load-class($middleware, 'Crust::Middleware');
-
-    @!middlewares.push(sub (*@args) {
+    self.add-middleware(sub (*@args) {
         ::($middleware-class).new(@args[0], |%args);
     });
 }
@@ -22,24 +21,19 @@ multi method add-middleware(Callable $middleware) {
 
 multi method add-middleware-if(Callable $condition, Str $middleware, *%args) {
     my $middleware-class = load-class($middleware, 'Crust::Middleware');
-
-    my $mw = sub (*@args) {
+    self.add-middleware-if($condition, sub (*@args) {
         ::($middleware-class).new(@args[0], |%args);
-    }
-
-    @!middlewares.push(sub (*@arg) {
-        Crust::Middleware::Conditional.new(@arg[0], :condition($condition), :builder($mw));
     });
 }
 
 multi method add-middleware-if(Callable $condition, Callable $middleware) {
-    @!middlewares.push(sub (*@arg) {
-        Crust::Middleware::Conditional.new(@arg[0], :condition($condition), :builder($middleware));
+    @!middlewares.push(sub (*@args) {
+        Crust::Middleware::Conditional.new(@args[0], :condition($condition), :builder($middleware));
     });
 }
 
 method !mount(Str $location, Callable $app) {
-    if !$!url-map.defined {
+    unless $!url-map.defined {
         $!url-map = Crust::App::URLMap.new;
     }
 
@@ -128,3 +122,4 @@ sub builder(Callable $block) is export {
 =head1 Crust::Builder - Utility to enable Crust Middlewares
 
 =pod end
+
