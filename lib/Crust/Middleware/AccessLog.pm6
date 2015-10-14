@@ -11,7 +11,7 @@ has &.logger;
 method new(Callable $app, *%opts) {
     my Apache::LogFormat::Formatter $formatter;
     given %opts<format> {
-    when any(!.defined, Nil, "", "combined")
+    when any(!.Bool, "combined")
         { $formatter = Apache::LogFormat.combined }
     when "common"   { $formatter = Apache::LogFormat.common }
     when Apache::LogFormat::Compiler {
