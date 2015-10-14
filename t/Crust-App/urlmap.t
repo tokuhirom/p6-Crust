@@ -9,6 +9,9 @@ $app.map: '/foo', sub ($env) { [200, [], ['hello'.encode('ascii')]] };
 $app.map: '/bar', sub ($env) { [200, [], ['world'.encode('ascii')]] };
 $app.map: 'http://localhost:5000/hello', sub ($env) { [200, [], ['こんにちわ'.encode('utf-8')]] };
 $app.map: 'http://127.0.0.1:5000/world', sub ($env) { [200, [], ['世界'.encode('utf-8')]] };
+$app
+  .map('/perl6', sub ($env) { [200, [], ['perl6'.encode('ascii')]] })
+  .map('/perl5', sub ($env) { [200, [], ['perl5'.encode('ascii')]] });
 
 my $client = -> $cb {
     my ($req, $res);
@@ -37,6 +40,16 @@ my $client = -> $cb {
     $req = HTTP::Request.new(GET => "/zoo");
     $res = $cb($req);
     is $res.code, 404;
+
+    $req = HTTP::Request.new(GET => "/perl6");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "perl6";
+
+    $req = HTTP::Request.new(GET => "/perl5");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "perl5";
 };
 
 test-psgi $app, $client;

@@ -13,6 +13,7 @@ multi method map(Str $location, Callable $callable) {
     } 
     $loc = $loc.subst(/\/+ $/, '');
     $!mapping.push: {host => $host, loc => $loc, app => $callable};
+    return self;
 }
 
 method CALL-ME($env) {
