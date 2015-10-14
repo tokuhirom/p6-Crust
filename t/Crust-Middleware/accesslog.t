@@ -4,7 +4,31 @@ use Test;
 use Crust::Middleware::AccessLog;
 use IO::Blob;
 
-{
+my &hello-app = sub (%env) {
+    404, [], ['hello'.encode('ascii')]
+}
+
+sub make-check-combined-logs($io) {
+    return sub {
+        $io.seek(0,0); # rewind
+        my $s = $io.slurp-rest(:enc<ascii>);
+        if ! ok($s.defined, "\$s is defined") {
+            note $s;
+            return;
+        }
+
+        ok $s ~~ /^ '127.0.0.1 - - [' /, "starts with 127.0.0.1";
+        my $v = $s.index('] "GET /apache_pb.gif HTTP/1.1" 404 - "http://www.example.com/start.html" "-"');
+        if ! ok($v.defined, "\$v is defined") {
+            note $s;
+            return;
+        }
+        ok($v > 0);
+        note "# " ~ $s;
+    }
+}
+
+sub runit (&app, &checker, %extra-env?) {
     my $io = IO::Blob.new;
     my %env = (
         :REMOTE_ADDR<127.0.0.1>,
@@ -12,44 +36,47 @@ use IO::Blob;
         :REQUEST_METHOD<GET>,
         :REQUEST_URI</apache_pb.gif>,
         :SERVER_PROTOCOL<HTTP/1.1>,
-        'p6sgi.error' => $io
     );
-    my $code = Crust::Middleware::AccessLog.new(
-        sub (%env) {
-            404, [], ['hello'.encode('ascii')]
-        },
-    );
-    $code(%env);
-    $io.seek(0,0); # rewind
-    my $got = $io.slurp-rest(:enc<ascii>);
-    note "Test when logger = nil";
-    ok $got ~~ /^ '127.0.0.1 - - [' /;
-    ok $got.index('] "GET /apache_pb.gif HTTP/1.1" 404 - "http://www.example.com/start.html" "-"') > 0;
-    note "# " ~ $got;
+
+    if %extra-env.defined {
+        %env = (|%env, |%extra-env);
+    }
+    &app(%env);
+    &checker();
 }
 
 {
     my $io = IO::Blob.new;
-    my %env = (
-        :REMOTE_ADDR<127.0.0.1>,
-        :HTTP_REFERER<http://www.example.com/start.html>,
-        :REQUEST_METHOD<GET>,
-        :REQUEST_URI</apache_pb.gif>,
-        :SERVER_PROTOCOL<HTTP/1.1>,
+    my &code = Crust::Middleware::AccessLog.new(&hello-app);
+    runit(&code, make-check-combined-logs($io), ("p6sgi.error" => $io));
+}
+
+{
+    my $io = IO::Blob.new;
+    my &code = Crust::Middleware::AccessLog.new(
+        &hello-app,
+        format => "combined",
     );
-    my $code = Crust::Middleware::AccessLog.new(
-        sub (%env) {
-            404, [], ['hello'.encode('ascii')]
-        },
-        logger => sub { $io.print(@_) },
+    runit(&code, make-check-combined-logs($io), ("p6sgi.error" => $io));
+}
+
+{
+    my $io = IO::Blob.new;
+    my &code = Crust::Middleware::AccessLog.new(
+        &hello-app,
+        format => Nil,
     );
-    $code(%env);
-    $io.seek(0,0); # rewind
-    my $got = $io.slurp-rest(:enc<ascii>);
-    note "Test when logger = IO.Blob";
-    ok $got ~~ /^ '127.0.0.1 - - [' /;
-    ok $got.index('] "GET /apache_pb.gif HTTP/1.1" 404 - "http://www.example.com/start.html" "-"') > 0;
-    note "# " ~ $got;
+    runit(&code, make-check-combined-logs($io), ("p6sgi.error" => $io));
+}
+
+{
+    my $io = IO::Blob.new;
+    my &code = Crust::Middleware::AccessLog.new(
+        &hello-app,
+        format => Nil,
+        logger => sub { my $s = shift @_; $io.print($s) },
+    );
+    runit(&code, make-check-combined-logs($io));
 }
 
 
