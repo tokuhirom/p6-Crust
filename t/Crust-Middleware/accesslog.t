@@ -73,6 +73,15 @@ sub runit (&app, &checker, %extra-env?) {
     my $io = IO::Blob.new;
     my &code = Crust::Middleware::AccessLog.new(
         &hello-app,
+        format => "",
+    );
+    runit(&code, make-check-combined-logs($io), ("p6sgi.error" => $io));
+}
+
+{
+    my $io = IO::Blob.new;
+    my &code = Crust::Middleware::AccessLog.new(
+        &hello-app,
         format => Nil,
         logger => sub { my $s = shift @_; $io.print($s) },
     );
