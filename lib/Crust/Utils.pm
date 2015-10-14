@@ -53,3 +53,19 @@ sub content-length($body) is export {
     return Nil;
 }
 
+sub load-class($class, $prefix) is export {
+    my $c = $class;
+
+    if $prefix {
+        unless $c ~~ s/^'+'// || $c ~~ /^$prefix/ {
+            $c = $prefix ~ '::' ~ $c;
+        }
+    }
+
+    my $file = $c;
+    $file ~~ s:global|'::'|/|;
+    require ::("$file");
+
+    return $c;
+}
+
