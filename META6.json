@@ -33,7 +33,8 @@
     "HTTP::Easy",
     "URI::Escape",
     "HTTP::UserAgent",
-    "Backtrace::AsHTML"
+    "Backtrace::AsHTML",
+    "Apache::LogFormat"
   ],
   "description" : "Perl6 Superglue for Web frameworks and Web Servers",
   "test-depends" : [ ],
