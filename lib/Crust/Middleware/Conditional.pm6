@@ -20,8 +20,11 @@ method new(Callable $app, *%opts) {
 }
 
 method CALL-ME(%env) {
-    my $app = $!condition(%env) ?? $!middleware !! $!app;
-    return $app.(%env);
+    if $!condition(%env) {
+        return $!middleware(%env);
+    }
+
+    return $.app()(%env);
 }
 
 =begin pod

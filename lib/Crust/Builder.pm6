@@ -71,12 +71,12 @@ our $_add = our $_add-if = our $_mount = sub (*@args) {
     die "enable/mount should be called inside builder {} block";
 }
 
-sub enable(*@args) is export {
-    $_add.(@args);
+sub enable($middleware, *%args) is export {
+    $_add.($middleware, |%args);
 }
 
-sub enable-if(Callable $condition, $middleware, *@args) is export {
-    $_add-if.($condition, $middleware, @args);
+sub enable-if(Callable $condition, $middleware, *%args) is export {
+    $_add-if.($condition, $middleware, |%args);
 }
 
 sub mount(*@args) is export {
@@ -95,12 +95,12 @@ sub builder(Callable $block) is export {
         return $url-map;
     };
 
-    temp $_add = sub (*@args) {
-        $builder.add-middleware(|@args);
+    temp $_add = sub (*@args, *%params) {
+        $builder.add-middleware(|@args, |%params);
     };
 
-    temp $_add-if = sub (*@args) {
-        $builder.add-middleware-if(|@args);
+    temp $_add-if = sub (*@args, *%params) {
+        $builder.add-middleware-if(|@args, |%params);
     };
 
     my $app = $block.();
