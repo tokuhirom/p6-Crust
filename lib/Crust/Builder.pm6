@@ -10,8 +10,8 @@ has $!url-map;
 
 multi method add-middleware(Str $middleware, *%args) {
     my $middleware-class = load-class($middleware, 'Crust::Middleware');
-    self.add-middleware(sub (*@args) {
-        ::($middleware-class).new(@args[0], |%args);
+    self.add-middleware(sub ($app) {
+        ::($middleware-class).new($app, |%args);
     });
 }
 
@@ -21,18 +21,18 @@ multi method add-middleware(Callable $middleware) {
 
 multi method add-middleware-if(Callable $condition, Str $middleware, *%args) {
     my $middleware-class = load-class($middleware, 'Crust::Middleware');
-    self.add-middleware-if($condition, sub (*@args) {
-        ::($middleware-class).new(@args[0], |%args);
+    self.add-middleware-if($condition, sub ($app) {
+        ::($middleware-class).new($app, |%args);
     });
 }
 
 multi method add-middleware-if(Callable $condition, Callable $middleware) {
-    @!middlewares.push(sub (*@args) {
-        Crust::Middleware::Conditional.new(@args[0], :condition($condition), :builder($middleware));
+    @!middlewares.push(sub ($app) {
+        Crust::Middleware::Conditional.new($app, :condition($condition), :builder($middleware));
     });
 }
 
-method !mount(Str $location, Callable $app) {
+method mount(Str $location, Callable $app) {
     unless $!url-map.defined {
         $!url-map = Crust::App::URLMap.new;
     }
@@ -67,7 +67,7 @@ method wrap(Callable $app) returns Callable {
 
 ### DSL
 
-our $_add = our $_add-if = our $_mount = sub (*@args) {
+my $_add = my $_add-if = my $_mount = sub (|) {
     die "enable/mount should be called inside builder {} block";
 }
 
@@ -79,8 +79,8 @@ sub enable-if(Callable $condition, $middleware, *%args) is export {
     $_add-if.($condition, $middleware, |%args);
 }
 
-sub mount(*@args) is export {
-    $_mount.(@args);
+sub mount(Str $location, Callable $block) is export {
+    $_mount.($location, $block);
 }
 
 sub builder(Callable $block) is export {
@@ -89,18 +89,18 @@ sub builder(Callable $block) is export {
     my $mount-is-called;
     my $url-map = Crust::App::URLMap.new;
 
-    temp $_mount = sub (*@args) {
+    temp $_mount = sub (Str $location, Callable $block) {
         $mount-is-called++;
-        $url-map.map(|@args);
+        $url-map.map($location, $block);
         return $url-map;
     };
 
-    temp $_add = sub (*@args, *%params) {
-        $builder.add-middleware(|@args, |%params);
+    temp $_add = sub ($middleware, *%params) {
+        $builder.add-middleware($middleware, |%params);
     };
 
-    temp $_add-if = sub (*@args, *%params) {
-        $builder.add-middleware-if(|@args, |%params);
+    temp $_add-if = sub (Callable $condition, $middleware, *%params) {
+        $builder.add-middleware-if($condition, $middleware, |%params);
     };
 
     my $app = $block.();

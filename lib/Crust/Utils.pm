@@ -62,9 +62,7 @@ sub load-class($class, $prefix) is export {
         }
     }
 
-    my $file = $c;
-    $file ~~ s:global|'::'|/|;
-    require ::("$file");
+    require ::("$c");
 
     return $c;
 }
