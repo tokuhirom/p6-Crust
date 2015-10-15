@@ -117,9 +117,207 @@ sub builder(Callable $block) is export {
     $builder.to-app($app);
 }
 
-=pod start
+=begin pod
 
-=head1 Crust::Builder - Utility to enable Crust Middlewares
+=head1 NAME
 
-=pod end
+Crust::Builder - Utility to enable Crust middlewares
+
+=head1 SYNOPSIS
+
+    # in .psgi
+    use Crust::Builder;
+
+    my $app = sub { ... };
+
+    builder {
+        enable "AccessLog", format => "combined";
+        enable "ContentLength";
+        enable "+My::Crust::Middleware";
+        $app;
+    };
+
+    # use URLMap
+    builder {
+        mount "/foo", builder {
+            enable "Foo";
+            $app;
+        };
+
+        mount "/bar", $app2;
+        mount "http://example.com/", builder { $app3 };
+    };
+
+    # using OO interface
+    my $builder = Crust::Builder.new;
+    $builder.add-middleware('Foo', opt => 1);
+    $builder.add-middleware('Bar');
+    $builder.wrap($app);
+
+=head1 DESCRIPTION
+
+Crust::Builder gives you a quick domain specific language (DSL) to
+wrap your application with Crust::Middleware.
+This utility is inspired by L<Plack::Builder|https://metacpan.org/pod/Plack::Builder>.
+
+Whenever you call C<enable> on any middleware, the middleware app is
+pushed to the stack inside the builder, and then reversed when it
+actually creates a wrapped application handler.
+C<"Crust::Middleware::"> is added as a prefix by default. So:
+
+    builder {
+        enable "Foo";
+        enable "Bar", opt => "val";
+        $app;
+    };
+
+is syntactically equal to:
+
+    $app = Crust::Middleware::Bar.new($app, opt => "val");
+    $app = Crust::Middleware::Foo.new($app);
+
+In other words, you're supposed to C<enable> middleware from outer to inner.
+
+=head1 INLINE MIDDLEWARE
+
+Crust::Builder allows you to code middleware inline using a nested
+code reference.
+
+If the first argument to C<enable> is a code reference, it will be
+passed an C<$app> and should return another code reference
+which is a P6SGI application that consumes C<%env> at runtime. So:
+
+    builder {
+        enable sub ($app) {
+            return sub (%env) {
+                # do preprocessing
+                my @res = $app(%env);
+                # do postprocessing
+                return @res;
+            };
+        };
+        $app;
+    };
+
+=head1 URLMap support
+
+Crust::Builder has a native support for L<Crust::App::URLMap> via the C<mount> method.
+
+    use Crust::Builder;
+    my $app = builder {
+        mount "/foo", $app1;
+        mount "/bar", builder {
+            enable "Foo";
+            $app2;
+        };
+    };
+
+See L<Crust::App::URLMap>'s C<map> method to see what they mean. With
+C<builder> you can't use C<map> as a DSL, for the obvious reason :)
+
+B<NOTE>: Once you use C<mount> in your builder code, you have to use
+C<mount> for all the paths, including the root path (C</>). You can't
+have the default app in the last line of C<builder> like:
+
+    my $app = sub (%env) {
+        ...
+    };
+
+    builder {
+        mount "/foo", sub (%env) { ... };
+        $app; # THIS DOESN'T WORK
+    };
+
+You'll get warnings saying that your mount configuration will be
+ignored. Instead you should use C<< mount "/" => ... >> in the last
+line to set the default fallback app.
+
+    builder {
+        mount "/foo", sub (%env) { ... };
+        mount "/", $app;
+    }
+
+Note that the C<builder> DSL returns a whole new P6SGI application, which means
+
+=item *
+
+C<builder { ... }> should normally the last statement of a C<.psgi>
+file, because the return value of C<builder> is the application that
+is actually executed.
+
+=item *
+
+You can nest your C<builder> blocks, mixed with C<mount> statements (see L</"URLMap support">
+above):
+
+    builder {
+        mount "/foo" => builder {
+            mount "/bar" => $app;
+        }
+    }
+
+will locate the C<$app> under C</foo/bar>, since the inner C<builder>
+block puts it under C</bar> and it results in a new P6SGI application
+which is located under C</foo> because of the outer C<builder> block.
+
+=head1 CONDITIONAL MIDDLEWARE SUPPORT
+
+You can use C<enable-if> to conditionally enable middleware based on
+the runtime environment.
+
+    builder {
+        enable-if -> %env {
+            %env<REMOTE_ADDR> eq '127.0.0.1'
+        }, 'AccessLog', format => "combined";
+        $app;
+    };
+
+See L<Crust::Middleware::Conditional> for details.
+
+=head1 OBJECT ORIENTED INTERFACE
+
+Object oriented interface supports the same functionality with the DSL
+version in a clearer interface, probably with more typing required.
+
+    # With mount
+    my $builder = Crust::Builder.new;
+    $builder.add-middleware('Foo', opt => 1);
+    $builder.mount('/foo', $foo-app);
+    $builder.mount('/', $root-app);
+    $builder.to-app;
+
+    # Nested builders. Equivalent to:
+    # builder {
+    #     mount '/foo', builder {
+    #         enable 'Foo';
+    #         $app;
+    #     };
+    #     mount '/' => $app2;
+    # };
+
+    my $builder-out = Crust::Builder.new;
+    my $builder-in  = Crust::Builder.new;
+    $builder-in.add-middleware('Foo');
+    $builder-out.mount("/foo", $builder-in.wrap($app));
+    $builder-out.mount("/", $app2);
+    $builder-out.to-app;
+
+    # conditional. You can also directly use Crust::Middleware::Conditional
+    my $builder = Crust::Builder.new;
+    $builder.add-middleware-if(sub (%sub) { %sub<REMOTE_ADDR> eq '127.0.0.1' }, 'AccessLog');
+    $builder.wrap($app);
+
+=head1 AUTHOR
+
+moznion <moznion@gmail.com>
+
+=head1 SEE ALSO
+
+=item L<Crust::App::URLMap>
+
+=item L<Crust::Middleware::Conditional>
+
+=item L<Plack::Builder|https://metacpan.org/pod/Plack::Builder>
+
+=end pod
 

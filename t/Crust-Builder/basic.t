@@ -4,12 +4,12 @@ use Crust::Builder;
 use IO::Blob;
 
 subtest {
-    my &app = builder {
+    my $app = builder {
         enable "AccessLog", format => "combined";
         enable "ContentLength";
-        enable sub (&app) {
+        enable sub ($app) {
             return sub (%env) {
-                my @res = &app(%env);
+                my @res = $app(%env);
                 @res[1].append("HELLO", "WORLD");
                 return @res;
             }
@@ -28,7 +28,7 @@ subtest {
         "p6sgi.error" => $io,
     );
 
-    my @res = &app(%env);
+    my @res = $app(%env);
     $io.seek(0, 0);
     my $s = $io.slurp-rest(:enc<ascii>);
 
@@ -40,12 +40,12 @@ subtest {
 
 subtest {
     subtest {
-        my &app = builder {
+        my $app = builder {
             enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, "AccessLog", format => "combined";
             enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, "ContentLength";
-            enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, sub (&app) {
+            enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, sub ($app) {
                 return sub (%env) {
-                    my @res = &app(%env);
+                    my @res = $app(%env);
                     @res[1].append("HELLO", "WORLD");
                     return @res;
                 }
@@ -64,7 +64,7 @@ subtest {
             "p6sgi.error" => $io,
         );
 
-        my @res = &app(%env);
+        my @res = $app(%env);
         $io.seek(0, 0);
         my $s = $io.slurp-rest(:enc<ascii>);
 
@@ -75,12 +75,12 @@ subtest {
     }, 'Truely';
 
     subtest {
-        my &app = builder {
+        my $app = builder {
             enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, "AccessLog", format => "combined";
             enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, "ContentLength";
-            enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, sub (&app) {
+            enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, sub ($app) {
                 return sub (%env) {
-                    my @res = &app(%env);
+                    my @res = $app(%env);
                     @res[1].append("HELLO", "WORLD");
                     return @res;
                 }
@@ -99,7 +99,7 @@ subtest {
             "p6sgi.error" => $io,
         );
 
-        my @res = &app(%env);
+        my @res = $app(%env);
         $io.seek(0, 0);
         my $s = $io.slurp-rest(:enc<ascii>);
 
