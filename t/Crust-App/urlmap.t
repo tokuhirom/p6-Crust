@@ -1,0 +1,57 @@
+use v6;
+use Test;
+use Crust::App::URLMap;
+use Crust::Test;
+use HTTP::Request;
+
+my $app = Crust::App::URLMap.new;
+$app.map: '/foo', sub ($env) { [200, [], ['hello'.encode('ascii')]] };
+$app.map: '/bar', sub ($env) { [200, [], ['world'.encode('ascii')]] };
+$app.map: 'http://localhost:5000/hello', sub ($env) { [200, [], ['こんにちわ'.encode('utf-8')]] };
+$app.map: 'http://127.0.0.1:5000/world', sub ($env) { [200, [], ['世界'.encode('utf-8')]] };
+$app
+  .map('/perl6', sub ($env) { [200, [], ['perl6'.encode('ascii')]] })
+  .map('/perl5', sub ($env) { [200, [], ['perl5'.encode('ascii')]] });
+
+my $client = -> $cb {
+    my ($req, $res);
+    $req = HTTP::Request.new(GET => "/foo");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "hello";
+
+    $req = HTTP::Request.new(GET => "/bar");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "world";
+
+    # TODO
+    #$req = HTTP::Request.new(GET => "http://localhost:5000/hello");
+    #$res = $cb($req);
+    #is $res.code, 200;
+    #is $res.content.decode, "こんにちわ";
+
+    # TODO
+    #$req = HTTP::Request.new(GET => "http://127.0.0.1:5000/world");
+    #$res = $cb($req);
+    #is $res.code, 200;
+    #is $res.content.decode, "世界";
+
+    $req = HTTP::Request.new(GET => "/zoo");
+    $res = $cb($req);
+    is $res.code, 404;
+
+    $req = HTTP::Request.new(GET => "/perl6");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "perl6";
+
+    $req = HTTP::Request.new(GET => "/perl5");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "perl5";
+};
+
+test-psgi $app, $client;
+
+done-testing;
