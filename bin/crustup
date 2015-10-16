@@ -1,96 +1,11 @@
 #!/usr/bin/env perl6-m
 use v6;
 
-use HTTP::Server::Tiny;
-use Crust;
-use Getopt::Tiny;
+use Crust::Runner;
 
-my $opts = {
-    I => [],
-    M => [],
-    s => 'HTTP::Server::Tiny',
-};
-
-get-options(
-    $opts, <
-        e=s
-        I=s@
-        M=s@
-        accesslog=!
-        lint=!
-        v|version=!
-        s=s
-    >, :pass-through
-);
-
-@*INC.prepend: @($opts<I>);
-
-if $opts<M> {
-    for @($opts<M>) {
-        require ::($_);
-    }
-}
-
-if $opts<version> {
-    say "perl6 version {$*PERL.compiler.version} built on {$*VM.name} version {$*VM.version}";
-    # TODO: show crust's version. but I don't know how to get it.
-    exit 1;
-}
-
-my %handler-opts;
-my @args;
-while @*ARGS {
-    given @*ARGS[0] {
-        when '--' {
-            @*ARGS.shift;
-            @args.append: @*ARGS;
-            last;
-        }
-        when /^\-\-(<-[\=]>+)\=(.*)$/ {
-            %handler-opts{$/[0].Str} = $/[1].Str;
-            @*ARGS.shift;
-        }
-        when /^\-\-(<-[\=]>+)$/ {
-            @*ARGS.shift;
-            my $key   = $/[0].Str;
-            my $value = @*ARGS.shift;
-            %handler-opts{$key} = $value;
-        }
-        default {
-            @args.push: @*ARGS.shift;
-        }
-    }
-}
-
-for %handler-opts.kv -> $k, $v {
-    if $v ~~ /^<[0 .. 9]>+$/ {
-        %handler-opts{$k} = IntStr.new($v.Int, $v);
-    }
-}
-
-# eval
-my $app = do {
-    if $opts<e> {
-        EVAL($opts<e>);
-    } elsif @args.elems > 0 {
-        EVALFILE(@args[0])
-    } else {
-        EVALFILE('app.psgi')
-    }
-};
-if $opts<accesslog> {
-    require Crust::Middleware::AccessLog;
-    $app = ::('Crust::Middleware::AccessLog').new($app);
-}
-if $opts<lint> {
-    require Crust::Middleware::Lint;
-    $app = ::('Crust::Middleware::Lint').new($app);
-}
-
-my $handler = "Crust::Handler::{$opts<s>}";
-require ::($handler);
-my $httpd = ::($handler).new(|%handler-opts);
-$httpd.run($app);
+my $runner = Crust::Runner.new;
+$runner.parse-options(@*ARGS);
+$runner.run();
 
 =begin pod
 
