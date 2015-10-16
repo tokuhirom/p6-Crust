@@ -17,7 +17,7 @@ subtest {
     my $io = IO::Blob.new;
 
     temp %env = %env;
-    %env<p6sgi.error> = $io;
+    %env<p6sgi.errors> = $io;
 
     my $code = Crust::Middleware::StackTrace.new(
         sub (%env) {
@@ -44,7 +44,7 @@ subtest {
     my $io = IO::Blob.new;
 
     temp %env = %env;
-    %env<p6sgi.error> = $io;
+    %env<p6sgi.errors> = $io;
     %env<HTTP_ACCEPT> = 'text/html';
 
     my $code = Crust::Middleware::StackTrace.new(
@@ -72,7 +72,7 @@ subtest {
     my $io = IO::Blob.new;
 
     temp %env = %env;
-    %env<p6sgi.error> = $io;
+    %env<p6sgi.errors> = $io;
 
     my $code = Crust::Middleware::StackTrace.new(
         sub (%env) {
