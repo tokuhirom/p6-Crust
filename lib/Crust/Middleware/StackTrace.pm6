@@ -24,7 +24,7 @@ method CALL-ME(%env) {
                 %env<crust.stacktrace.text> = $text;
                 %env<crust.stacktrace.html> = $html;
 
-                %env<p6sgi.error>.print($text) unless $.no-print-errors;
+                %env<p6sgi.errors>.print($text) unless $.no-print-errors;
                 if (%env<HTTP_ACCEPT> || '*/*') ~~ /'html'/ {
                     return [500, ['Content-Type' => 'text/html; charset=utf-8'], [ $html ]];
                 }
@@ -64,7 +64,7 @@ that middleware further up the stack can reference it.
 
   $app = ::('Crust::Middleware::StackTrace').new(app => $app, no-print-errors => True);
 
-Skips printing the text stacktrace to console (C<p6sgi.error>).
+Skips printing the text stacktrace to console (C<p6sgi.errors>).
 Defaults to False, which means the text version of the
 stack trace error is printed to the errors handle, which usually is a
 standard error.

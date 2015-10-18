@@ -53,3 +53,15 @@ sub content-length($body) is export {
     return Nil;
 }
 
+multi sub load-class($class) is export {
+    require ::($class);
+    return $class;
+}
+
+multi sub load-class($class is copy, $prefix) is export {
+    unless $class ~~ s/^'+'// || $class ~~ /^$prefix/ {
+        $class = $prefix ~ '::' ~ $class;
+    }
+    return load-class($class);
+}
+

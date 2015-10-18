@@ -44,7 +44,7 @@ method CALL-ME(%env) {
     # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
     my $logger = $.logger;
     if !$logger.defined {
-        $logger = sub ($s) { %env<p6sgi.error>.print($s) };
+        $logger = sub ($s) { %env<p6sgi.errors>.print($s) };
     }
 
     my $cl = content-length(@res);
