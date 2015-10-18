@@ -14,7 +14,7 @@ EOF
 my $app = Crust::App::Directory.new(
     :root($tempdir),
     app => sub ($env) {
-        [200, [], ["hello"].encode('ascii')];
+        200, [], ['hello'];
     }
 );
 my $client = -> $cb {
