@@ -38,7 +38,7 @@ Crust::Test - Test PSGI applications
   use HTTP::Request;
 
   # OO
-  my $app = -> $env { 200,[],["hello".encode] };
+  my $app = -> $env { 200,[],["hello"] };
   my $test = Crust::Test.create($app);
   my $req = HTTP::Request.new(GET => "/");
   my $res = $test.request($req);

@@ -90,13 +90,13 @@ subtest {
 subtest {
     my $code = Crust::Middleware::StackTrace.new(
         sub (%env) {
-            200, [], ['hello'.encode('ascii')]
+            200, [], ['hello']
         }
     );
     my $ret = $code(%env);
     is $ret[0], 200;
     is $ret[1], [];
-    is-deeply $ret[2], ['hello'.encode('ascii')];
+    is-deeply $ret[2], ['hello'];
 }, 'No errors';
 
 done-testing;

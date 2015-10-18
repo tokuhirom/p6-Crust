@@ -5,7 +5,7 @@ use Crust::Middleware::AccessLog;
 use IO::Blob;
 
 my &hello-app = sub (%env) {
-    404, [], ['hello'.encode('ascii')]
+    404, [], ['hello']
 }
 
 sub make-check-combined-logs($io) {

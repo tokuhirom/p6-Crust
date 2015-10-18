@@ -15,7 +15,7 @@ my %env = (
 subtest {
     my $code = Crust::Middleware::Lint.new(
         sub (%env) {
-            200, [], ['hello'.encode('ascii')]
+            200, [], ['hello']
         }
     );
 
@@ -107,7 +107,7 @@ subtest {
                 200, [
                     'Content-Type' => 'text/plain',
                     'Content-Length' => 123,
-                ], ['hello'.encode('ascii')]
+                ], ['hello']
             }
         );
         lives-ok({$code(%env)});
@@ -122,35 +122,35 @@ subtest {
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
-            sub (%env) { 'status!!', [], ['hello'.encode('ascii')] }
+            sub (%env) { 'status!!', [], ['hello'] }
         );
         dies-ok({$code(%env)});
     }, 'Should die because response has not numerical status code';
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
-            sub (%env) { 42, [], ['hello'.encode('ascii')] }
+            sub (%env) { 42, [], ['hello'] }
         );
         dies-ok({$code(%env)});
     }, 'Should die because response status code is less than 100';
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
-            sub (%env) { 200, 'invalid-header', ['hello'.encode('ascii')] }
+            sub (%env) { 200, 'invalid-header', ['hello'] }
         );
         dies-ok({$code(%env)});
     }, 'Should die because response header is not Array';
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
-            sub (%env) { 200, ['invalid'], ['hello'.encode('ascii')] }
+            sub (%env) { 200, ['invalid'], ['hello'] }
         );
         dies-ok({$code(%env)});
     }, 'Should die because response header has odd elements';
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
-            sub (%env) { 200, ['Status' => 'Fine'], ['hello'.encode('ascii')] }
+            sub (%env) { 200, ['Status' => 'Fine'], ['hello'] }
         );
         dies-ok({$code(%env)});
     }, 'Should die because response header has status field';
@@ -158,25 +158,25 @@ subtest {
     subtest {
         {
             my $code = Crust::Middleware::Lint.new(
-                sub (%env) { 200, ['foo:bar' => 'buz'], ['hello'.encode('ascii')] }
+                sub (%env) { 200, ['foo:bar' => 'buz'], ['hello'] }
             );
             dies-ok({$code(%env)});
         }
         {
             my $code = Crust::Middleware::Lint.new(
-                sub (%env) { 200, ['foobar-' => 'buz'], ['hello'.encode('ascii')] }
+                sub (%env) { 200, ['foobar-' => 'buz'], ['hello'] }
             );
             dies-ok({$code(%env)});
         }
         {
             my $code = Crust::Middleware::Lint.new(
-                sub (%env) { 200, ['0foobar' => 'buz'], ['hello'.encode('ascii')] }
+                sub (%env) { 200, ['0foobar' => 'buz'], ['hello'] }
             );
             dies-ok({$code(%env)});
         }
         {
             my $code = Crust::Middleware::Lint.new(
-                sub (%env) { 200, ['foo$bar' => 'buz'], ['hello'.encode('ascii')] }
+                sub (%env) { 200, ['foo$bar' => 'buz'], ['hello'] }
             );
             dies-ok({$code(%env)});
         }
@@ -184,14 +184,14 @@ subtest {
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
-            sub (%env) { 200, ['something' => utf8.new(0).Str], ['hello'.encode('ascii')] }
+            sub (%env) { 200, ['something' => utf8.new(0).Str], ['hello'] }
         );
         dies-ok({$code(%env)});
     }, 'Should die because value of response header has invalid character';
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
-            sub (%env) { 200, ['something' => Nil], ['hello'.encode('ascii')] }
+            sub (%env) { 200, ['something' => Nil], ['hello'] }
         );
         dies-ok({$code(%env)});
     }, 'Should die because value of response header is undefined';

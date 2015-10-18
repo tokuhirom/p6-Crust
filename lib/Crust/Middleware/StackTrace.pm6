@@ -26,9 +26,9 @@ method CALL-ME(%env) {
 
                 %env<p6sgi.errors>.print($text) unless $.no-print-errors;
                 if (%env<HTTP_ACCEPT> || '*/*') ~~ /'html'/ {
-                    return [500, ['Content-Type' => 'text/html; charset=utf-8'], [ $html ]];
+                    return 500, ['Content-Type' => 'text/html; charset=utf-8'], [ $html ];
                 }
-                return [500, ['Content-Type' => 'text/plain; charset=utf-8'], [ $text ]];
+                return 500, ['Content-Type' => 'text/plain; charset=utf-8'], [ $text ];
             }
         }
     }();

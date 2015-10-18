@@ -7,7 +7,7 @@ use Crust::Middleware::Conditional;
 
 subtest {
     my $app = sub (%env) {
-        200, [], ['hello'.encode('ascii')]
+        200, [], ['hello']
     };
 
     $app = Crust::Middleware::Conditional.new(

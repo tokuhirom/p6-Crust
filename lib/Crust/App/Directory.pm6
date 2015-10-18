@@ -57,7 +57,7 @@ method serve-dir(Hash $env, Str $dir) {
             'Content-Type' => "text/plain",
             'Location' => "/{{$dir}}/"
         ],
-        ["".encode('utf-8')] unless $path.ends-with('/');
+        [""] unless $path.ends-with('/');
 
     my Str $files;
     $files ~= sprintf($dir_file, '..', '..', '', '', '');
@@ -74,7 +74,7 @@ method serve-dir(Hash $env, Str $dir) {
         [
             'Content-Type' => "text/html; charset=utf-8"
         ],
-        [$page.encode('utf-8')]
+        [$page]
     ;
 }
 

@@ -7,7 +7,7 @@ subtest {
     my @psgi-res =
         404,
         ["Content-Length" => 9, 'X-Foo' => "hoge"],
-        ["NOT FOUND".encode('ascii')],
+        ["NOT FOUND"],
     ;
     my $res = HTTP::Response.from-psgi(|@psgi-res);
     is $res.code, 404;

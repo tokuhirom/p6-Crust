@@ -5,13 +5,13 @@ use Crust::Test;
 use HTTP::Request;
 
 my $app = Crust::App::URLMap.new;
-$app.map: '/foo', sub ($env) { [200, [], ['hello'.encode('ascii')]] };
-$app.map: '/bar', sub ($env) { [200, [], ['world'.encode('ascii')]] };
-$app.map: 'http://localhost:5000/hello', sub ($env) { [200, [], ['こんにちわ'.encode('utf-8')]] };
-$app.map: 'http://127.0.0.1:5000/world', sub ($env) { [200, [], ['世界'.encode('utf-8')]] };
+$app.map: '/foo', sub ($env) { 200, [], ['hello'] };
+$app.map: '/bar', sub ($env) { 200, [], ['world'] };
+$app.map: 'http://localhost:5000/hello', sub ($env) { 200, [], ['こんにちわ'] };
+$app.map: 'http://127.0.0.1:5000/world', sub ($env) { 200, [], ['世界'] };
 $app
-  .map('/perl6', sub ($env) { [200, [], ['perl6'.encode('ascii')]] })
-  .map('/perl5', sub ($env) { [200, [], ['perl5'.encode('ascii')]] });
+  .map('/perl6', sub ($env) { 200, [], ['perl6'] })
+  .map('/perl5', sub ($env) { 200, [], ['perl5'] });
 
 my $client = -> $cb {
     my ($req, $res);

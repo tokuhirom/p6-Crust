@@ -6,7 +6,7 @@ use HTTP::Request;
 
 my $app = -> $env {
     sleep 0.5;
-    200, [ 'Content-Type' => 'text/plain' ], [ "Hello World".encode ];
+    200, [ 'Content-Type' => 'text/plain' ], [ "Hello World" ];
 };
 $app = ::('Crust::Middleware::Runtime').new($app);
 
@@ -21,7 +21,7 @@ test-psgi
 # with a differnt header-name
 $app = -> $env {
     sleep 0.5;
-    200, [ 'Content-Type' => 'text/plain' ], [ "Hello World".encode ];
+    200, [ 'Content-Type' => 'text/plain' ], [ "Hello World" ];
 };
 $app = ::('Crust::Middleware::Runtime').new($app, :header-name<X-RUNTIME-TEST>);
 

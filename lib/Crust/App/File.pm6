@@ -90,13 +90,13 @@ method serve-path(Hash $env, Str $file) {
 }
 
 method !return_403() {
-    return 403, ['Content-Type' => 'text/plain', 'Content-Length' => 9], ['forbidden'.encode('ascii')];
+    return 403, ['Content-Type' => 'text/plain', 'Content-Length' => 9], ['forbidden'];
 }
 method !return_400() {
-    return 400, ['Content-Type' => 'text/plain', 'Content-Length' => 11], ['Bad Request'.encode('ascii')];
+    return 400, ['Content-Type' => 'text/plain', 'Content-Length' => 11], ['Bad Request'];
 }
 method !return_404() {
-    return 404, ['Content-Type' => 'text/plain', 'Content-Length' => 9], ['not found'.encode('ascii')];
+    return 404, ['Content-Type' => 'text/plain', 'Content-Length' => 9], ['not found'];
 }
 
 =begin pod
