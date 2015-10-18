@@ -1,7 +1,7 @@
 use v6;
 
 sub app($env) {
-    if ($env<PATH_INFO> eq '/exit') {
+    if ($env<PATH_INFO> && $env<PATH_INFO> eq '/exit') {
         say 'good bye!';
         exit;
     }
