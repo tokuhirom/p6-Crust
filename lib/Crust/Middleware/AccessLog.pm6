@@ -1,10 +1,10 @@
 use v6;
 
-unit class Crust::Middleware::AccessLog does Callable;
-
 use Apache::LogFormat;
+use Crust::Middleware;
 
-has $.app;
+unit class Crust::Middleware::AccessLog is Crust::Middleware;
+
 has $.formatter;
 has &.logger;
 
@@ -25,7 +25,7 @@ method new(Callable $app, *%opts) {
     %opts<format>:delete;
 
     %opts<formatter> = $formatter;
-    self.bless(app => $app, |%opts);
+    callwith($app, |%opts);
 }
 
 my sub content-length(@res) {

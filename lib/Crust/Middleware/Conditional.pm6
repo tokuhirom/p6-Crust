@@ -1,22 +1,17 @@
 use v6;
 
-unit class Crust::Middleware::Conditional does Callable;
+use Crust::Middleware;
 
-has Callable $.app;
+unit class Crust::Middleware::Conditional is Crust::Middleware;
 
 has Callable $!condition;
 has Callable $!builder;
 has $!middleware;
 
 submethod BUILD(:$app, *%opts) {
-    $!app = $app;
     $!condition  = %opts<condition>;
     $!builder    = %opts<builder>;
     $!middleware = $!builder.($app);
-}
-
-method new(Callable $app, *%opts) {
-    self.bless(app => $app, |%opts);
 }
 
 method CALL-ME(%env) {

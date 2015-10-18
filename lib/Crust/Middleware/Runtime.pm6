@@ -1,13 +1,9 @@
 use v6;
+use Crust::Middleware;
 
-unit class Crust::Middleware::Runtime does Callable;
+unit class Crust::Middleware::Runtime is Crust::Middleware;
 
-has $.app;
 has $.header-name = 'X-Runtime';
-
-method new(Callable $app, *%opts) {
-    self.bless(app => $app, |%opts);
-}
 
 method CALL-ME(%env) {
     my $start = now;

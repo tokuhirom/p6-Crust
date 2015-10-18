@@ -1,12 +1,7 @@
 use v6;
+use Crust::Middleware;
 
-unit class Crust::Middleware::Lint does Callable;
-
-has $.app;
-
-method new(Callable $app, *%opts) {
-    self.bless(app => $app, |%opts);
-}
+unit class Crust::Middleware::Lint is Crust::Middleware;
 
 my sub validate-env(%env) {
     unless %env<REQUEST_METHOD> {

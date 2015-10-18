@@ -1,16 +1,10 @@
 use v6;
 use Backtrace::AsHTML;
+use Crust::Middleware;
 
-unit class Crust::Middleware::StackTrace does Callable;
-
-has $.app;
+unit class Crust::Middleware::StackTrace is Crust::Middleware;
 
 has Bool $.no-print-errors = False;
-
-method new(Callable $app, *%opts) {
-    self.bless(app => $app, |%opts);
-}
-
 
 method CALL-ME(%env) {
     my $ret = sub {
