@@ -14,7 +14,7 @@ subtest {
                 return @res;
             }
         };
-        sub (%env) { 200, [ "Content-Type" => "text/plain" ], [ "Hello, World" ] };
+        sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
     }
 
     my $io = IO::Blob.new;
@@ -50,7 +50,7 @@ subtest {
                     return @res;
                 }
             };
-            sub (%env) { 200, [ "Content-Type" => "text/plain" ], [ "Hello, World" ] };
+            sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
         }
 
         my $io = IO::Blob.new;
@@ -85,7 +85,7 @@ subtest {
                     return @res;
                 }
             };
-            sub (%env) { 200, [ "Content-Type" => "text/plain" ], [ "Hello, World" ] };
+            sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
         }
 
         my $io = IO::Blob.new;

@@ -72,7 +72,7 @@ method serve-dir(Hash $env, Str $dir) {
     return
         200,
         [
-            'Content-Type' => "text/html; charset=utf-8"
+            'Content-Type' => 'text/html; charset=utf-8'
         ],
         [$page]
     ;

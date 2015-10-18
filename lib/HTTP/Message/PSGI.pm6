@@ -115,7 +115,7 @@ HTTP::Message::PSGI - Converts HTTP::Request and HTTP::Response from/to PSGI env
   my $req = HTTP::Request.new(GET => "http://example.com/foo");
   my $psgi-env = $req.to-psgi;
 
-  my $psgi-res = 200, ['Content-Type' => 'text/plain'], ["ok"];
+  my $psgi-res = 200, ['Content-Type' => 'text/plain'], ['ok'];
   my $res = HTTP::Response.from-psgi(|$psgi-res);
 
 =head1 DESCRIPTION
