@@ -1,13 +1,8 @@
 use v6;
 use Test;
 use Crust::Test;
-
-use Crust::Builder;
 use Crust::Middleware::Runtime;
-
 use HTTP::Request;
-
-$Crust::Test::Impl = "MockHTTP";
 
 my $app = -> $env {
     sleep 0.5;
