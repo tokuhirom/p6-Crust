@@ -43,10 +43,10 @@ method call(Hash $env) {
 
         $env<PATH_INFO>  = $path;
         $env<SCRIPT_NAME> = $script_name ~~ $loc;
-        my $res = $map<app>($env);
+        my @res = $map<app>($env);
         $env<PATH_INFO> = $orig_path_info;
         $env<SCRIPT_NAME> = $orig_script_name;
-        return $res;
+        return @res;
     }
 
     return 404, ['Content-Type' => 'text/plain'], ["Not Found".encode('ascii')];
