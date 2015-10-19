@@ -11,7 +11,7 @@ has $!url-map;
 multi method add-middleware(Str $middleware, *%args) {
     my $middleware-class = load-class($middleware, 'Crust::Middleware');
     self.add-middleware(sub ($app) {
-        ::($middleware-class).wrap($app, |%args);
+        ::($middleware-class).new($app, |%args);
     });
 }
 
@@ -22,13 +22,13 @@ multi method add-middleware(Callable $middleware) {
 multi method add-middleware-if(Callable $condition, Str $middleware, *%args) {
     my $middleware-class = load-class($middleware, 'Crust::Middleware');
     self.add-middleware-if($condition, sub ($app) {
-        ::($middleware-class).wrap($app, |%args);
+        ::($middleware-class).new($app, |%args);
     });
 }
 
 multi method add-middleware-if(Callable $condition, Callable $middleware) {
     @!middlewares.push(sub ($app) {
-        Crust::Middleware::Conditional.wrap($app, :condition($condition), :builder($middleware));
+        Crust::Middleware::Conditional.new($app, :condition($condition), :builder($middleware));
     });
 }
 
