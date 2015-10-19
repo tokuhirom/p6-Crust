@@ -26,7 +26,6 @@ method call(Hash $env) {
 
     my $http_host = $env<HTTP_HOST>;
     my $server_name = $env<SERVER_NAME>;
-    say $http_host;
 
     for $!mapping.keys -> $i {
         my $map = $!mapping[$i];
