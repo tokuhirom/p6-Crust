@@ -3,6 +3,11 @@ use v6;
 
 use Crust::Runner;
 
+# EXPERIMENTAL FEATURE
+# p6sgi file can detect whether it is invoked by some p6sgi runner script or not
+# via environment variable P6SGI_CONTAINER
+%*ENV<P6SGI_CONTAINER> = "crust";
+
 my $runner = Crust::Runner.new;
 $runner.parse-options(@*ARGS);
 $runner.run();
