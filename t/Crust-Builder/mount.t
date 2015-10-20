@@ -6,7 +6,7 @@ use IO::Blob;
 
 subtest {
     my $app = sub ($env) {
-        [200, [ "Content-Type" => "text/plain" ], [ "Hello, World" ]]
+        200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ]
     };
 
     my $builder = builder {

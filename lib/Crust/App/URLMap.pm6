@@ -49,7 +49,7 @@ method call(Hash $env) {
         return @res;
     }
 
-    return 404, ['Content-Type' => 'text/plain'], ["Not Found".encode('ascii')];
+    return 404, ['Content-Type' => 'text/plain'], ["Not Found"];
 }
 
 method to-app() {

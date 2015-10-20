@@ -41,13 +41,15 @@ my $client = -> $cb {
     is $res.code, 404;
     is $res.content.decode, "not found";
 
-    $req = HTTP::Request.new(GET => "/secret");
-    $res = $cb($req);
-    is $res.code, 403;
+    unless $*DISTRO.is-win {
+        $req = HTTP::Request.new(GET => "/secret");
+        $res = $cb($req);
+        is $res.code, 403;
 
-    $req = HTTP::Request.new(GET => "/../.ssh/id_rsa");
-    $res = $cb($req);
-    is $res.code, 403;
+        $req = HTTP::Request.new(GET => "/../.ssh/id_rsa");
+        $res = $cb($req);
+        is $res.code, 403;
+    }
 };
 
 test-psgi $app, $client;

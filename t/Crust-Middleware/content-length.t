@@ -16,8 +16,8 @@ subtest {
     my $code = Crust::Middleware::ContentLength.new(
         sub (%env) {
             200, [], [
-                'hello'.encode('ascii'),
-                'goodbye'.encode('ascii'),
+                'hello',
+                'goodbye',
             ]
         }
     );
