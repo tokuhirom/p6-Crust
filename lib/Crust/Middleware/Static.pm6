@@ -12,7 +12,7 @@ has $.pass-through;
 has $.content-type;
 
 submethod BUILD(:$!path, :$!root, :$!encoding, :$!content-type, :$!pass-through) {
-    $!path //= sub ($env, %path) { True };
+    $!path //= sub ($path, %env) { return True, $path };
     $!root //= ".";
     $!encoding //= "iso-8859-1";
     $!content-type //= "";
@@ -34,21 +34,23 @@ method CALL-ME(%env) {
 
 method !handle-static(%env) {
     my $path_match = $.path;
-    if ! $path_match {
-        return;
+    if ! $path_match.defined {
+        return ();
     }
 
     my $path = %env<PATH_INFO>;
     my $proceed;
 
     given $path_match {
-        when Callable { ($proceed, $path) = $path_match($path, %env) }
         when Regex { $proceed = $path ~~ $path_match }
+        when Callable { ($proceed, $path) = $path_match($path, %env) }
     }
+
     if !$proceed {
-        return;
+        return ();
     }
 
     temp %env<PATH_INFO> = $path;
-    return $!file.call(%env);
+    my @res = $!file.(%env);
+    return @res;
 }
