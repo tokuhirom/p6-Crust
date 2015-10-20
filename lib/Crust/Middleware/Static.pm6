@@ -43,7 +43,7 @@ method !handle-static(%env) {
 
     given $path_match {
         when Callable { ($proceed, $path) = $path_match($path, %env) }
-        when Regex { $proceed = $path ~~ $path }
+        when Regex { $proceed = $path ~~ $path_match }
     }
     if !$proceed {
         return;
