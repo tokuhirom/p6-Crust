@@ -1,13 +1,9 @@
 use v6;
+use Crust::Middleware;
 
-unit class Crust::Middleware::ReverseProxy does Callable;
+unit class Crust::Middleware::ReverseProxy is Crust::Middleware;
 
-has $.app;
 has Regex $.ip-pattern = rx{\d ** 1..3 '.' \d ** 1..3 '.' \d ** 1..3 '.' \d ** 1..3};
-
-method new(Callable $app, *%opts) {
-    self.bless(app => $app, |%opts);
-}
 
 method CALL-ME(%env) {
     # in apache2 httpd.conf (RequestHeader set X-Forwarded-HTTPS %{HTTPS}s)

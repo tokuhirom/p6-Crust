@@ -1,13 +1,8 @@
 use v6;
+use Crust::Middleware;
 use Crust::Utils;
 
-unit class Crust::Middleware::ContentLength does Callable;
-
-has $.app;
-
-method new(Callable $app, *%opts) {
-    self.bless(app => $app, |%opts);
-}
+unit class Crust::Middleware::ContentLength is Crust::Middleware;
 
 method CALL-ME(%env) {
     my @ret = $.app()(%env);
