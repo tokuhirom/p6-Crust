@@ -6,7 +6,7 @@ use Crust::MIME;
 
 has Str $.root;
 has Str $.file;
-has Str $.content-type;
+has $.content-type; # Could be Str/Callable
 has Str $.encoding;
 
 method should-handle(Str $file) {

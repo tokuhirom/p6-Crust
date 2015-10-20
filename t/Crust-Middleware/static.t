@@ -18,15 +18,36 @@ my $app = builder {
             return ($match, @_[0]);
         },
         root => "share";
+    enable "Static",
+        path => rx:i{ '.foo' $},
+        root => ".",
+        content-type => sub ($file) { "text/x-fooo" };
     -> %env {
-        200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ];
+        return (200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ]);
     };
 };
 
 test-psgi
     client => -> $cb {
-        my $req = HTTP::Request.new(GET => "http://localhost/share/face.jpg");
-        my $res = $cb($req);
+        my ($req, $res);
+
+        $req = HTTP::Request.new(GET => "http://localhost/hello");
+        $res = $cb($req);
+        is $res.code, 200;
+        is $res.content.decode, "Hello World";
+
+        $req = HTTP::Request.new(GET => "http://localhost/share/face.jpg");
+        $res = $cb($req);
+        is $res.code, 200;
+        like $res.field('Content-Type').Str, rx:i{image};
+
+        $req = HTTP::Request.new(GET => "http://localhost/share/doesnotexist");
+        $res = $cb($req);
+        is $res.code, 404;
+
+        $req = HTTP::Request.new(GET => "http://localhost/t/Crust-Middleware/static.foo");
+        $res = $cb($req);
+        like $res.field('Content-Type').Str, rx:i{'text/x-fooo' ';'?};
         is $res.code, 200;
     },
     app => $app;
