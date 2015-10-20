@@ -26,7 +26,6 @@ method call(Hash $env) {
 
     my $http_host = $env<HTTP_HOST>;
     my $server_name = $env<SERVER_NAME>;
-    say $http_host;
 
     for $!mapping.keys -> $i {
         my $map = $!mapping[$i];
@@ -35,7 +34,7 @@ method call(Hash $env) {
                     $http_host   eq $map<host> or
                     $server_name eq $map<host>;
         my $loc = $map<loc>;
-        next if $loc  ne '' and $path !~~ /^ $loc /;
+        next if $loc  ne '' and $path !~~ s/^ $loc //;
         next if $path ne '' and $path !~~ /^ '/'/;
 
         my $orig_path_info   = $env<PATH_INFO>;
