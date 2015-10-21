@@ -62,6 +62,8 @@ AUTHORS
 
   * Shoichi Kaji
 
+  * Daisuke Maki
+
 COPYRIGHT AND LICENSE
 =====================
 
