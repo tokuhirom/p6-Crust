@@ -28,7 +28,7 @@ Crust::Middleware::XFramework - Sets an X-Framework response header
     use Crust::Middleware::XFramework;
 
     my $app = sub { ... }; # your app
-    $app = ::('Crust::Middleware::XFramework').new($app, :framework<YOUR-AWESOME-FRAMEWORK>);
+    $app = Crust::Middleware::XFramework.new($app, :framework<YOUR-AWESOME-FRAMEWORK>);
 
 =head1 DESCRIPTION
 

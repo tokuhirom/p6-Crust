@@ -9,7 +9,7 @@ my $framework = 'AwesomeWAF';
 my $app = -> $env {
     200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ];
 };
-$app = ::('Crust::Middleware::XFramework').new($app, :framework($framework));
+$app = Crust::Middleware::XFramework.new($app, :framework($framework));
 
 test-psgi
     client => -> $cb {
