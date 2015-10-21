@@ -37,7 +37,7 @@ method CALL-ME(%env) {
         %headers<Transfer-Encoding>:delete;
         %headers<Content-Type> = Crust::MIME.mime-type($path);
 
-        @ret[2] = try { open $path, :bin } or die "Not Found";
+        @ret[2] = open $path, :bin;
     }
 
     @ret[1] = [%headers];
