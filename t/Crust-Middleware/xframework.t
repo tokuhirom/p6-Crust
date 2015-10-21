@@ -7,7 +7,6 @@ use HTTP::Request;
 my $framework = 'AwesomeWAF';
 
 my $app = -> $env {
-    sleep 0.5;
     200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ];
 };
 $app = ::('Crust::Middleware::XFramework').new($app, :framework($framework));
