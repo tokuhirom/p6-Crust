@@ -28,6 +28,7 @@
     "Crust::Headers" : "lib/Crust/Headers.pm6"
   },
   "depends" : [
+    "Base64",
     "HTTP::Server::Tiny",
     "Cookie::Baker",
     "File::Temp",
