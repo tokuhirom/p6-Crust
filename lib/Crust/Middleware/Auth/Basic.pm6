@@ -57,9 +57,10 @@ method CALL-ME(%env) {
         $pass = '';
     }
 
-    if self!authenticate($user, $pass, %env) {
-        %env<REMOTE_USER> = $user;
-        return $.app.(%env);
+    if ! self!authenticate($user, $pass, %env) {
+        return self.unauthorized()
     }
-    return self.unauthorized()
+
+    %env<REMOTE_USER> = $user;
+    return $.app.(%env);
 }
