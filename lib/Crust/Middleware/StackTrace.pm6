@@ -43,6 +43,10 @@ Crust::Middleware::StackTrace - Displays stack trace when your app dies
   my $app = sub { ... }; # your app
   $app = ::('Crust::Middleware::StackTrace').new($app);
 
+Or use with builder
+
+  enable 'StackTrace';
+
 =head1 DESCRIPTION
 
 Crust::Middleware::StackTrace catches exceptions of your application

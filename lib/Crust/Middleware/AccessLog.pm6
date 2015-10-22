@@ -71,5 +71,9 @@ Crust::Middleware::AccessLog - Middleware To Generate Access Logs
     format => "combined",
   }
 
+Or use with builder
+
+  enable 'AccessLog', :format('combined'), :logger(-> $log-line { ... });
+
 =end pod
 

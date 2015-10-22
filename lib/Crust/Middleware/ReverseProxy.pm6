@@ -83,6 +83,10 @@ Crust::Middleware::ReverseProxy - Supports app to run as a reverse proxy backend
   my $app = sub { ... }; # your app
   $app = ::('Crust::Middleware::ReverseProxy').new($app);
 
+Or use with builder
+
+  enable 'ReverseProxy';
+
 =head1 DESCRIPTION
 
 Crust::Middleware::ReverseProxy resets some HTTP headers, which changed by reverse-proxy.

@@ -52,6 +52,13 @@ Crust::Middleware::Conditional - Conditional wrapper for Crust middleware
         },
     );
 
+Or use with builder
+
+    builder {
+        enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, 'AccessLog', :format('combined');
+        $app;
+    };
+
 =head1 DESCRIPTION
 
 Crust::Middleware::Conditional is a piece of meta-middleware, to run a

@@ -34,6 +34,10 @@ Crust::Middleware::ContentLength - Adds Content-Length header automatically
   my $app = sub { ... }; # your app
   $app = ::('Crust::Middleware::ContentLength').new($app);
 
+Or use with builder
+
+  enable 'ContentLength';
+
 =head1 DESCRIPTION
 
 Crust::Middleware::ContentLength is a middleware that automatically

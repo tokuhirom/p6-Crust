@@ -32,6 +32,10 @@ Crust::Middleware::Runtime - Sets an X-Runtime response header
   # or with your own header-name
   $app = ::('Crust::Middleware::Runtime').new($app, :header-name<X-OWN-RUNTIME>);
 
+Or use with builder
+
+  enable 'Runtime';
+
 =head1 DESCRIPTION
 
 Crust::Middleware::Runtime is a middleware component that sets

@@ -121,8 +121,13 @@ Crust::Middleware::Lint - Validate request and response
   my $app = sub { ... }; # your app
   $app = ::('Crust::Middleware::Lint').new($app);
 
-  # Or from crustup
+Or from crustup
+
   crustup --lint myapp.psgi6
+
+Or use with builder
+
+  enable 'Lint';
 
 =head1 DESCRIPTION
 
