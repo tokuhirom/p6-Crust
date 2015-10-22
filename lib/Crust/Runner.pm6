@@ -32,7 +32,7 @@ method parse-options(@args) {
         .bool(Nil, 'accesslog', { $!accesslog =   $^a })
         .bool(Nil, 'lint',      { $!lint      =   $^a })
         .bool('v', 'version',   { $version    =   $^a })
-        .str( 's', 'sever',     { $!server    =   $^a })
+        .str( 's', 'server',     { $!server    =   $^a })
         .parse(@args);
 
     if $version {
