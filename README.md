@@ -70,6 +70,8 @@ AUTHORS
 
   * Tim Smith
 
+  * fayland
+
 COPYRIGHT AND LICENSE
 =====================
 
