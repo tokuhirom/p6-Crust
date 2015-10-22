@@ -64,6 +64,12 @@ AUTHORS
 
   * Daisuke Maki
 
+  * moznion
+
+  * Kentaro Kuribayashi
+
+  * Tim Smith
+
 COPYRIGHT AND LICENSE
 =====================
 

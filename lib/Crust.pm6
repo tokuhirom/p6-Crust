@@ -75,6 +75,12 @@ reference. See "eg/" directory for more examples of ".psgi" files.
 
 =item Daisuke Maki
 
+=item moznion
+
+=item Kentaro Kuribayashi
+
+=item Tim Smith
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 2015 Tokuhiro Matsuno <tokuhirom@gmail.com>
