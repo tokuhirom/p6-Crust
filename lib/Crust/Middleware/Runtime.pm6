@@ -27,10 +27,10 @@ Crust::Middleware::Runtime - Sets an X-Runtime response header
   use Crust::Middleware::Runtime;
 
   my $app = sub { ... }; # your app
-  $app = ::('Crust::Middleware::Runtime').new($app);
+  $app = Crust::Middleware::Runtime.new($app);
 
   # or with your own header-name
-  $app = ::('Crust::Middleware::Runtime').new($app, :header-name<X-OWN-RUNTIME>);
+  $app = Crust::Middleware::Runtime.new($app, :header-name<X-OWN-RUNTIME>);
 
 Or use with builder
 

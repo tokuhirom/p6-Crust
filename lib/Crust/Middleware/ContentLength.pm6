@@ -32,7 +32,7 @@ Crust::Middleware::ContentLength - Adds Content-Length header automatically
   use Crust::Middleware::ContentLength;
 
   my $app = sub { ... }; # your app
-  $app = ::('Crust::Middleware::ContentLength').new($app);
+  $app = Crust::Middleware::ContentLength.new($app);
 
 Or use with builder
 
