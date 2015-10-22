@@ -25,7 +25,8 @@ subtest {
         sub (%env) {
             200, ['Content-Type' => 'text/plain'], ['OK']
         },
-        errors => { 500 => "$tempdir/500.html", 404 => "$tempdir/404.png" }
+        500 => "$tempdir/500.html",
+        404 => "$tempdir/404.png"
     );
     my @ret = $app(%env);
 
@@ -39,7 +40,8 @@ subtest {
         sub (%env) {
             404, ['Content-Type' => 'text/plain'], ['OK']
         },
-        errors => { 500 => "$tempdir/500.html", 404 => "$tempdir/404.png" }
+        500 => "$tempdir/500.html",
+        404 => "$tempdir/404.png"
     );
     my @ret = $app(%env);
 
@@ -53,7 +55,8 @@ subtest {
         sub (%env) {
             500, ['Content-Type' => 'text/plain'], ['OK']
         },
-        errors => { 500 => "$tempdir/500.html", 404 => "$tempdir/404.png" }
+        500 => "$tempdir/500.html",
+        404 => "$tempdir/404.png"
     );
     my @ret = $app(%env);
 
@@ -67,7 +70,8 @@ subtest {
         sub (%env) {
             500, ['Content-Type' => 'text/plain'], ['OK']
         },
-        errors => { 500 => "$tempdir/500.html", 404 => "$tempdir/404.png" },
+        500 => "$tempdir/500.html",
+        404 => "$tempdir/404.png",
         sub-request => True
     );
     my @ret = $app(%env);
