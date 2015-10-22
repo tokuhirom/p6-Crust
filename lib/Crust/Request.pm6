@@ -37,9 +37,9 @@ method input()        { $.env<p6sgi.input> }
 method content-length()   { $.env<CONTENT_LENGTH> }
 method content-type()     { $.env<CONTENT_TYPE> }
 
-method session()         { $.env<psgix.session> }
-method session-options() { $.env<psgix.session.options> }
-method logger()          { $.env<psgix.logger> }
+method session()         { $.env<p6sgix.session> }
+method session-options() { $.env<p6sgix.session.options> }
+method logger()          { $.env<p6sgix.logger> }
 
 # TODO cache
 method query-parameters() {
@@ -278,9 +278,9 @@ Create new instance of this class by P6SGI's env.
 =head2 C<method input()        { $.env<p6sgi.input> }>
 =head2 C<method content-length()   { $.env<CONTENT_LENGTH> }>
 =head2 C<method content-type()     { $.env<CONTENT_TYPE> }>
-=head2 C<method session()         { $.env<psgix.session> }>
-=head2 C<method session-options() { $.env<psgix.session.options> }>
-=head2 C<method logger()          { $.env<psgix.logger> }>
+=head2 C<method session()         { $.env<p6sgix.session> }>
+=head2 C<method session-options() { $.env<p6sgix.session.options> }>
+=head2 C<method logger()          { $.env<p6sgix.logger> }>
 
 Short-hand to access.
 
