@@ -64,3 +64,73 @@ method CALL-ME(%env) {
     %env<REMOTE_USER> = $user;
     return $.app.(%env);
 }
+
+=begin pod
+
+=head1 NAME
+
+Crust::Middleware::Auth::Basic - Simple basic authentication middleware
+
+=head1 SYNOPSIS
+
+    use Crust::Builder;
+    my $app = sub { ... };
+
+    my sub authen_cb($username, $password, %env) {
+        return $username eq 'admin' && $password eq 's3cr3t';
+    }
+
+    builder {
+        enable "Auth::Basic", :authenticator(\&authen_cb);
+        $app;
+    };
+
+=head1 DESCRIPTION
+
+Crust::Middleware::Auth::Basic is a basic authentication handler for Crust.
+
+=head1 CONFIGURATION
+
+=item authenticator :Callable | :Object
+
+    :authenticator(-> $user, $pass, %env { ... });
+
+A callback function that takes username, password and PSGI environment
+supplied and returns whether the authentication succeeds. Required.
+
+Authenticator can also be an object that responds to C<authenticate>
+method that takes username and password and returns boolean.
+
+=item realm :Str
+
+Realm name to display in the basic authentication dialog. Defaults to I<restricted area>.
+
+=head1 LIMITATIONS
+
+This middleware expects that the application has a full access to the
+headers sent by clients in PSGI environment. That is normally the case
+with standalone P6SGI web servers .
+
+However, in a web server configuration where you can't achieve this
+(i.e. using your application via Apache's mod_cgi), this middleware
+does not work since your application can't know the value of
+C<Authorization:> header.
+
+If you use Apache as a web server and CGI to run your PSGI
+application, you can either a) compile Apache with
+C<-DSECURITY_HOLE_PASS_AUTHORIZATION> option, or b) use mod_rewrite to
+pass the Authorization header to the application with the rewrite rule
+like following.
+
+    RewriteEngine on
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+=head1 AUTHOR
+
+Daisuke Maki
+
+=head1 SEE ALSO
+
+L<Crust>
+
+=end pod
