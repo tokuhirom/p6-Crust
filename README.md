@@ -34,24 +34,24 @@ Crust::Request gives you a nice wrapper API around PSGI $env hash to get headers
 
 Crust::Response does the same to construct the response array reference.
 
-.psgi6 files
+.p6sgi files
 ------------
 
-A PSGI application is a code reference but it's not easy to pass code reference via the command line or configuration files, so Crust uses a convention that you need a file named "app.psgi6" or similar, which would be loaded (via perl6's core function "EVALFILE") to return the PSGI application code reference.
+A PSGI application is a code reference but it's not easy to pass code reference via the command line or configuration files, so Crust uses a convention that you need a file named "app.p6sgi" or similar, which would be loaded (via perl6's core function "EVALFILE") to return the PSGI application code reference.
 
-    # Hello.psgi6
+    # Hello.p6sgi
     my $app = sub ($env) {
         # ...
         return $status, $headers, $body;
     };
 
-If you use a web framework, chances are that they provide a helper utility to automatically generate these ".psgi" files for you, such as:
+If you use a web framework, chances are that they provide a helper utility to automatically generate these ".p6sgi" files for you, such as:
 
-    # MyApp.psgi6
+    # MyApp.p6sgi
     use MyApp;
     my $app = sub { MyApp->run_psgi(@_) };
 
-It's important that the return value of ".psgi" file is the code reference. See "eg/" directory for more examples of ".psgi" files.
+It's important that the return value of ".p6sgi" file is the code reference. See "eg/" directory for more examples of ".p6sgi" files.
 
 AUTHORS
 =======

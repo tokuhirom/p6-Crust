@@ -18,7 +18,7 @@ Crust::Handler - Connects P6SGI applications and Web servers
     }
 
     # then from command line
-    crustup -s AwesomeWebServer -a app.psgi
+    crustup -s AwesomeWebServer -a app.p6sgi
 
 
 =head1 DESCRIPTION

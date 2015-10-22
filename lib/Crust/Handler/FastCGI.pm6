@@ -35,6 +35,6 @@ Crust::Handler::FastCGI - Crust adapter for FastCGI::NativeCall::PSGI
     crustup \
         -s FastCGI -MFastCGI::NativeCall -MFastCGI::NativeCall::PSGI \
         [--socket /PATH/TO/APP.SOCK] [--backlog INT] \
-        app.psgi
+        app.p6sgi
 
 =end pod

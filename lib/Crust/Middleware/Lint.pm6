@@ -123,7 +123,7 @@ Crust::Middleware::Lint - Validate request and response
 
 Or from crustup
 
-  crustup --lint myapp.psgi6
+  crustup --lint myapp.p6sgi
 
 Or use with builder
 
