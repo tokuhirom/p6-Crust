@@ -30,6 +30,10 @@ Crust::Middleware::XFramework - Sets an X-Framework response header
     my $app = sub { ... }; # your app
     $app = Crust::Middleware::XFramework.new($app, :framework<YOUR-AWESOME-FRAMEWORK>);
 
+Or use with builder
+
+    enable 'XFramework', :framework<YOUR-AWESOME-FRAMEWORK>;
+
 =head1 DESCRIPTION
 
 Crust::Middleware::XFramework is a middleware component that sets the name of
