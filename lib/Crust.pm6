@@ -81,6 +81,8 @@ reference. See "eg/" directory for more examples of ".psgi" files.
 
 =item Tim Smith
 
+=item fayland
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 2015 Tokuhiro Matsuno <tokuhirom@gmail.com>
