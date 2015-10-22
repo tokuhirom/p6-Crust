@@ -71,8 +71,12 @@ my $_add = my $_add-if = my $_mount = sub (|) {
     die "enable/mount should be called inside builder {} block";
 }
 
-sub enable($middleware, *%args) is export {
-    $_add.($middleware, |%args);
+multi sub enable($middleware, +$args) is export {
+	$_add.($middleware, |%$args);
+}
+
+multi sub enable($middleware, *%args) is export {
+	$_add.($middleware, |%args);
 }
 
 sub enable-if(Callable $condition, $middleware, *%args) is export {
