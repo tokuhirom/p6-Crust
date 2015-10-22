@@ -31,7 +31,8 @@
     "Crust::Request" : "lib/Crust/Request.pm6",
     "Crust::Middleware::Conditional" : "lib/Crust/Middleware/Conditional.pm6",
     "Crust::Response" : "lib/Crust/Response.pm6",
-    "Crust::Headers" : "lib/Crust/Headers.pm6"
+    "Crust::Headers" : "lib/Crust/Headers.pm6",
+    "Crust::Middleware::XFramework" : "lib/Crust/Middleware/XFramework.pm6"
   },
   "depends" : [
     "Base64",
