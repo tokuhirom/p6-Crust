@@ -20,14 +20,14 @@ crustup -  Run PSGI application with Crust handlers
 
 =head1 SYNOPSIS
 
-    # read your app from app.psgi file
+    # read your app from app.p6sgi file
     crustup
 
-    # choose .psgi file from ARGV[0] (or with -a option)
-    crustup hello.psgi
+    # choose .p6sgi file from ARGV[0] (or with -a option)
+    crustup hello.p6sgi
 
     # switch server implementation with --server (or -s)
-    crustup --server HTTP::Server::Simple --port 9090 --host 127.0.0.1 test.psgi
+    crustup --server HTTP::Server::Simple --port 9090 --host 127.0.0.1 test.p6sgi
 
 =head1 DESCRIPTION
 
