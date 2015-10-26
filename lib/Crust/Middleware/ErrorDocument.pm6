@@ -9,9 +9,9 @@ unit class Crust::Middleware::ErrorDocument is Crust::Middleware;
 has Hash $.errors;
 has Bool $.sub-request;
 
-method new(Callable $app, :$sub-request = False, +%opts) {
-    my %newopts = errors => {}, sub-request => $sub-request;
-    %newopts<errors>{.key.Str} = .value for %opts;
+method new(Callable $app, |opts) {
+    my %newopts = errors => {};
+    %newopts<errors>{.key.Str} = .value for opts;
     callwith($app, |%newopts);
 }
 
