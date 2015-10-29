@@ -26,3 +26,4 @@ is $resp<content>, 'ok';
 
 done-testing;
 
+exit 0; # There is no way to kill the server thread.
