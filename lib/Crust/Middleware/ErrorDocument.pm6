@@ -13,7 +13,6 @@ method new(Callable $app, |opts) {
     my %newopts = errors => {}, sub-request => False;
     for opts -> $opt {
         my $kv = $opt.key ~~ Pair ?? $opt.key !! $opt;
-        say $opt;
         if $kv.key eq 'sub-request' {
             %newopts<sub-request> = $kv.value;
         } else {
