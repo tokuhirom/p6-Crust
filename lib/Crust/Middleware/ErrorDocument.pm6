@@ -9,9 +9,16 @@ unit class Crust::Middleware::ErrorDocument is Crust::Middleware;
 has Hash $.errors;
 has Bool $.sub-request;
 
-method new(Callable $app, :$sub-request = False, +%opts) {
-    my %newopts = errors => {}, sub-request => $sub-request;
-    %newopts<errors>{.key.Str} = .value for %opts;
+method new(Callable $app, |opts) {
+    my %newopts = errors => {}, sub-request => False;
+    for opts -> $opt {
+        my $kv = $opt.key ~~ Pair ?? $opt.key !! $opt;
+        if $kv.key eq 'sub-request' {
+            %newopts<sub-request> = $kv.value;
+        } else {
+            %newopts<errors>{$kv.key.Str} = $kv.value;
+        }
+    }
     callwith($app, |%newopts);
 }
 
@@ -63,10 +70,16 @@ Crust::Middleware::ErrorDocument - Set Error Document based on HTTP status code
   my &app = sub(%env) { ... };
   my $code = Crust::Middleware::ErrorDocument.new(
     &app,
-    errors => {
-      500 => '/uri/error/500.html',
-      404 => '/uri/error/404.html',
-    }
+    500 => '/uri/error/500.html',
+    404 => '/uri/error/404.html',
+  }
+
+  # getting sub request
+  $code = Crust::Middleware::ErrorDocument.new(
+    &app,
+    500 => '/uri/error/500.html',
+    404 => '/uri/error/404.html',
+    :sub-request => True,
   }
 
 =end pod

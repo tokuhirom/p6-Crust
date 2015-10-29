@@ -8,10 +8,10 @@ unit class Crust::Builder;
 has @!middlewares;
 has $!url-map;
 
-multi method add-middleware(Str $middleware, *%args) {
+multi method add-middleware(Str $middleware, |opts) {
     my $middleware-class = load-class($middleware, 'Crust::Middleware');
     self.add-middleware(sub ($app) {
-        ::($middleware-class).new($app, |%args);
+        ::($middleware-class).new($app, |opts);
     });
 }
 
@@ -71,12 +71,12 @@ my $_add = my $_add-if = my $_mount = sub (|) {
     die "enable/mount should be called inside builder {} block";
 }
 
-sub enable($middleware, *%args) is export {
-    $_add.($middleware, |%args);
+sub enable($middleware, |opts) is export {
+	$_add.($middleware, |opts);
 }
 
-sub enable-if(Callable $condition, $middleware, *%args) is export {
-    $_add-if.($condition, $middleware, |%args);
+sub enable-if(Callable $condition, $middleware, |opts) is export {
+    $_add-if.($condition, $middleware, |opts);
 }
 
 sub mount(Str $location, Callable $block) is export {
@@ -95,12 +95,12 @@ sub builder(Callable $block) is export {
         return $url-map;
     };
 
-    temp $_add = sub ($middleware, *%params) {
-        $builder.add-middleware($middleware, |%params);
+    temp $_add = sub ($middleware, |opts) {
+        $builder.add-middleware($middleware, |opts);
     };
 
-    temp $_add-if = sub (Callable $condition, $middleware, *%params) {
-        $builder.add-middleware-if($condition, $middleware, |%params);
+    temp $_add-if = sub (Callable $condition, $middleware, |opts) {
+        $builder.add-middleware-if($condition, $middleware, |opts);
     };
 
     my $app = $block.();

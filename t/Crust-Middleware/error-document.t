@@ -72,7 +72,7 @@ subtest {
         },
         500 => "$tempdir/500.html",
         404 => "$tempdir/404.png",
-        sub-request => True
+        :sub-request => True
     );
     my @ret = $app(%env);
 
