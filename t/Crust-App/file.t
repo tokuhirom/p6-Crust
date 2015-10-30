@@ -18,6 +18,8 @@ EOF
 "$tempdir/secret".IO.spurt("");
 "$tempdir/secret".IO.chmod(0o000);
 
+my $modified = DateTime.new("$tempdir/hello.css".IO.modified);
+
 my $app = Crust::App::File.new(:root($tempdir));
 my $client = -> $cb {
     my ($req, $res);
@@ -25,6 +27,7 @@ my $client = -> $cb {
     $res = $cb($req);
     is $res.code, 200;
     is $res.field('Content-Type').Str, 'text/css; charset=utf-8';
+    is DateTime.new($res.field('Last-Modified').Str), $modified;
 
     $req = HTTP::Request.new(GET => "/js/foo.js");
     $res = $cb($req);
