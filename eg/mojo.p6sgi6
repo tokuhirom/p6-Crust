@@ -20,8 +20,7 @@ sub app($env) {
     given $req.path-info {
         when "/" {
             my $content = $tmpl.render($req.query-parameters<name> // 'unknown');
-            return 200, [ 'Content-Type' => 'text/html; charset=utf-8' ], [$content]
-            ];
+            return 200, [ 'Content-Type' => 'text/html; charset=utf-8' ], [$content];
         }
         when "/upload" {
             my $content = $req.uploads<foo>.path.slurp(:bin);
