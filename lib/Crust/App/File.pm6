@@ -84,7 +84,7 @@ method serve-path(Hash $env, Str $file) {
         [
             'Content-Type' => $content-type,
             'Content-Length' => $file.IO.s,
-            'Last-Modified' => format-rfc1123(DateTime.new($file.IO.modified)),
+            'Last-Modified' => format-datetime-rfc1123(DateTime.new($file.IO.modified)),
         ],
         $fh,
     ;

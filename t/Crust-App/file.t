@@ -26,7 +26,7 @@ my $client = -> $cb {
     $res = $cb($req);
     is $res.code, 200;
     is $res.field('Content-Type').Str, 'text/css; charset=utf-8';
-    is $res.field('Last-Modified'), format-rfc1123(DateTime.new("$tempdir/hello.css".IO.modified));
+    is $res.field('Last-Modified'), format-datetime-rfc1123(DateTime.new("$tempdir/hello.css".IO.modified));
 
     $req = HTTP::Request.new(GET => "/js/foo.js");
     $res = $cb($req);
