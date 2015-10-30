@@ -65,3 +65,19 @@ multi sub load-class($class is copy, $prefix) is export {
     return load-class($class);
 }
 
+multi sub format-datetime-rfc1123(Instant $i) is export {
+    return format-datetime-rfc1123(DateTime.new($i))
+}
+
+multi sub format-datetime-rfc1123(DateTime $dt) is export {
+    state @mon-abbr = <Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec>;
+    state @dow-abbr = <Mon Tue Wed Thu Fri Sat Sun>;
+
+    my $utc = $dt.utc;
+    return sprintf("%s %02d %s %04d %02d:%02d:%02d GMT",
+        @dow-abbr[$utc.day-of-week - 1],
+        $utc.day-of-month, @mon-abbr[$utc.month-1], $utc.year,
+        $utc.hour, $utc.minute, $utc.second);
+}
+
+
