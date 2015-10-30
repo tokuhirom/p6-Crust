@@ -1,6 +1,7 @@
 use v6;
 unit class Crust::App::File does Callable;
 use Crust::MIME;
+use Crust::Utils;
 
 # TODO: need to set path-info for Crust::App::CGIBin etc...
 
@@ -83,7 +84,7 @@ method serve-path(Hash $env, Str $file) {
         [
             'Content-Type' => $content-type,
             'Content-Length' => $file.IO.s,
-            'Last-Modified' => $file.IO.modified,
+            'Last-Modified' => format-datetime-rfc1123(DateTime.new($file.IO.modified)),
         ],
         $fh,
     ;
