@@ -22,6 +22,7 @@ method address()      { $.env<REMOTE_ADDR> }
 method remote-host()  { $.env<REMOTE_HOST> }
 method protocol()     { $.env<SERVER_PROTOCOL> }
 method method()       { $.env<REQUEST_METHOD> }
+method host()         { $.env<HTTP_HOST> // $.env<SERVER_NAME> //  $.env<HOSTNAME> // 'localhost' }
 method port()         { $.env<SERVER_PORT> }
 method user()         { $.env<REMOTE_USER> }
 method request-uri()  { $.env<REQUEST_URI> }
