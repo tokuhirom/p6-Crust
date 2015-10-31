@@ -3,14 +3,15 @@ use v6;
 unit class Crust::App::URLMap does Callable;
 
 has Array $!mapping;
+has @!sorted-mapping;
 
 multi method map(Str $location, Callable $callable) {
     my $loc = $location;
-    my Str $host;
+    my Str $host = "";
     if $loc ~~ /^ 'http' 's'? '://' (.*?) ('/' .*)/ {
         $host = $0.Str || '';
         $loc  = $1.Str || '';
-    } 
+    }
     $loc = $loc.subst(/\/+ $/, '');
     $!mapping.push: {host => $host, loc => $loc, app => $callable};
     return self;
@@ -21,16 +22,19 @@ method CALL-ME($env) {
 }
 
 method call(Hash $env) {
+    if !@!sorted-mapping {
+        @!sorted-mapping = $!mapping.sort: { -$^a<host>.chars,-$^a<loc>.chars };
+    }
     my $path_info   = $env<PATH_INFO>;
     my $script_name = $env<SCRIPT_NAME>;
 
     my $http_host = $env<HTTP_HOST>;
     my $server_name = $env<SERVER_NAME>;
 
-    for $!mapping.keys -> $i {
-        my $map = $!mapping[$i];
+    for @!sorted-mapping.keys -> $i {
+        my $map = @!sorted-mapping[$i];
         my $path = $path_info; # copy
-        next unless not defined $map<host> or
+        next unless $map<host>.chars == 0 or
                     $http_host   eq $map<host> or
                     $server_name eq $map<host>;
         my $loc = $map<loc>;
