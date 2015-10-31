@@ -71,7 +71,6 @@ subtest {
     my $req = Crust::Request.new({
         :HTTP_COOKIE<hoge=fuga>
     });
-    $req.cookies.perl; # magical trash. if you remove this, this test fails.
     my $cookies = $req.cookies;
     my $hoge = $cookies<hoge>;
     is $hoge, 'fuga';

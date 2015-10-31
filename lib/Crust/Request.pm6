@@ -243,6 +243,7 @@ method cookies() {
     my $parsed = crush-cookie($!env<HTTP_COOKIE>);
     $!env<crust.cookie.parsed> = $parsed;
     $!env<crust.cookie.string> = $!env<HTTP_COOKIE>;
+    return $parsed;
 }
 
 =begin pod
