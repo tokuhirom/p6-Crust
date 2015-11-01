@@ -26,17 +26,15 @@ my $client = -> $cb {
     is $res.code, 200;
     is $res.content.decode, "world";
 
-    # TODO
-    #$req = HTTP::Request.new(GET => "http://localhost:5000/hello");
-    #$res = $cb($req);
-    #is $res.code, 200;
-    #is $res.content.decode, "こんにちわ";
+    $req = HTTP::Request.new(GET => "http://localhost:5000/hello");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "こんにちわ";
 
-    # TODO
-    #$req = HTTP::Request.new(GET => "http://127.0.0.1:5000/world");
-    #$res = $cb($req);
-    #is $res.code, 200;
-    #is $res.content.decode, "世界";
+    $req = HTTP::Request.new(GET => "http://127.0.0.1:5000/world");
+    $res = $cb($req);
+    is $res.code, 200;
+    is $res.content.decode, "世界";
 
     $req = HTTP::Request.new(GET => "/zoo");
     $res = $cb($req);
