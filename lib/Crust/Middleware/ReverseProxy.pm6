@@ -14,9 +14,9 @@ method CALL-ME(%env) {
         %env<HTTPS> = 'ON';
     }
     if (%env<HTTPS> && %env<HTTPS>.uc eq 'ON') || (%env<HTTP_HTTPS> && %env<HTTP_HTTPS>.uc eq 'ON') {
-        %env<p6sgi.url_scheme> = 'https';
+        %env<p6sgi.url-scheme> = 'https';
     }
-    my $default_port = %env<p6sgi.url_scheme> eq 'https' ?? 443 !! 80;
+    my $default_port = %env<p6sgi.url-scheme> eq 'https' ?? 443 !! 80;
 
     # If we are running as a backend server, the user will always appear
     # as 127.0.0.1. Select the most recent upstream IP (last in the list)
@@ -37,7 +37,7 @@ method CALL-ME(%env) {
             if $host ~~ /^.+ ':' (\d+)$/ {
                 %env<SERVER_PORT> = $0;
                 if %env<SERVER_PORT> == 443 {
-                    %env<p6sgi.url_scheme>  = 'https';
+                    %env<p6sgi.url-scheme>  = 'https';
                 }
             }
             %env<HTTP_HOST> = $host;
@@ -51,7 +51,7 @@ method CALL-ME(%env) {
             %env<SERVER_PORT> = %env<HTTP_X_FORWARDED_PORT>;
             $host ~= ":%env<SERVER_PORT>";
             if %env<SERVER_PORT> == 443 {
-                %env<p6sgi.url_scheme> = 'https';
+                %env<p6sgi.url-scheme> = 'https';
             }
         } else {
             %env<SERVER_PORT> = $default_port;

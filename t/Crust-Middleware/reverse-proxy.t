@@ -34,7 +34,7 @@ sub run(Str $tag, %arg) {
                     }
 
                     if %arg<secure>.defined {
-                        is ($req.env<p6sgi.url_scheme> eq 'https'), %arg<secure>, "$tag of secure";
+                        is ($req.env<p6sgi.url-scheme> eq 'https'), %arg<secure>, "$tag of secure";
                     }
 
                     for qw/uri base/ -> $url {

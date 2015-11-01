@@ -29,7 +29,7 @@ method path-info()    { $.env<PATH_INFO> }
 method path()         { $.env<PATH_INFO> || '/' }
 method query-string() { $.env<QUERY_STRING> }
 method script-name()  { $.env<SCRIPT_NAME> }
-method scheme()       { $.env<p6sgi.url_scheme> }
+method scheme()       { $.env<p6sgi.url-scheme> }
 method secure()       { $.scheme eq 'https' }
 method body()         { $.env<p6sgi.input> }
 method input()        { $.env<p6sgi.input> }
@@ -227,7 +227,7 @@ method uri() {
 }
 
 method !uri-base() {
-    return ($!env<p6sgi.url_scheme> || "http") ~
+    return ($!env<p6sgi.url-scheme> || "http") ~
         "://" ~
         ($!env<HTTP_HOST> || (($!env<SERVER_NAME> || "") ~ ":" ~ ($!env<SERVER_PORT> || 80))) ~
         ($!env<SCRIPT_NAME> || '/');
@@ -273,7 +273,7 @@ Create new instance of this class by P6SGI's env.
 =head2 C<method path()         { $.env<PATH_INFO> || '/' }>
 =head2 C<method query-string() { $.env<QUERY_STRING> }>
 =head2 C<method script-name()  { $.env<SCRIPT_NAME> }>
-=head2 C<method scheme()       { $.env<p6sgi.url_scheme> }>
+=head2 C<method scheme()       { $.env<p6sgi.url-scheme> }>
 =head2 C<method secure()       { $.scheme eq 'https' }>
 =head2 C<method body()         { $.env<p6sgi.input> }>
 =head2 C<method input()        { $.env<p6sgi.input> }>
