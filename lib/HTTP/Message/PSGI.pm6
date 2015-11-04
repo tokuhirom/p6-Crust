@@ -26,7 +26,7 @@ our sub req-to-psgi($req, *%args) {
         REQUEST_URI       => $uri.path_query || '/',                  # not in RFC 3875
         REQUEST_METHOD    => $req.method,
         'p6sgi.version'      => [ 1, 1 ],
-        'p6sgi.url_scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
+        'p6sgi.url-scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
         'p6sgi.input'        => $input,
         'p6sgi.errors'       => $*ERR,
         'p6sgi.multithread'  => False,
