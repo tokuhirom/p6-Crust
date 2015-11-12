@@ -13,10 +13,10 @@ subtest  {
 subtest {
     my ($head, %opts) = parse-header-item('form-data; name="upload"; filename="hello.pl"');
     is $head, 'form-data';
-    is %opts, (
+    is-deeply %opts, {
         name => 'upload',
         filename => 'hello.pl',
-    );
+    };
 }, 'parse-header-item';
 
 subtest {
