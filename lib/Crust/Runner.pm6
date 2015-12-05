@@ -72,7 +72,8 @@ method parse-options(@args) {
 }
 
 method !setup() {
-    @*INC.prepend: @!inc;
+    my @inc = @!inc;
+    EVAL qq{use lib @inc};
     for @!modules {
         require ::($_)
     }
