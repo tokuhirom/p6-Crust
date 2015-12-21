@@ -10,7 +10,7 @@ my %map = (
 my $app = builder {
     enable "Auth::Basic",
         :authenticator(-> $u, $p, %env {
-            return %map{$u} && %map{$u} eq $p;
+            %map{$u} && %map{$u} eq $p;
         });
     -> %env { 200, [:Content-Type('text/plain')], ["Hello {%env<REMOTE_USER>}!"] }
 };
