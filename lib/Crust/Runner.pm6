@@ -1,5 +1,7 @@
 use v6;
 
+use MONKEY-SEE-NO-EVAL;
+
 unit class Crust::Runner;
 
 use Getopt::Tiny;
