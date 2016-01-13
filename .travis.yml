@@ -4,7 +4,8 @@ perl6:
 install:
   - rakudobrew build-panda
   - panda --notests installdeps .
+  - panda --notests installdeps .
+  - panda --notests installdeps .
 script:
-  - perl6 -MPanda::Builder -e 'Panda::Builder.build($*CWD)'
-  - PERL6LIB=$PWD/blib/lib prove -e perl6 -r t/
+  - prove -vr -e 'perl6 -Ilib' t/
 sudo: false
