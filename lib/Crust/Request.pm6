@@ -84,9 +84,17 @@ method header(Str $name) {
 method content() {
     # TODO: we should support buffering in Crust layer
     my $input = $!env<p6sgi.input>;
-    $input.seek(0,0); # rewind
-    my Blob $content = $input.slurp-rest(:bin);
-    return $content;
+    if $input ~~ Blob {
+        return $input;
+    }
+    elsif $input ~~ IO {
+        $input.seek(0,0); # rewind
+        my Blob $content = $input.slurp-rest(:bin);
+        return $content;
+    }
+    else {
+        die "Can't understand p6sgi.input type "~$input.^name;
+    }
 }
 
 method user-agent() { self.headers.user-agent }
