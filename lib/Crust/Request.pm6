@@ -84,7 +84,7 @@ method header(Str $name) {
 method content() {
     # TODO: we should support buffering in Crust layer
     my $input = $!env<p6sgi.input>;
-    $input.seek(0,0); # rewind
+    $input.seek(0, SeekFromBeginning); # rewind
     my Blob $content = $input.slurp-rest(:bin);
     return $content;
 }
