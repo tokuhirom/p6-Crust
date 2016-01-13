@@ -10,7 +10,7 @@ my &hello-app = sub (%env) {
 
 sub make-check-combined-logs($io) {
     return sub {
-        $io.seek(0,0); # rewind
+        $io.seek(0, SeekFromBeginning); # rewind
         my $s = $io.slurp-rest(:enc<ascii>);
         if ! ok($s.defined, "\$s is defined") {
             note $s;

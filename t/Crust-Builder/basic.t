@@ -29,7 +29,7 @@ subtest {
     );
 
     my @res = $app(%env);
-    $io.seek(0, 0);
+    $io.seek(0, SeekFromBeginning);
     my $s = $io.slurp-rest(:enc<ascii>);
 
     ok $s.starts-with('127.0.0.1 - - ['), "starts with 127.0.0.1";
@@ -65,7 +65,7 @@ subtest {
         );
 
         my @res = $app(%env);
-        $io.seek(0, 0);
+        $io.seek(0, SeekFromBeginning);
         my $s = $io.slurp-rest(:enc<ascii>);
 
         ok $s.starts-with('127.0.0.1 - - ['), "starts with 127.0.0.1";
@@ -100,7 +100,7 @@ subtest {
         );
 
         my @res = $app(%env);
-        $io.seek(0, 0);
+        $io.seek(0, SeekFromBeginning);
         my $s = $io.slurp-rest(:enc<ascii>);
 
         is $s, '', 'empty logging';

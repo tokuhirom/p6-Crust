@@ -2,7 +2,6 @@ use v6;
 use Test;
 use Crust::Builder;
 use Crust::Test;
-use IO::Blob;
 
 subtest {
     my $app = sub ($env) {

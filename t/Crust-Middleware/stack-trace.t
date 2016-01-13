@@ -36,7 +36,7 @@ subtest {
     like %env<crust.stacktrace.text>, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:16'};
     like %env<crust.stacktrace.html>, rx{'Error:' \s+ 'in block &lt;unit&gt; at t/Crust-Middleware/stack-trace.t:16'};
 
-    $io.seek(0, 0); # rewind
+    $io.seek(0, SeekFromBeginning); # rewind
     like $io.slurp-rest, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:16'};
 }, 'Errors with plain text trace';
 
@@ -64,7 +64,7 @@ subtest {
     like %env<crust.stacktrace.text>, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:43'};
     like %env<crust.stacktrace.html>, rx{'Error:' \s+ 'in block &lt;unit&gt; at t/Crust-Middleware/stack-trace.t:43'};
 
-    $io.seek(0, 0); # rewind
+    $io.seek(0, SeekFromBeginning); # rewind
     like $io.slurp-rest, rx{'in block <unit> at t/Crust-Middleware/stack-trace.t:43'};
 }, 'Errors with html trace';
 
@@ -83,7 +83,7 @@ subtest {
     my $ret = $code(%env);
     is $ret[0], 500;
 
-    $io.seek(0, 0); # rewind
+    $io.seek(0, SeekFromBeginning); # rewind
     is $io.slurp-rest, '';
 }, 'Test for no-print-errors';
 
