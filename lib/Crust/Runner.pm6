@@ -3,6 +3,7 @@ use v6;
 unit class Crust::Runner;
 
 use Getopt::Tiny;
+use MONKEY-SEE-NO-EVAL;
 
 has @!inc;
 
