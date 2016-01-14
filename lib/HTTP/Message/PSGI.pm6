@@ -92,14 +92,18 @@ our sub res-from-psgi(Int $status, Array $headers, $body) {
     $res;
 }
 
-HTTP::Request.^add_method: 'to-psgi', method (HTTP::Request:D:) {
-    req-to-psgi(self);
-};
+BEGIN {
+    # https://rt.perl.org/Public/Bug/Display.html?id=126341
+    # per above ticket, add_method must be inside a BEGIN block
+    HTTP::Request.^add_method: 'to-psgi', method (HTTP::Request:D:) {
+        req-to-psgi(self);
+    };
 
-HTTP::Response.^add_method: 'from-psgi', method (
-    HTTP::Response:U: Int $status, Array $headers, $body) {
-    res-from-psgi($status, $headers, $body);
-};
+    HTTP::Response.^add_method: 'from-psgi', method (
+        HTTP::Response:U: Int $status, Array $headers, $body) {
+        res-from-psgi($status, $headers, $body);
+    };
+}
 
 =begin pod
 
