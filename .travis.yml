@@ -4,8 +4,6 @@ perl6:
 install:
   - rakudobrew build-panda
   - panda --notests installdeps .
-  - panda --notests installdeps .
-  - panda --notests installdeps .
 script:
   - prove -vr -e 'perl6 -Ilib' t/
 sudo: false
