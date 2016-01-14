@@ -1,7 +1,7 @@
 {
   "name" : "Crust",
   "source-url" : "git://github.com/tokuhirom/p6-Crust.git",
-  "perl" : "v6",
+  "perl" : "6",
   "build-depends" : [ ],
   "provides" : {
     "Crust::Utils" : "lib/Crust/Utils.pm6",
