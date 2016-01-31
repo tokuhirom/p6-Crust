@@ -73,8 +73,8 @@ method parse-options(@args) {
 }
 
 method !setup() {
-    my @inc = @!inc;
-    EVAL qq{use lib @inc};
+    CompUnit::RepositoryRegistry.use-repository(CompUnit::RepositoryRegistry.repository-for-spec($_))
+        for @!inc;
     for @!modules {
         require ::($_)
     }
