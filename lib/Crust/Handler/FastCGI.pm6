@@ -2,8 +2,8 @@ use v6;
 
 unit class Crust::Handler::FastCGI;
 
-use FastCGI::NativeCall;
-use FastCGI::NativeCall::PSGI;
+require FastCGI::NativeCall;
+require FastCGI::NativeCall::PSGI;
 
 has $!psgi;
 
@@ -14,8 +14,8 @@ method new(*%args) {
 }
 
 method !initialize(:$socket, :$backlog) {
-    my $sock = FastCGI::NativeCall::OpenSocket($socket, $backlog);
-    $!psgi = FastCGI::NativeCall::PSGI.new(FastCGI::NativeCall.new($sock));
+    my $sock = &::("FastCGI::NativeCall::OpenSocket")($socket, $backlog);
+    $!psgi = ::("FastCGI::NativeCall::PSGI").new(::("FastCGI::NativeCall").new($sock));
     self;
 }
 
