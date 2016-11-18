@@ -75,10 +75,6 @@ reference. See "eg/" directory for more examples of ".p6sgi" files.
 An Alternative to .p6sgi files
 ------------------------------
 
-Perl 6 has a long-standing bug related to EVAL, which is used to
-incorporate your .p6sgi files. This bug results in increasing memory
-consumption as the Crust application runs.
-
 As an alternative to using EVAL, you can take advantage of Perl's
 Callable type which will return a code reference as well, making Crust
 happy.
@@ -87,7 +83,7 @@ Here is an example of an implmentation using a Callable class in place
 of any .p6sgi files and having to call a "crustup" script. You can
 call this directly from the command line, just like you would
 "crustup".
-q
+
     use v6;
 
     use Crust::Runner;
