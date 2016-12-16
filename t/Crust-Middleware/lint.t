@@ -19,7 +19,7 @@ subtest {
         }
     );
 
-    lives-ok({$code(%env)}), 'Should work fine';
+    lives-ok({$code(%env)}, 'Should work fine');
 
     subtest {
         temp %env = %env;
