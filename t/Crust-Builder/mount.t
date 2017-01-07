@@ -2,6 +2,7 @@ use v6;
 use Test;
 use Crust::Builder;
 use Crust::Test;
+use HTTP::Request;
 
 subtest {
     my $app = sub ($env) {
