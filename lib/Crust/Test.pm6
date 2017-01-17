@@ -9,9 +9,14 @@ $Impl ||= %*ENV<CRUST_TEST_IMPL> || "MockHTTP";
 # This is workaround for the issue. We should remove following line before christmas.
 use Crust::Test::MockHTTP;
 
+use MONKEY-SEE-NO-EVAL;
+
 method create(Crust::Test:U: Callable $app, *@args) {
     my $subclass = "Crust::Test::$Impl";
-    require ::($subclass);
+
+    # FIXME: workaround for Bug RT #130535
+    # ref: https://github.com/tokuhirom/p6-Crust/pull/86
+    EVAL "use $subclass";
 
     ::($subclass).new(:$app); # @args
 }
