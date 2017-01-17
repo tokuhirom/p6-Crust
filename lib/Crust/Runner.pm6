@@ -76,7 +76,9 @@ method !setup() {
     CompUnit::RepositoryRegistry.use-repository(CompUnit::RepositoryRegistry.repository-for-spec($_))
         for @!inc;
     for @!modules {
-        require ::($_)
+        # FIXME: workaround for Bug RT #130535
+        # ref: https://github.com/tokuhirom/p6-Crust/pull/86
+        EVAL "use $_";
     }
 }
 
