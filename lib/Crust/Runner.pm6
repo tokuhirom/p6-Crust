@@ -112,7 +112,8 @@ multi method run() {
     }
 
     my $handler = "Crust::Handler::{$!server}";
-    require ::($handler);
+    # FIXME: workaround for Bug RT #130535
+    EVAL "use $handler";
     my $httpd = ::($handler).new(|%!options);
     $httpd.run(&app);
 }
