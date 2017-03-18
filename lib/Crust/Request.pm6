@@ -164,6 +164,7 @@ method !parse-multipart-parser(Blob $boundary) {
                             filename => %opts<filename>,
                             headers  => $headers,
                             path     => $tempfilepath.IO,
+                            fh       => $tempfilefh,
                         )
                     );
                 } else {
