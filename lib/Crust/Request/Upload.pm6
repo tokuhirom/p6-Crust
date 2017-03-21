@@ -5,6 +5,9 @@ unit class Crust::Request::Upload;
 has Str $.filename;
 has $.headers;
 has IO::Path $.path;
+has IO::Handle $!fh;
+
+submethod BUILD(:$!filename, :$!headers, :$!path, :$!fh) {}
 
 =begin pod
 
