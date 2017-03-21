@@ -24,7 +24,7 @@ sub make-check-combined-logs($io) {
             return;
         }
         ok($v > 0);
-        note "# " ~ $s;
+        note "# " ~ $s if %*ENV<TEST_VERBOSE>;
     }
 }
 
