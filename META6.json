@@ -2,6 +2,7 @@
   "name" : "Crust",
   "source-url" : "git://github.com/tokuhirom/p6-Crust.git",
   "perl" : "6",
+  "license" : "Artistic-2.0",
   "build-depends" : [ ],
   "provides" : {
     "Crust::Utils" : "lib/Crust/Utils.pm6",
