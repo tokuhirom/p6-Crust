@@ -62,7 +62,7 @@ method serve-dir(Hash $env, Str $dir) {
     my Str $files;
     $files ~= sprintf($dir_file, '..', '..', '', '', '');
     for $dir.IO.dir -> $file {
-        my $ct = $file.d ?? '' !! Crust::MIME.mime-type($file.abspath) || 'text/plain';
+        my $ct = $file.d ?? '' !! Crust::MIME.mime-type($file.absolute) || 'text/plain';
         my $size = $file.d ?? '' !! $file.s;
         my $name = encode-html($file.basename);
         $files ~= sprintf($dir_file, $name, $name, $size, $ct, DateTime.new($file.modified));
