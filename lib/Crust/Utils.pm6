@@ -49,7 +49,7 @@ sub content-length($body) is export {
         }
         return $cl;
     } elsif $body.isa(IO::Handle) {
-        return $body.s - $body.tell;
+        return $body.path.s - $body.tell;
     }
 
     return Nil;
