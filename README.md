@@ -8,12 +8,12 @@ Crust - Perl6 Superglue for Web frameworks and Web Servers
 DESCRIPTION
 ===========
 
-Crust is a set of tools for using the PSGI stack. It contains
+Crust is a set of tools for using the P6W stack. It contains
 middleware components(TBI), and utilities for Web application
 frameworks. Crust is like Perl5's Plack, Ruby's Rack, Python's Paste
 for WSGI.
 
-See [PSGI](PSGI) for the PSGI specification.
+See [P6W](https://github.com/zostay/P6W) for the P6W (former known as PSGI) specification.
 
 MODULES AND UTILITIES
 =====================
@@ -39,7 +39,7 @@ exactly the same as P6SGI applications.
 Crust::Request, Crust::Response
 -------------------------------
 
-Crust::Request gives you a nice wrapper API around PSGI $env hash to
+Crust::Request gives you a nice wrapper API around P6W $env hash to
 get headers, cookies and query parameters much like Apache::Request in
 mod_perl.
 
@@ -49,11 +49,11 @@ reference.
 .p6sgi files
 ------------
 
-A PSGI application is a code reference but it's not easy to pass code
+A P6W application is a code reference but it's not easy to pass code
 reference via the command line or configuration files, so Crust uses a
 convention that you need a file named "app.p6sgi" or similar, which
 would be loaded (via perl6's core function "EVALFILE") to return the
-PSGI application code reference.
+P6W application code reference.
 
     # Hello.p6sgi
     my $app = sub ($env) {
