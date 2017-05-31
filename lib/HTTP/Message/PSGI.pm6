@@ -25,7 +25,7 @@ our sub req-to-psgi($req, *%args) {
         REMOTE_PORT       => 64000.rand.Int + 1000,                   # not in RFC 3875
         REQUEST_URI       => $uri.path_query || '/',                  # not in RFC 3875
         REQUEST_METHOD    => $req.method,
-        'p6w.version'      => [ 1, 1 ],
+        'p6w.version'      => Version.new("0.7.Draft"),
         'p6w.url-scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
         'p6w.input'        => $input,
         'p6w.errors'       => $*ERR,
