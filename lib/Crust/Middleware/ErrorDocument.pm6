@@ -32,7 +32,7 @@ method CALL-ME(%env) {
     }
     if $!sub-request {
         for %headers -> $pair {
-            unless ($pair.key ~~ /^ psgi /) {
+            unless ($pair.key ~~ /^ p6w /) {
                 %headers{'p6wx.errordocument.' ~ $pair.key} = $pair.value;
             }
         }
