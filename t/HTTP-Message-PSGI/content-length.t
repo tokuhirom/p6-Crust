@@ -13,7 +13,7 @@ $req.content = $content.encode;
 my $env = $req.to-psgi;
 
 is $env<CONTENT_LENGTH>, 13;
-my $buf = $env<p6sgi.input>.read(13);
+my $buf = $env<p6w.input>.read(13);
 is $buf, $content.encode;
 
 done-testing;

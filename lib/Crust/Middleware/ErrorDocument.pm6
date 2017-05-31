@@ -33,7 +33,7 @@ method CALL-ME(%env) {
     if $!sub-request {
         for %headers -> $pair {
             unless ($pair.key ~~ /^ psgi /) {
-                %headers{'p6sgix.errordocument.' ~ $pair.key} = $pair.value;
+                %headers{'p6wx.errordocument.' ~ $pair.key} = $pair.value;
             }
         }
         %env<REQUEST_METHOD> = 'GET';

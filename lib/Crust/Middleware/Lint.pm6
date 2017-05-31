@@ -38,7 +38,7 @@ my sub validate-env(%env) {
         die "Invalid SERVER_PROTOCOL: %env<SERVER_PROTOCOL>";
     }
 
-    # TODO validate p6sgi.xxx
+    # TODO validate p6w.xxx
 
     if %env<HTTP_CONTENT_TYPE> {
         die 'HTTP_CONTENT_TYPE should not exist';
@@ -123,7 +123,7 @@ Crust::Middleware::Lint - Validate request and response
 
 Or from crustup
 
-  crustup --lint myapp.p6sgi
+  crustup --lint myapp.p6w
 
 Or use with builder
 

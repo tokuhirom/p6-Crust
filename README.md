@@ -46,33 +46,33 @@ mod_perl.
 Crust::Response does the same to construct the response array
 reference.
 
-.p6sgi files
+.p6w files
 ------------
 
 A P6W application is a code reference but it's not easy to pass code
 reference via the command line or configuration files, so Crust uses a
-convention that you need a file named "app.p6sgi" or similar, which
+convention that you need a file named "app.p6w" or similar, which
 would be loaded (via perl6's core function "EVALFILE") to return the
 P6W application code reference.
 
-    # Hello.p6sgi
+    # Hello.p6w
     my $app = sub ($env) {
         # ...
         return $status, $headers, $body;
     };
 
 If you use a web framework, chances are that they provide a helper
-utility to automatically generate these ".p6sgi" files for you, such
+utility to automatically generate these ".p6w" files for you, such
 as:
 
-    # MyApp.p6sgi
+    # MyApp.p6w
     use MyApp;
     my $app = sub { MyApp->run_psgi(@_) };
 
-It's important that the return value of ".p6sgi" file is the code
-reference. See "eg/" directory for more examples of ".p6sgi" files.
+It's important that the return value of ".p6w" file is the code
+reference. See "eg/" directory for more examples of ".p6w" files.
 
-An Alternative to .p6sgi files
+An Alternative to .p6w files
 ------------------------------
 
 As an alternative to using EVAL, you can take advantage of Perl's
@@ -80,7 +80,7 @@ Callable type which will return a code reference as well, making Crust
 happy.
 
 Here is an example of an implmentation using a Callable class in place
-of any .p6sgi files and having to call a "crustup" script. You can
+of any .p6w files and having to call a "crustup" script. You can
 call this directly from the command line, just like you would
 "crustup".
 

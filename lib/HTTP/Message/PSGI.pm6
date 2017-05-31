@@ -25,15 +25,15 @@ our sub req-to-psgi($req, *%args) {
         REMOTE_PORT       => 64000.rand.Int + 1000,                   # not in RFC 3875
         REQUEST_URI       => $uri.path_query || '/',                  # not in RFC 3875
         REQUEST_METHOD    => $req.method,
-        'p6sgi.version'      => [ 1, 1 ],
-        'p6sgi.url-scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
-        'p6sgi.input'        => $input,
-        'p6sgi.errors'       => $*ERR,
-        'p6sgi.multithread'  => False,
-        'p6sgi.multiprocess' => False,
-        'p6sgi.run_once'     => True,
-        'p6sgi.streaming'    => True,
-        'p6sgi.nonblocking'  => False,
+        'p6w.version'      => [ 1, 1 ],
+        'p6w.url-scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
+        'p6w.input'        => $input,
+        'p6w.errors'       => $*ERR,
+        'p6w.multithread'  => False,
+        'p6w.multiprocess' => False,
+        'p6w.run_once'     => True,
+        'p6w.streaming'    => True,
+        'p6w.nonblocking'  => False,
         |%args,
     };
 
@@ -46,7 +46,7 @@ our sub req-to-psgi($req, *%args) {
         }
     }
     unless $env<CONTENT_LENGTH>:exists {
-        my $len = $env<p6sgi.input>.data.elems;
+        my $len = $env<p6w.input>.data.elems;
         $env<CONTENT_LENGTH> = $len;
     }
 

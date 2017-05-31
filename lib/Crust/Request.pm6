@@ -29,17 +29,17 @@ method path-info()    { $.env<PATH_INFO> }
 method path()         { $.env<PATH_INFO> || '/' }
 method query-string() { $.env<QUERY_STRING> }
 method script-name()  { $.env<SCRIPT_NAME> }
-method scheme()       { $.env<p6sgi.url-scheme> }
+method scheme()       { $.env<p6w.url-scheme> }
 method secure()       { $.scheme eq 'https' }
-method body()         { $.env<p6sgi.input> }
-method input()        { $.env<p6sgi.input> }
+method body()         { $.env<p6w.input> }
+method input()        { $.env<p6w.input> }
 
 method content-length()   { $.env<CONTENT_LENGTH> }
 method content-type()     { $.env<CONTENT_TYPE> }
 
-method session()         { $.env<p6sgix.session> }
-method session-options() { $.env<p6sgix.session.options> }
-method logger()          { $.env<p6sgix.logger> }
+method session()         { $.env<p6wx.session> }
+method session-options() { $.env<p6wx.session.options> }
+method logger()          { $.env<p6wx.logger> }
 
 # TODO cache
 method query-parameters() {
@@ -83,7 +83,7 @@ method header(Str $name) {
 
 method content() {
     # TODO: we should support buffering in Crust layer
-    my $input = $!env<p6sgi.input>;
+    my $input = $!env<p6w.input>;
     $input.seek(0, SeekFromBeginning); # rewind
     my Blob $content = $input.slurp-rest(:bin);
     return $content;
@@ -228,7 +228,7 @@ method uri() {
 }
 
 method !uri-base() {
-    return ($!env<p6sgi.url-scheme> || "http") ~
+    return ($!env<p6w.url-scheme> || "http") ~
         "://" ~
         ($!env<HTTP_HOST> || (($!env<SERVER_NAME> || "") ~ ":" ~ ($!env<SERVER_PORT> || 80))) ~
         ($!env<SCRIPT_NAME> || '/');
@@ -274,15 +274,15 @@ Create new instance of this class by P6SGI's env.
 =head2 C<method path()         { $.env<PATH_INFO> || '/' }>
 =head2 C<method query-string() { $.env<QUERY_STRING> }>
 =head2 C<method script-name()  { $.env<SCRIPT_NAME> }>
-=head2 C<method scheme()       { $.env<p6sgi.url-scheme> }>
+=head2 C<method scheme()       { $.env<p6w.url-scheme> }>
 =head2 C<method secure()       { $.scheme eq 'https' }>
-=head2 C<method body()         { $.env<p6sgi.input> }>
-=head2 C<method input()        { $.env<p6sgi.input> }>
+=head2 C<method body()         { $.env<p6w.input> }>
+=head2 C<method input()        { $.env<p6w.input> }>
 =head2 C<method content-length()   { $.env<CONTENT_LENGTH> }>
 =head2 C<method content-type()     { $.env<CONTENT_TYPE> }>
-=head2 C<method session()         { $.env<p6sgix.session> }>
-=head2 C<method session-options() { $.env<p6sgix.session.options> }>
-=head2 C<method logger()          { $.env<p6sgix.logger> }>
+=head2 C<method session()         { $.env<p6wx.session> }>
+=head2 C<method session-options() { $.env<p6wx.session.options> }>
+=head2 C<method logger()          { $.env<p6wx.logger> }>
 
 Short-hand to access.
 

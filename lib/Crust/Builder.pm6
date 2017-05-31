@@ -125,7 +125,7 @@ Crust::Builder - Utility to enable Crust middlewares
 
 =head1 SYNOPSIS
 
-    # in .p6sgi
+    # in .p6w
     use Crust::Builder;
 
     my $app = sub { ... };
@@ -241,7 +241,7 @@ Note that the C<builder> DSL returns a whole new P6SGI application, which means
 
 =item *
 
-C<builder { ... }> should normally the last statement of a C<.p6sgi>
+C<builder { ... }> should normally the last statement of a C<.p6w>
 file, because the return value of C<builder> is the application that
 is actually executed.
 

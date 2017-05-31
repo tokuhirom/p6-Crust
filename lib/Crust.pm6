@@ -41,29 +41,29 @@ mod_perl.
 
 Crust::Response does the same to construct the response array reference.
 
-=head2 .p6sgi files
+=head2 .p6w files
 
 A PSGI application is a code reference but it's not easy to pass code
 reference via the command line or configuration files, so Crust uses a
-convention that you need a file named "app.p6sgi" or similar, which would
+convention that you need a file named "app.p6w" or similar, which would
 be loaded (via perl6's core function "EVALFILE") to return the PSGI application
 code reference.
 
-    # Hello.p6sgi
+    # Hello.p6w
     my $app = sub ($env) {
         # ...
         return $status, $headers, $body;
     };
 
 If you use a web framework, chances are that they provide a helper utility
-to automatically generate these ".p6sgi" files for you, such as:
+to automatically generate these ".p6w" files for you, such as:
 
-    # MyApp.p6sgi
+    # MyApp.p6w
     use MyApp;
     my $app = sub { MyApp->run_psgi(@_) };
 
-It's important that the return value of ".p6sgi" file is the code
-reference. See "eg/" directory for more examples of ".p6sgi" files.
+It's important that the return value of ".p6w" file is the code
+reference. See "eg/" directory for more examples of ".p6w" files.
 
 =head1 AUTHORS
 
