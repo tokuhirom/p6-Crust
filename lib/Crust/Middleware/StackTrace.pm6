@@ -18,7 +18,7 @@ method CALL-ME(%env) {
                 %env<crust.stacktrace.text> = $text;
                 %env<crust.stacktrace.html> = $html;
 
-                %env<p6w.errors>.print($text) unless $.no-print-errors;
+                %env<p6w.errors>.emit($text) unless $.no-print-errors;
                 if (%env<HTTP_ACCEPT> || '*/*') ~~ /'html'/ {
                     return 500, ['Content-Type' => 'text/html; charset=utf-8'], [ $html ];
                 }

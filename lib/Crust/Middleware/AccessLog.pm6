@@ -44,7 +44,7 @@ method CALL-ME(%env) {
     # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
     my $logger = $.logger;
     if !$logger.defined {
-        $logger = sub ($s) { %env<p6w.errors>.print($s) };
+        $logger = sub ($s) { %env<p6w.errors>.emit($s) };
     }
 
     my $cl = content-length(@res);
