@@ -26,7 +26,7 @@ submethod BUILD(:$!path, :$!root, :$!encoding, :$!content-type, :$!pass-through)
 method CALL-ME(%env) {
     my @res = self!handle-static(%env);
     if @res && ! ($.pass-through && @res[0] == 404) {
-        return @res;
+        return start { @res };
     }
 
     return $.app.(%env);
@@ -51,6 +51,6 @@ method !handle-static(%env) {
     }
 
     temp %env<PATH_INFO> = $path;
-    my @res = $!file.(%env);
+    my @res = await $!file.(%env);
     return @res;
 }

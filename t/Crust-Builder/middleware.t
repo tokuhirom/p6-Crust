@@ -6,7 +6,7 @@ use Crust::Middleware::ErrorDocument;
 use Crust::Middleware::AccessLog;
 
 my $app = sub () {
-    return 500, [], ["OK"];
+    return start { 500, [], ["OK"] };
 }
 
 builder {

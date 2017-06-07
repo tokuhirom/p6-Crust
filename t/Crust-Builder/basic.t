@@ -9,12 +9,14 @@ subtest {
         enable "ContentLength";
         enable sub ($app) {
             return sub (%env) {
-                my @res = $app(%env);
-                @res[1].append("HELLO", "WORLD");
-                return @res;
+                start {
+                    my @res = await $app(%env);
+                    @res[1].append("HELLO", "WORLD");
+                    @res;
+                };
             }
         };
-        sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
+        sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
     }
 
     my $io = IO::Blob.new;
@@ -28,7 +30,7 @@ subtest {
         "p6sgi.errors" => $io,
     );
 
-    my @res = $app(%env);
+    my @res = await $app(%env);
     $io.seek(0, SeekFromBeginning);
     my $s = $io.slurp-rest(:enc<ascii>);
 
@@ -45,12 +47,14 @@ subtest {
             enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, "ContentLength";
             enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, sub ($app) {
                 return sub (%env) {
-                    my @res = $app(%env);
-                    @res[1].append("HELLO", "WORLD");
-                    return @res;
+                    start {
+                        my @res = $app(%env).result;
+                        @res[1].append("HELLO", "WORLD");
+                        @res
+                    };
                 }
             };
-            sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
+            sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
         }
 
         my $io = IO::Blob.new;
@@ -64,7 +68,7 @@ subtest {
             "p6sgi.errors" => $io,
         );
 
-        my @res = $app(%env);
+        my @res = await $app(%env);
         $io.seek(0, SeekFromBeginning);
         my $s = $io.slurp-rest(:enc<ascii>);
 
@@ -80,12 +84,14 @@ subtest {
             enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, "ContentLength";
             enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, sub ($app) {
                 return sub (%env) {
-                    my @res = $app(%env);
-                    @res[1].append("HELLO", "WORLD");
-                    return @res;
+                    start {
+                        my @res = await $app(%env);
+                        @res[1].append("HELLO", "WORLD");
+                        @res;
+                    };
                 }
             };
-            sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
+            sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
         }
 
         my $io = IO::Blob.new;
@@ -99,7 +105,7 @@ subtest {
             "p6sgi.errors" => $io,
         );
 
-        my @res = $app(%env);
+        my @res = await $app(%env);
         $io.seek(0, SeekFromBeginning);
         my $s = $io.slurp-rest(:enc<ascii>);
 

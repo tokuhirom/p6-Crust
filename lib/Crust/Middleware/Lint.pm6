@@ -104,8 +104,12 @@ my sub validate-ret(@ret) {
 
 method CALL-ME(%env) {
     validate-env(%env);
-    my @ret = $.app()(%env);
-    return validate-ret(@ret);
+    my $ret = $.app()(%env);
+    unless $ret.isa(Promise) {
+        die "P6W app's return value must be a Promise: " ~ $ret.WHAT.perl;
+    }
+    my @ret = await $ret;
+    return start { validate-ret(@ret) };
 }
 
 =begin pod

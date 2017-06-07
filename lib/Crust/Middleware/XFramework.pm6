@@ -6,15 +6,17 @@ unit class Crust::Middleware::XFramework is Crust::Middleware;
 has $.framework;
 
 method CALL-ME(%env) {
-    my @ret = $.app()(%env);
+    start {
+        my @ret = await $.app()(%env);
 
-    if $.framework {
-        my %headers = %(@ret[1]);
-        %headers<X-Framework> = $.framework;
-        @ret[1] = [%headers];
-    }
+        if $.framework {
+            my %headers = %(@ret[1]);
+            %headers<X-Framework> = $.framework;
+            @ret[1] = [%headers];
+        }
 
-    return @ret;
+        @ret;
+    };
 }
 
 =begin pod

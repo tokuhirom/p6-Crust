@@ -22,8 +22,8 @@ method new(Callable $app, |opts) {
     callwith($app, |%newopts);
 }
 
-method CALL-ME(%env) {
-    my @ret = $.app()(%env);
+method !call(%env) {
+    my @ret = await $.app()(%env);
 
     my %headers = %(@ret[1]);
     my $path = $!errors{@ret[0].Str};
@@ -42,7 +42,7 @@ method CALL-ME(%env) {
         %env<QUERY_STRING>   = '';
         %env<CONTENT_LENGTH>:delete;
 
-        my @sub_ret = $.app()(%env);
+        my @sub_ret = await $.app()(%env);
         @ret = @sub_ret if @sub_ret[0] == 200;
     } else {
         %headers<Content-Length>:delete;
@@ -57,6 +57,8 @@ method CALL-ME(%env) {
 
     return @ret;
 }
+
+method CALL-ME(%env) { start { self!call(%env) } }
 
 
 =begin pod

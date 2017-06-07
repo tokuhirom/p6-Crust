@@ -5,14 +5,14 @@ use Crust::Test;
 use HTTP::Request;
 
 my $app = Crust::App::URLMap.new;
-$app.map: '/foo', sub ($env) { 200, [], ['hello'] };
-$app.map: '/bar', sub ($env) { 200, [], ['world'] };
-$app.map: 'http://localhost:5000/hello', sub ($env) { 200, [], ['こんにちわ'] };
-$app.map: 'http://127.0.0.1:5000/world', sub ($env) { 200, [], ['世界'] };
+$app.map: '/foo', sub ($env) { start { 200, [], ['hello'] } };
+$app.map: '/bar', sub ($env) { start { 200, [], ['world'] } };
+$app.map: 'http://localhost:5000/hello', sub ($env) { start { 200, [], ['こんにちわ'] } };
+$app.map: 'http://127.0.0.1:5000/world', sub ($env) { start { 200, [], ['世界'] } };
 $app
-  .map('/perl6', sub ($env) { 200, [], ['perl6'] })
-  .map('/perl5', sub ($env) { 200, [], ['perl5'] })
-  .map('/path',  sub ($env) { 200, [], [$env<PATH_INFO>] });
+  .map('/perl6', sub ($env) { start { 200, [], ['perl6'] } })
+  .map('/perl5', sub ($env) { start { 200, [], ['perl5'] } })
+  .map('/path',  sub ($env) { start { 200, [], [$env<PATH_INFO>] } });
 
 my $client = -> $cb {
     my ($req, $res);

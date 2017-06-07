@@ -6,7 +6,7 @@ use HTTP::Request;
 
 subtest {
     my $app = sub ($env) {
-        200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ]
+        start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] }
     };
 
     my $builder = builder {
@@ -14,9 +14,11 @@ subtest {
             enable "ContentLength";
             enable sub ($app) {
                 return sub (%env) {
-                    my @res = $app(%env);
-                    @res[1].append("HELLO", "WORLD");
-                    return @res;
+                    start {
+                        my @res = await $app(%env);
+                        @res[1].append("HELLO", "WORLD");
+                        @res;
+                    };
                 }
             };
             $app;

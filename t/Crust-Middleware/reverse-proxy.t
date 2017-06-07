@@ -43,7 +43,7 @@ sub run(Str $tag, %arg) {
                         }
                     }
 
-                    return 200, ['Content-Type' => 'text/plain'], [ 'OK' ];
+                    return start { 200, ['Content-Type' => 'text/plain'], [ 'OK' ] };
                 }
             );
             $code(%env);
@@ -179,7 +179,7 @@ subtest {
                 my $code = Crust::Middleware::ReverseProxy.new(
                     sub (%env) {
                         my $req = Crust::Request.new(%env);
-                        return 200, ['Content-Type' => 'text/plain'], [ 'OK' ];
+                        return start { 200, ['Content-Type' => 'text/plain'], [ 'OK' ] };
                     },
                 );
                 $code(%env);
@@ -203,7 +203,7 @@ subtest {
                 my $code = Crust::Middleware::ReverseProxy.new(
                     sub (%env) {
                         my $req = Crust::Request.new(%env);
-                        return 200, ['Content-Type' => 'text/plain'], [ 'OK' ];
+                        return start { 200, ['Content-Type' => 'text/plain'], [ 'OK' ] };
                     },
                     ip-pattern => rx{'127.0.0.1'},
                 );
@@ -227,7 +227,7 @@ subtest {
                 my $code = Crust::Middleware::ReverseProxy.new(
                     sub (%env) {
                         my $req = Crust::Request.new(%env);
-                        return 200, ['Content-Type' => 'text/plain'], [ 'OK' ];
+                        return start { 200, ['Content-Type' => 'text/plain'], [ 'OK' ] };
                     },
                     ip-pattern => Nil,
                 );

@@ -5,7 +5,7 @@ use Crust::Middleware::AccessLog;
 use IO::Blob;
 
 my &hello-app = sub (%env) {
-    404, [], ['hello']
+    start { 404, [], ['hello'] }
 }
 
 sub make-check-combined-logs($io) {
@@ -41,7 +41,7 @@ sub runit (&app, &checker, %extra-env?) {
     if %extra-env.defined {
         %env = (|%env, |%extra-env);
     }
-    &app(%env);
+    await &app(%env);
     &checker();
 }
 

@@ -19,10 +19,14 @@ method CALL-ME($env) {
 }
 
 method call(Hash $env) {
-    my ($file, $path-info, $error-res) = $!file || self.locate-file($env);
-    return |$error-res if $error-res;
+    start {
+        sub {
+            my ($file, $path-info, $error-res) = $!file || self.locate-file($env);
+            return |$error-res if $error-res;
 
-    return self.serve-path($env, $file);
+            return self.serve-path($env, $file);
+        }.();
+    };
 }
 
 method locate-file(Hash $env) {

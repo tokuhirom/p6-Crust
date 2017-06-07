@@ -14,7 +14,7 @@ Thread.start({
         port => $port
     );
     $handler.run(-> $env {
-        200, [], ['ok']
+        start { 200, [], ['ok'] }
     });
 });
 
