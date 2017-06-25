@@ -13,7 +13,7 @@ middleware components(TBI), and utilities for Web application
 frameworks. Crust is like Perl5's Plack, Ruby's Rack, Python's Paste
 for WSGI.
 
-See [P6W](https://github.com/zostay/P6W) for the P6W (former known as PSGI) specification.
+See [P6W](https://github.com/zostay/P6W) for the P6W (former known as P6SGI) specification.
 
 MODULES AND UTILITIES
 =====================
@@ -31,10 +31,10 @@ See [Crust::Handler](Crust::Handler) when writing your own adapters.
 Crust::Middleware
 -----------------
 
-P6SGI middleware is a P6SGI application that wraps an existing P6SGI
+P6W middleware is a P6W application that wraps an existing P6W
 application and plays both side of application and servers. From the
 servers the wrapped code reference still looks like and behaves
-exactly the same as P6SGI applications.
+exactly the same as P6W applications.
 
 Crust::Request, Crust::Response
 -------------------------------
@@ -67,7 +67,7 @@ as:
 
     # MyApp.p6w
     use MyApp;
-    my $app = sub { MyApp->run_psgi(@_) };
+    my $app = sub { MyApp->run_p6w(@_) };
 
 It's important that the return value of ".p6w" file is the code
 reference. See "eg/" directory for more examples of ".p6w" files.

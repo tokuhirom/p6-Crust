@@ -255,13 +255,13 @@ Crust::Request - Request object
 
 =head1 DESCRIPTION
 
-PSGI request object
+P6W request object
 
 =head1 METHODS
 
 =head2 C<method new(Hash $env)>
 
-Create new instance of this class by P6SGI's env.
+Create new instance of this class by P6W's env.
 
 =head2 C<method address()      { $.env<REMOTE_ADDR> }>
 =head2 C<method remote-host()  { $.env<REMOTE_HOST> }>

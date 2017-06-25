@@ -9,7 +9,7 @@ use Crust::Middleware::ReverseProxy;
 sub run(Str $tag, %arg) {
     my %input = %arg<input>.lines.map({|.split(rx{':' ' '?}, 2)});
 
-    test-psgi
+    test-p6w
         client => -> $cb {
             my $req = HTTP::Request.new(
                 GET => 'http://example.com/?foo=bar',
@@ -165,7 +165,7 @@ subtest {
     subtest {
         my %input = (x-forwarded-for => q{I'm not a IP address});
 
-        test-psgi
+        test-p6w
             client => -> $cb {
                 my $req = HTTP::Request.new(
                     GET => 'http://example.com/?foo=bar',
@@ -189,7 +189,7 @@ subtest {
     subtest {
         my %input = (x-forwarded-for => '1.1.1.1');
 
-        test-psgi
+        test-p6w
             client => -> $cb {
                 my $req = HTTP::Request.new(
                     GET => 'http://example.com/?foo=bar',
@@ -214,7 +214,7 @@ subtest {
     subtest {
         my %input = (x-forwarded-for => q{I'm not a IP address});
 
-        test-psgi
+        test-p6w
             client => -> $cb {
                 my $req = HTTP::Request.new(
                     GET => 'http://example.com/?foo=bar',

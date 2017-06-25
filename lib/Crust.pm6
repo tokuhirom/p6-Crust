@@ -10,11 +10,11 @@ Crust - Perl6 Superglue for Web frameworks and Web Servers
 
 =head1 DESCRIPTION
 
-Crust is a set of tools for using the PSGI stack. It contains middleware
+Crust is a set of tools for using the P6W stack. It contains middleware
 components(TBI), and utilities for Web application frameworks.
 Crust is like Perl5's Plack, Ruby's Rack, Python's Paste for WSGI.
 
-See L<PSGI> for the PSGI specification.
+See L<P6W> for the P6W specification.
 
 =head1 MODULES AND UTILITIES
 
@@ -28,14 +28,14 @@ See L<Crust::Handler> when writing your own adapters.
 
 =head2 Crust::Middleware
 
-P6SGI middleware is a P6SGI application that wraps an existing P6SGI
+P6W middleware is a P6W application that wraps an existing P6W
 application and plays both side of application and servers. From the
 servers the wrapped code reference still looks like and behaves exactly
-the same as P6SGI applications.
+the same as P6W applications.
 
 =head2 Crust::Request, Crust::Response
 
-Crust::Request gives you a nice wrapper API around PSGI $env hash to get
+Crust::Request gives you a nice wrapper API around P6W $env hash to get
 headers, cookies and query parameters much like Apache::Request in
 mod_perl.
 
@@ -43,10 +43,10 @@ Crust::Response does the same to construct the response array reference.
 
 =head2 .p6w files
 
-A PSGI application is a code reference but it's not easy to pass code
+A P6W application is a code reference but it's not easy to pass code
 reference via the command line or configuration files, so Crust uses a
 convention that you need a file named "app.p6w" or similar, which would
-be loaded (via perl6's core function "EVALFILE") to return the PSGI application
+be loaded (via perl6's core function "EVALFILE") to return the P6W application
 code reference.
 
     # Hello.p6w
@@ -60,7 +60,7 @@ to automatically generate these ".p6w" files for you, such as:
 
     # MyApp.p6w
     use MyApp;
-    my $app = sub { MyApp->run_psgi(@_) };
+    my $app = sub { MyApp->run_p6w(@_) };
 
 It's important that the return value of ".p6w" file is the code
 reference. See "eg/" directory for more examples of ".p6w" files.

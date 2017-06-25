@@ -133,8 +133,8 @@ Or use with builder
 
 Crust::Middleware::Lint is a middleware component to validate request
 and response environment formats. You are strongly suggested to use
-this middleware when you develop a new framework adapter or a new P6SGI
-web server that implements the P6SGI interface.
+this middleware when you develop a new framework adapter or a new P6W
+web server that implements the P6W interface.
 
 This middleware is inspired by L<Plack::Middleware::Lint|https://metacpan.org/pod/Plack::Middleware::Lint> and most of code is taken from that.
 

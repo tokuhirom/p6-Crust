@@ -5,8 +5,8 @@ use Crust::Runner;
 
 # EXPERIMENTAL FEATURE
 # p6w file can detect whether it is invoked by some p6w runner script or not
-# via environment variable P6SGI_CONTAINER
-%*ENV<P6SGI_CONTAINER> = "crust";
+# via environment variable P6W_CONTAINER
+%*ENV<P6W_CONTAINER> = "crust";
 
 my $runner = Crust::Runner.new;
 $runner.parse-options(@*ARGS);
@@ -16,7 +16,7 @@ $runner.run();
 
 =head1 NAME
 
-crustup -  Run PSGI application with Crust handlers
+crustup -  Run P6W application with Crust handlers
 
 =head1 SYNOPSIS
 
@@ -31,7 +31,7 @@ crustup -  Run PSGI application with Crust handlers
 
 =head1 DESCRIPTION
 
-crustup is a command line utility to run PSGI applications from the
+crustup is a command line utility to run P6W applications from the
 command line.
 
 =end pod

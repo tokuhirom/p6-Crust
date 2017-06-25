@@ -47,6 +47,6 @@ my $client = -> $cb {
     is $res.code, 403;
 };
 
-test-psgi $app, $client;
+test-p6w $app, $client;
 
 done-testing;
