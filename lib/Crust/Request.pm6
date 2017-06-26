@@ -207,8 +207,8 @@ method uri() {
     # ? or # so that the URI parser won't be tricked. However we should
     # preserve '/' since encoding them into %2f doesn't make sense.
     # This means when a request like /foo%2fbar comes in, we recognize
-    # it as /foo/bar which is not ideal, but that's how the PSGI PATH_INFO
-    # spec goes and we can't do anything about it. See PSGI::FAQ for details.
+    # it as /foo/bar which is not ideal, but that's how the p6w PATH_INFO
+    # spec goes and we can't do anything about it.
 
     # See RFC 3986 before modifying.
     my $path_escape_class = rx!(<-[/;:@&= A..Z a..z 0..9 \$_.+!*'(),-]>)!;

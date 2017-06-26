@@ -117,10 +117,10 @@ HTTP::Message::P6W - Converts HTTP::Request and HTTP::Response from/to P6W env a
   use HTTP::Request;
 
   my $req = HTTP::Request.new(GET => "http://example.com/foo");
-  my $psgi-env = $req.to-p6w;
+  my $p6w-env = $req.to-p6w;
 
-  my $psgi-res = 200, ['Content-Type' => 'text/plain'], ['ok'];
-  my $res = HTTP::Response.from-p6w(|$psgi-res);
+  my $p6w-res = 200, ['Content-Type' => 'text/plain'], ['ok'];
+  my $res = HTTP::Response.from-p6w(|$p6w-res);
 
 =head1 DESCRIPTION
 
