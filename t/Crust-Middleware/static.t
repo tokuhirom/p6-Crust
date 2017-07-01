@@ -27,7 +27,7 @@ my $app = builder {
     };
 };
 
-test-psgi
+test-p6w
     client => -> $cb {
         my ($req, $res);
 

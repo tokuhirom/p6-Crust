@@ -21,11 +21,11 @@ method create(Crust::Test:U: Callable $app, *@args) {
     ::($subclass).new(:$app); # @args
 }
 
-multi test-psgi(Callable $app, Callable $client) is export {
-    test-psgi(:$app, :$client);
+multi test-p6w(Callable $app, Callable $client) is export {
+    test-p6w(:$app, :$client);
 }
 
-multi test-psgi(Callable :$app!, Callable :$client!) is export {
+multi test-p6w(Callable :$app!, Callable :$client!) is export {
     my $tester = Crust::Test.create($app);
     my $cb = -> $req { $tester.request($req) };
     $client($cb);
@@ -35,7 +35,7 @@ multi test-psgi(Callable :$app!, Callable :$client!) is export {
 
 =head1 NAME
 
-Crust::Test - Test PSGI applications
+Crust::Test - Test P6W applications
 
 =head1 SYNOPSIS
 
@@ -50,7 +50,7 @@ Crust::Test - Test PSGI applications
   is $res.content, "hello".encode;
 
   # Functional, named parameters
-  test-psgi
+  test-p6w
       app => $app,
       client => -> $cb {
           my $req = HTTP::Request.new(GET => "/");
@@ -60,7 +60,7 @@ Crust::Test - Test PSGI applications
   ;
 
   # Functional, potitional parameters
-  test-psgi $app, -> $cb {
+  test-p6w $app, -> $cb {
       my $req = HTTP::Request.new(GET => "/");
       my $res = $cb($req);
       is $res->content, "hello".encode;
@@ -70,8 +70,8 @@ Crust::Test - Test PSGI applications
 
 Crust::Test is a port of perl5 Plack::Test.
 
-Crust::Test is a unified interface to test PSGI applications using
-L<HTTP::Request> and L<HTTP::Response> objects. It also allows you to run PSGI
+Crust::Test is a unified interface to test P6W applications using
+L<HTTP::Request> and L<HTTP::Response> objects. It also allows you to run P6W
 applications in various ways. The default backend is C<Crust::Test::MockHTTP>,
 but you may also use any L<Crust::Handler> implementation to run live HTTP
 requests against a web server.

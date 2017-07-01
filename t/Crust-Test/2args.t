@@ -7,7 +7,7 @@ $Crust::Test::Impl = "MockHTTP";
 
 my $app = { 200, [], [ 'Hello' ] };
 
-test-psgi $app, -> $cb {
+test-p6w $app, -> $cb {
     my $res = $cb(HTTP::Request.new(GET =>"/"));
     is $res.content, "Hello".encode;
 };

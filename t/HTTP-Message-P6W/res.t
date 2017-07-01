@@ -1,6 +1,6 @@
 use v6;
 use Test;
-use HTTP::Message::PSGI;
+use HTTP::Message::P6W;
 use IO::Blob;
 
 subtest {
@@ -9,7 +9,7 @@ subtest {
         ["Content-Length" => 9, 'X-Foo' => "hoge"],
         ["NOT FOUND"],
     ;
-    my $res = HTTP::Response.from-psgi(|@psgi-res);
+    my $res = HTTP::Response.from-p6w(|@psgi-res);
     is $res.code, 404;
     is $res.content, "NOT FOUND".encode('ascii');
     is $res.field('Content-Length'), 9;
@@ -23,7 +23,7 @@ subtest {
         [],
         $io,
     ;
-    my $res = HTTP::Response.from-psgi(|@psgi-res);
+    my $res = HTTP::Response.from-p6w(|@psgi-res);
     is $res.code, 200;
     is $res.content, "hello".encode('utf-8');
 };

@@ -23,6 +23,6 @@ Crust::Handler::HTTP::Server::Tiny - Crust adapter for HTTP::Server::Tiny
 
 =head1 SYNOPSIS
 
-    crustup -s HTTP::Server::Tiny app.p6sgi
+    crustup -s HTTP::Server::Tiny app.p6w
 
 =end pod

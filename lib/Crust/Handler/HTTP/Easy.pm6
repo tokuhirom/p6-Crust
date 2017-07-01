@@ -27,6 +27,6 @@ Crust::Handler::HTTP::Easy - Crust adapter for HTTP::Easy::PSGI
 
 =head1 SYNOPSIS
 
-    crustup -s HTTP::Easy app.p6sgi
+    crustup -s HTTP::Easy app.p6w
 
 =end pod

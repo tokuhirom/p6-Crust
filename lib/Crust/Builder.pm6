@@ -125,7 +125,7 @@ Crust::Builder - Utility to enable Crust middlewares
 
 =head1 SYNOPSIS
 
-    # in .p6sgi
+    # in .p6w
     use Crust::Builder;
 
     my $app = sub { ... };
@@ -185,7 +185,7 @@ code reference.
 
 If the first argument to C<enable> is a code reference, it will be
 passed an C<$app> and should return another code reference
-which is a P6SGI application that consumes C<%env> at runtime. So:
+which is a P6W application that consumes C<%env> at runtime. So:
 
     builder {
         enable sub ($app) {
@@ -237,11 +237,11 @@ line to set the default fallback app.
         mount "/", $app;
     }
 
-Note that the C<builder> DSL returns a whole new P6SGI application, which means
+Note that the C<builder> DSL returns a whole new P6W application, which means
 
 =item *
 
-C<builder { ... }> should normally the last statement of a C<.p6sgi>
+C<builder { ... }> should normally the last statement of a C<.p6w>
 file, because the return value of C<builder> is the application that
 is actually executed.
 
@@ -257,7 +257,7 @@ above):
     }
 
 will locate the C<$app> under C</foo/bar>, since the inner C<builder>
-block puts it under C</bar> and it results in a new P6SGI application
+block puts it under C</bar> and it results in a new P6W application
 which is located under C</foo> because of the outer C<builder> block.
 
 =head1 CONDITIONAL MIDDLEWARE SUPPORT
