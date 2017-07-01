@@ -5,6 +5,8 @@ sub app($env) {
         say 'good bye!';
         exit;
     }
-    return 200, ['Content-Type' => 'text/plain'], ["hello!!!\n"];
+    return start {
+        200, ['Content-Type' => 'text/plain'], ["hello!!!\n"];
+    };
 }
 

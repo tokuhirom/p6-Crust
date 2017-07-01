@@ -52,7 +52,9 @@ code reference.
     # Hello.p6w
     my $app = sub ($env) {
         # ...
-        return $status, $headers, $body;
+        return start {
+            $status, $headers, $body
+        };
     };
 
 If you use a web framework, chances are that they provide a helper utility
@@ -94,7 +96,9 @@ Here is an example of an implmentation using a Callable class in place of any .p
                           '</html>',
                         ];
     
-            return $.status, @.headers, @.body;
+            return start {
+                $.status, @.headers, @.body
+            };
         }
     }
     

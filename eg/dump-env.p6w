@@ -6,5 +6,7 @@ sub app(%env) {
         push @lines, "$key => $value"
     }
     my $content = @lines.join("\n").encode;
-    return 200, ['content-length' => $content.bytes], [$content];
+    return start {
+        200, ['content-length' => $content.bytes], [$content];
+    };
 }

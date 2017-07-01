@@ -17,24 +17,26 @@ END
 
 sub app($env) {
     my $req = Crust::Request.new($env);
-    given $req.path-info {
-        when "/" {
-            my $content = $tmpl.render($req.query-parameters<name> // 'unknown');
-            return 200, [ 'Content-Type' => 'text/html; charset=utf-8' ], [$content];
+    start {
+        given $req.path-info {
+            when "/" {
+                my $content = $tmpl.render($req.query-parameters<name> // 'unknown');
+                200, [ 'Content-Type' => 'text/html; charset=utf-8' ], [$content];
+            }
+            when "/upload" {
+                my $content = $req.uploads<foo>.path.slurp(:bin);
+                $content.perl.say;
+                200,
+                    [
+                            'Content-Type' => 'text/plain',
+                            'content-length' => $content.bytes,
+                    ],
+                    [$content];
+            }
+            default {
+                400, [], ['not found'];
+            }
         }
-        when "/upload" {
-            my $content = $req.uploads<foo>.path.slurp(:bin);
-            $content.perl.say;
-            return 200,
-                [
-                        'Content-Type' => 'text/plain',
-                        'content-length' => $content.bytes,
-                ],
-                [$content];
-        }
-        default {
-            return 400, [], ['not found'];
-        }
-    }
+    };
 }
 

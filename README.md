@@ -42,7 +42,9 @@ A P6W application is a code reference but it's not easy to pass code reference v
     # Hello.p6w
     my $app = sub ($env) {
         # ...
-        return $status, $headers, $body;
+        return start {
+            $status, $headers, $body
+        };
     };
 
 If you use a web framework, chances are that they provide a helper utility to automatically generate these ".p6w" files for you, such as:
@@ -83,7 +85,9 @@ Here is an example of an implmentation using a Callable class in place of any .p
                           '</html>',
                         ];
 
-            return $.status, @.headers, @.body;
+            return start {
+                $.status, @.headers, @.body
+            };
         }
     }
 
