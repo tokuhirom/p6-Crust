@@ -48,7 +48,7 @@ sub runit (&app, &checker, %extra-env?) {
 {
     my $io = IO::Blob.new;
     my &code = Crust::Middleware::AccessLog.new(&hello-app);
-    runit(&code, make-check-combined-logs($io), ("p6sgi.errors" => $io));
+    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
 }
 
 {
@@ -57,7 +57,7 @@ sub runit (&app, &checker, %extra-env?) {
         &hello-app,
         format => "combined",
     );
-    runit(&code, make-check-combined-logs($io), ("p6sgi.errors" => $io));
+    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
 }
 
 {
@@ -66,7 +66,7 @@ sub runit (&app, &checker, %extra-env?) {
         &hello-app,
         format => Nil,
     );
-    runit(&code, make-check-combined-logs($io), ("p6sgi.errors" => $io));
+    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
 }
 
 {
@@ -75,7 +75,7 @@ sub runit (&app, &checker, %extra-env?) {
         &hello-app,
         format => "",
     );
-    runit(&code, make-check-combined-logs($io), ("p6sgi.errors" => $io));
+    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
 }
 
 {

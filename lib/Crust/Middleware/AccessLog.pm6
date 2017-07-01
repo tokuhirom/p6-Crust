@@ -44,7 +44,7 @@ method CALL-ME(%env) {
     # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
     my $logger = $.logger;
     if !$logger.defined {
-        $logger = sub ($s) { %env<p6sgi.errors>.print($s) };
+        $logger = sub ($s) { %env<p6w.errors>.print($s) };
     }
 
     my $cl = content-length(@res);
@@ -104,7 +104,7 @@ generate access_log lines. See more details on perldoc L<Apache::LogFormat::Comp
     enable "AccessLog",
         :logger(-> sub ($s) { $logger->log($s ... ) };
 
-Sets a callback to print log message to. It prints to the C<p6sgi.errors>
+Sets a callback to print log message to. It prints to the C<p6w.errors>
 output stream by default.
 
 =head1 AUTHORS

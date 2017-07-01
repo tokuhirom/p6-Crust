@@ -6,7 +6,7 @@ use Hash::MultiValue;
 
 has $!env = Hash::MultiValue.new;
 
-# $env is PSGI's env header.
+# $env is P6W's env header.
 method new(Hash $env) {
     self.bless()!initialize($env);
 }

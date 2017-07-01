@@ -10,7 +10,7 @@ my $app = -> $env {
 };
 $app = ::('Crust::Middleware::Runtime').new($app);
 
-test-psgi
+test-p6w
     client => -> $cb {
         my $req = HTTP::Request.new(GET => "http://localhost/hello");
         my $res = $cb($req);
@@ -25,7 +25,7 @@ $app = -> $env {
 };
 $app = ::('Crust::Middleware::Runtime').new($app, :header-name<X-RUNTIME-TEST>);
 
-test-psgi
+test-p6w
     client => -> $cb {
         my $req = HTTP::Request.new(GET => "http://localhost/hello");
         my $res = $cb($req);

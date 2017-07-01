@@ -25,7 +25,7 @@ subtest {
         :REQUEST_METHOD<GET>,
         :REQUEST_URI</apache_pb.gif>,
         :SERVER_PROTOCOL<HTTP/1.1>,
-        "p6sgi.errors" => $io,
+        "p6w.errors" => $io,
     );
 
     my @res = $app(%env);
@@ -61,7 +61,7 @@ subtest {
             :REQUEST_METHOD<GET>,
             :REQUEST_URI</apache_pb.gif>,
             :SERVER_PROTOCOL<HTTP/1.1>,
-            "p6sgi.errors" => $io,
+            "p6w.errors" => $io,
         );
 
         my @res = $app(%env);
@@ -96,7 +96,7 @@ subtest {
             :REQUEST_METHOD<GET>,
             :REQUEST_URI</apache_pb.gif>,
             :SERVER_PROTOCOL<HTTP/1.1>,
-            "p6sgi.errors" => $io,
+            "p6w.errors" => $io,
         );
 
         my @res = $app(%env);
