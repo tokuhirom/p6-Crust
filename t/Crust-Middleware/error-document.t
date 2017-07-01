@@ -23,12 +23,12 @@ my %env = (
 subtest {
     my $app = Crust::Middleware::ErrorDocument.new(
         sub (%env) {
-            200, ['Content-Type' => 'text/plain'], ['OK']
+            start { 200, ['Content-Type' => 'text/plain'], ['OK'] }
         },
         500 => "$tempdir/500.html",
         404 => "$tempdir/404.png"
     );
-    my @ret = $app(%env);
+    my @ret = await $app(%env);
 
     is @ret[0], 200;
     is-deeply @ret[1], [:Content-Type('text/plain')];
@@ -38,12 +38,12 @@ subtest {
 subtest {
     my $app = Crust::Middleware::ErrorDocument.new(
         sub (%env) {
-            404, ['Content-Type' => 'text/plain'], ['OK']
+            start { 404, ['Content-Type' => 'text/plain'], ['OK'] }
         },
         500 => "$tempdir/500.html",
         404 => "$tempdir/404.png"
     );
-    my @ret = $app(%env);
+    my @ret = await $app(%env);
 
     is @ret[0], 404;
     is-deeply @ret[1], [:Content-Type('image/png')];
@@ -53,12 +53,12 @@ subtest {
 subtest {
     my $app = Crust::Middleware::ErrorDocument.new(
         sub (%env) {
-            500, ['Content-Type' => 'text/plain'], ['OK']
+            start { 500, ['Content-Type' => 'text/plain'], ['OK'] }
         },
         500 => "$tempdir/500.html",
         404 => "$tempdir/404.png"
     );
-    my @ret = $app(%env);
+    my @ret = await $app(%env);
 
     is @ret[0], 500;
     is-deeply @ret[1], [:Content-Type('text/html')];
@@ -68,13 +68,13 @@ subtest {
 subtest {
     my $app = Crust::Middleware::ErrorDocument.new(
         sub (%env) {
-            500, ['Content-Type' => 'text/plain'], ['OK']
+            start { 500, ['Content-Type' => 'text/plain'], ['OK'] }
         },
         500 => "$tempdir/500.html",
         404 => "$tempdir/404.png",
         :sub-request => True
     );
-    my @ret = $app(%env);
+    my @ret = await $app(%env);
 
     is @ret[0], 500;
     is-deeply @ret[1], ['p6wx.errordocument.Content-Type' => 'text/plain', :Content-Type('text/plain')];

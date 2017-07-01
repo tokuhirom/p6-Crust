@@ -12,13 +12,13 @@ method unauthorized () {
     my $authenticate = q!Basic realm="! ~ ($.realm || "restricted area") ~ q!"!;
     my $body = 'Authorization required';
 
-    return
+    return start {
         401,
         [:Content-Type("text/plain"),
          :Content-Length(content-length($body)),
          :WWW-Authenticate($authenticate)],
         [$body]
-    ;
+    };
 }
 
 method !authenticate($user, $pass, %env) {

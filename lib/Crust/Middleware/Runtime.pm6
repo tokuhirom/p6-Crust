@@ -6,14 +6,16 @@ unit class Crust::Middleware::Runtime is Crust::Middleware;
 has $.header-name = 'X-Runtime';
 
 method CALL-ME(%env) {
-    my $start = now;
-    my @ret = $.app()(%env);
+    start {
+        my $start = now;
+        my @ret = await $.app()(%env);
 
-    my %headers = %(@ret[1]);
-    %headers{$.header-name} = now - $start;
-    @ret[1] = [%headers];
+        my %headers = %(@ret[1]);
+        %headers{$.header-name} = now - $start;
+        @ret[1] = [%headers];
 
-    return @ret;
+        @ret;
+    };
 }
 
 =begin pod

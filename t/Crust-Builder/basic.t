@@ -10,12 +10,14 @@ subtest {
         enable "ContentLength";
         enable sub ($app) {
             return sub (%env) {
-                my @res = $app(%env);
-                @res[1].append("HELLO", "WORLD");
-                return @res;
+                start {
+                    my @res = await $app(%env);
+                    @res[1].append("HELLO", "WORLD");
+                    @res;
+                };
             }
         };
-        sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
+        sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
     }
 
     my $buf = SupplierBuffer.new;
@@ -29,7 +31,9 @@ subtest {
         "p6w.errors" => $buf.supplier,
     );
 
-    my @res = $app(%env);
+    my $promise = $app(%env);
+    isa-ok $promise, Promise;
+    my @res = await $promise;
     my $s = $buf.result;
 
     ok $s.starts-with('127.0.0.1 - - ['), "starts with 127.0.0.1";
@@ -45,12 +49,14 @@ subtest {
             enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, "ContentLength";
             enable-if -> %env { %env<REMOTE_ADDR> eq '127.0.0.1' }, sub ($app) {
                 return sub (%env) {
-                    my @res = $app(%env);
-                    @res[1].append("HELLO", "WORLD");
-                    return @res;
+                    start {
+                        my @res = $app(%env).result;
+                        @res[1].append("HELLO", "WORLD");
+                        @res
+                    };
                 }
             };
-            sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
+            sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
         }
 
         my $buf = SupplierBuffer.new;
@@ -64,7 +70,7 @@ subtest {
             "p6w.errors" => $buf.supplier,
         );
 
-        my @res = $app(%env);
+        my @res = await $app(%env);
         my $s = $buf.result;
 
         ok $s.starts-with('127.0.0.1 - - ['), "starts with 127.0.0.1";
@@ -79,12 +85,14 @@ subtest {
             enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, "ContentLength";
             enable-if -> %env { %env<REMOTE_ADDR> eq '192.168.11.1' }, sub ($app) {
                 return sub (%env) {
-                    my @res = $app(%env);
-                    @res[1].append("HELLO", "WORLD");
-                    return @res;
+                    start {
+                        my @res = await $app(%env);
+                        @res[1].append("HELLO", "WORLD");
+                        @res;
+                    };
                 }
             };
-            sub (%env) { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] };
+            sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
         }
 
         my $buf = SupplierBuffer.new;
@@ -98,7 +106,7 @@ subtest {
             "p6w.errors" => $buf,
         );
 
-        my @res = $app(%env);
+        my @res = await $app(%env);
         my $s = $buf.result;
 
         is $s, '', 'empty logging';

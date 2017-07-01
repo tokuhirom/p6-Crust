@@ -5,20 +5,22 @@ use Crust::Utils;
 unit class Crust::Middleware::ContentLength is Crust::Middleware;
 
 method CALL-ME(%env) {
-    my @ret = $.app()(%env);
+    return start {
+        my @ret = await $.app()(%env);
 
-    my %headers = %(@ret[1]);
-    if (
-        !status-with-no-entity-body(@ret[0]) &&
-        !%headers<Content-Length>.defined &&
-        !%headers<Transfer-Encoding>.defined &&
-        (my $content-length = content-length(@ret[2])).defined
-    ) {
-        %headers<Content-Length> = $content-length;
-    }
-    @ret[1] = [%headers];
+        my %headers = %(@ret[1]);
+        if (
+            !status-with-no-entity-body(@ret[0]) &&
+            !%headers<Content-Length>.defined &&
+            !%headers<Transfer-Encoding>.defined &&
+            (my $content-length = content-length(@ret[2])).defined
+        ) {
+            %headers<Content-Length> = $content-length;
+        }
+        @ret[1] = [%headers];
 
-    return @ret;
+        @ret
+    };
 }
 
 =begin pod

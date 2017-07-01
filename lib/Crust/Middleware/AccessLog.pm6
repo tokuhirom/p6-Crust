@@ -38,21 +38,23 @@ my sub content-length(@res) {
 }
 
 method CALL-ME(%env) {
-    my $t0 = DateTime.now.Instant;
-    my @res = $.app()(%env);
+    start {
+        my $t0 = DateTime.now.Instant;
+        my @res = await $.app()(%env);
 
-    # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
-    my $logger = $.logger;
-    if !$logger.defined {
-        $logger = sub ($s) { %env<p6w.errors>.emit($s) };
-    }
+        # '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"'
+        my $logger = $.logger;
+        if !$logger.defined {
+            $logger = sub ($s) { %env<p6w.errors>.emit($s) };
+        }
 
-    my $cl = content-length(@res);
-    my $now = DateTime.now;
-    my $line = $.formatter().format(%env, @res, $cl, $now.Instant - $t0, $now);
-    $logger($line);
+        my $cl = content-length(@res);
+        my $now = DateTime.now;
+        my $line = $.formatter().format(%env, @res, $cl, $now.Instant - $t0, $now);
+        $logger($line);
 
-    return @res;
+        @res;
+    };
 }
 
 

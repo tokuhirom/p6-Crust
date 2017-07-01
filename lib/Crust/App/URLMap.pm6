@@ -46,13 +46,15 @@ method call(Hash $env) {
 
         $env<PATH_INFO>  = $path;
         $env<SCRIPT_NAME> = $script_name ~~ $loc;
-        my @res = $map<app>($env);
+        my @res = $map<app>($env).result;
         $env<PATH_INFO> = $orig_path_info;
         $env<SCRIPT_NAME> = $orig_script_name;
-        return @res;
+        return start { @res };
     }
 
-    return 404, ['Content-Type' => 'text/plain'], ["Not Found"];
+    return start {
+        404, ['Content-Type' => 'text/plain'], ["Not Found"]
+    };
 }
 
 method to-app() {

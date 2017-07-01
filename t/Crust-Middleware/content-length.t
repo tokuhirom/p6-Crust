@@ -15,14 +15,14 @@ my %env = (
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
         sub (%env) {
-            200, [], [
+            start { 200, [], [
                 'hello',
                 'goodbye',
-            ]
+            ] }
         }
     );
 
-    my @ret = $code(%env);
+    my @ret = await $code(%env);
 
     is @ret[0], 200;
     is-deeply @ret[1], [{Content-Length => 12}];
@@ -31,11 +31,11 @@ subtest {
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
         sub (%env) {
-            200, [], ['hello', 'goodbye']
+            start { 200, [], ['hello', 'goodbye'] }
         }
     );
 
-    my @ret = $code(%env);
+    my @ret = await $code(%env);
 
     is @ret[0], 200;
     is-deeply @ret[1], [{Content-Length => 12}];
@@ -46,14 +46,13 @@ subtest {
 
     my $code = Crust::Middleware::ContentLength.new(
         sub (%env) {
-            200, [], $io,
+            start { 200, [], $io }
         }
     );
 
-    my @ret = $code(%env);
+    my @ret = await $code(%env);
 
     is @ret[0], 200;
-    say @ret[1];
     # is-deeply @ret[1], [{Content-Length => 12}];
 
     $io.close;
@@ -62,11 +61,11 @@ subtest {
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
         sub (%env) {
-            100, [], ['hello', 'goodbye']
+            start { 100, [], ['hello', 'goodbye'] }
         }
     );
 
-    my @ret = $code(%env);
+    my @ret = await $code(%env);
 
     is @ret[0], 100;
     is-deeply @ret[1], [];
@@ -75,11 +74,11 @@ subtest {
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
         sub (%env) {
-            200, [Content-Length => 10000], ['hello', 'goodbye']
+            start { 200, [Content-Length => 10000], ['hello', 'goodbye'] }
         }
     );
 
-    my @ret = $code(%env);
+    my @ret = await $code(%env);
 
     is @ret[0], 200;
     is-deeply @ret[1], [{Content-Length => 10000}];
@@ -88,11 +87,11 @@ subtest {
 subtest {
     my $code = Crust::Middleware::ContentLength.new(
         sub (%env) {
-            200, [Transfer-Encoding => 'chunked'], ['hello', 'goodbye']
+            start { 200, [Transfer-Encoding => 'chunked'], ['hello', 'goodbye'] }
         }
     );
 
-    my @ret = $code(%env);
+    my @ret = await $code(%env);
 
     is @ret[0], 200;
     is-deeply @ret[1], [{Transfer-Encoding => 'chunked'}];
@@ -103,11 +102,11 @@ subtest {
     {
         my $code = Crust::Middleware::ContentLength.new(
              sub (%env) {
-                200, [], Nil
+                start { 200, [], Nil }
             }
         );
 
-        my @ret = $code(%env);
+        my @ret = await $code(%env);
 
         is @ret[0], 200;
         is-deeply @ret[1], [];
@@ -116,11 +115,11 @@ subtest {
     {
         my $code = Crust::Middleware::ContentLength.new(
             sub (%env) {
-                200, [], 42
+                start { 200, [], 42 }
             }
         );
 
-        my @ret = $code(%env);
+        my @ret = await $code(%env);
 
         is @ret[0], 200;
         is-deeply @ret[1], [];

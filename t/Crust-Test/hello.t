@@ -14,7 +14,7 @@ test-p6w
         is $res.code, 200;
     },
     app => -> $env {
-        200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ];
+        start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ] };
     };
 
 done-testing;

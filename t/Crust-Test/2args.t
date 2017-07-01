@@ -5,7 +5,7 @@ use HTTP::Request;
 
 $Crust::Test::Impl = "MockHTTP";
 
-my $app = { 200, [], [ 'Hello' ] };
+my $app = { start { 200, [], [ 'Hello' ] } };
 
 test-p6w $app, -> $cb {
     my $res = $cb(HTTP::Request.new(GET =>"/"));

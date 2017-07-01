@@ -6,7 +6,7 @@ use lib 't/lib/';
 use SupplierBuffer;
 
 my &hello-app = sub (%env) {
-    404, [], ['hello']
+    start { 404, [], ['hello'] }
 }
 
 sub make-check-combined-logs($buf) {
@@ -40,7 +40,7 @@ sub runit (&app, &checker, %extra-env?) {
     if %extra-env.defined {
         %env = (|%env, |%extra-env);
     }
-    &app(%env);
+    await &app(%env);
     &checker();
 }
 

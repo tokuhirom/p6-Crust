@@ -7,27 +7,30 @@ unit class Crust::Middleware::StackTrace is Crust::Middleware;
 has Bool $.no-print-errors = False;
 
 method CALL-ME(%env) {
-    my $ret = sub {
-        return $.app()(%env);
+    start {
+        my @ret = sub {
+            return await $.app()(%env);
 
-        CATCH {
-            my $trace = .backtrace;
-            default {
-                my $text = @$trace.map({ .Str.trim }).join("\n");
-                my $html = $trace.as-html;
-                %env<crust.stacktrace.text> = $text;
-                %env<crust.stacktrace.html> = $html;
+            CATCH {
+                my $trace = .backtrace;
+                default {
+                    my $text = @$trace.map({ .Str.trim }).join("\n");
+                    my $html = $trace.as-html;
+                    %env<crust.stacktrace.text> = $text;
+                    %env<crust.stacktrace.html> = $html;
 
-                %env<p6w.errors>.emit($text) unless $.no-print-errors;
-                if (%env<HTTP_ACCEPT> || '*/*') ~~ /'html'/ {
-                    return 500, ['Content-Type' => 'text/html; charset=utf-8'], [ $html ];
+                    %env<p6w.errors>.emit($text) unless $.no-print-errors;
+                    if (%env<HTTP_ACCEPT> || '*/*') ~~ /'html'/ {
+                        return 500, ['Content-Type' => 'text/html; charset=utf-8'], [ $html ];
+                    }
+                    return 500, ['Content-Type' => 'text/plain; charset=utf-8'], [ $text ];
                 }
-                return 500, ['Content-Type' => 'text/plain; charset=utf-8'], [ $text ];
             }
-        }
-    }();
+        }();
+        @ret.perl.say;
 
-    return $ret;
+        @ret;
+    };
 }
 
 =begin pod

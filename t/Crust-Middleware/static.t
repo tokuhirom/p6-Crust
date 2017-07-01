@@ -23,7 +23,7 @@ my $app = builder {
         root => ".",
         content-type => sub ($file) { "text/x-fooo" };
     -> %env {
-        (200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ]);
+        start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello World' ] };
     };
 };
 
