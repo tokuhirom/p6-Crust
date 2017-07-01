@@ -2,16 +2,16 @@ use v6;
 use Test;
 
 use Crust::Middleware::AccessLog;
-use IO::Blob;
+use lib 't/lib/';
+use SupplierBuffer;
 
 my &hello-app = sub (%env) {
     404, [], ['hello']
 }
 
-sub make-check-combined-logs($io) {
+sub make-check-combined-logs($buf) {
     return sub {
-        $io.seek(0, SeekFromBeginning); # rewind
-        my $s = $io.slurp-rest(:enc<ascii>);
+        my $s = $buf.result();
         if ! ok($s.defined, "\$s is defined") {
             note $s;
             return;
@@ -29,7 +29,6 @@ sub make-check-combined-logs($io) {
 }
 
 sub runit (&app, &checker, %extra-env?) {
-    my $io = IO::Blob.new;
     my %env = (
         :REMOTE_ADDR<127.0.0.1>,
         :HTTP_REFERER<http://www.example.com/start.html>,
@@ -46,46 +45,46 @@ sub runit (&app, &checker, %extra-env?) {
 }
 
 {
-    my $io = IO::Blob.new;
+    my $buf = SupplierBuffer.new;
     my &code = Crust::Middleware::AccessLog.new(&hello-app);
-    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
+    runit(&code, make-check-combined-logs($buf), ("p6w.errors" => $buf.supplier));
 }
 
 {
-    my $io = IO::Blob.new;
+    my $buf = SupplierBuffer.new;
     my &code = Crust::Middleware::AccessLog.new(
         &hello-app,
         format => "combined",
     );
-    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
+    runit(&code, make-check-combined-logs($buf), ("p6w.errors" => $buf.supplier));
 }
 
 {
-    my $io = IO::Blob.new;
+    my $buf = SupplierBuffer.new;
     my &code = Crust::Middleware::AccessLog.new(
         &hello-app,
         format => Nil,
     );
-    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
+    runit(&code, make-check-combined-logs($buf), ("p6w.errors" => $buf.supplier));
 }
 
 {
-    my $io = IO::Blob.new;
+    my $buf = SupplierBuffer.new;
     my &code = Crust::Middleware::AccessLog.new(
         &hello-app,
         format => "",
     );
-    runit(&code, make-check-combined-logs($io), ("p6w.errors" => $io));
+    runit(&code, make-check-combined-logs($buf), ("p6w.errors" => $buf.supplier));
 }
 
 {
-    my $io = IO::Blob.new;
+    my $buf = SupplierBuffer.new;
     my &code = Crust::Middleware::AccessLog.new(
         &hello-app,
         format => Nil,
-        logger => sub { my $s = shift @_; $io.print($s) },
+        logger => sub { my $s = shift @_; $buf.supplier.emit($s) },
     );
-    runit(&code, make-check-combined-logs($io));
+    runit(&code, make-check-combined-logs($buf));
 }
 
 
