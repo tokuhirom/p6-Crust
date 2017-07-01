@@ -7,6 +7,13 @@ use URI::Escape;
 use IO::Blob;
 use URI;
 
+sub supplier-for-io(IO::Handle $io --> Supplier) {
+    my $supplier = Supplier.new;
+    my $supply = $supplier.Supply;
+    $supply.tap(-> $v { $io.say($v) });
+    return $supplier;
+}
+
 our sub req-to-p6w($req, *%args) {
     my $uri = $req.uri;
     my IO::Blob $input .= new(
@@ -28,7 +35,7 @@ our sub req-to-p6w($req, *%args) {
         'p6w.version'      => Version.new("0.7.Draft"),
         'p6w.url-scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
         'p6w.input'        => $input,
-        'p6w.errors'       => $*ERR,
+        'p6w.errors'       => supplier-for-io($*ERR),
         'p6w.multithread'  => False,
         'p6w.multiprocess' => False,
         'p6w.run_once'     => True,
