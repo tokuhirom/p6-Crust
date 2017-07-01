@@ -32,8 +32,8 @@ method !call(%env) {
     }
     if $!sub-request {
         for %headers -> $pair {
-            unless ($pair.key ~~ /^ psgi /) {
-                %headers{'p6sgix.errordocument.' ~ $pair.key} = $pair.value;
+            unless ($pair.key ~~ /^ p6w /) {
+                %headers{'p6wx.errordocument.' ~ $pair.key} = $pair.value;
             }
         }
         %env<REQUEST_METHOD> = 'GET';

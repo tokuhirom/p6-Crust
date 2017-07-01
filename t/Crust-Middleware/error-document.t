@@ -77,7 +77,7 @@ subtest {
     my @ret = await $app(%env);
 
     is @ret[0], 500;
-    is-deeply @ret[1], [:Content-Type('text/plain'), 'p6sgix.errordocument.Content-Type' => 'text/plain'];
+    is-deeply @ret[1], ['p6wx.errordocument.Content-Type' => 'text/plain', :Content-Type('text/plain')];
     isa-ok @ret[2], Array;
 }, 'Sub Request';
 

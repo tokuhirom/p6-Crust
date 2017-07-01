@@ -1,7 +1,8 @@
 use v6;
 use Test;
 use Crust::Builder;
-use IO::Blob;
+use lib 't/lib/';
+use SupplierBuffer;
 
 subtest {
     my $app = builder {
@@ -19,7 +20,7 @@ subtest {
         sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
     }
 
-    my $io = IO::Blob.new;
+    my $buf = SupplierBuffer.new;
 
     my %env = (
         :REMOTE_ADDR<127.0.0.1>,
@@ -27,12 +28,13 @@ subtest {
         :REQUEST_METHOD<GET>,
         :REQUEST_URI</apache_pb.gif>,
         :SERVER_PROTOCOL<HTTP/1.1>,
-        "p6sgi.errors" => $io,
+        "p6w.errors" => $buf.supplier,
     );
 
-    my @res = await $app(%env);
-    $io.seek(0, SeekFromBeginning);
-    my $s = $io.slurp-rest(:enc<ascii>);
+    my $promise = $app(%env);
+    isa-ok $promise, Promise;
+    my @res = await $promise;
+    my $s = $buf.result;
 
     ok $s.starts-with('127.0.0.1 - - ['), "starts with 127.0.0.1";
     is @res[0], 200, "should be 200";
@@ -57,7 +59,7 @@ subtest {
             sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
         }
 
-        my $io = IO::Blob.new;
+        my $buf = SupplierBuffer.new;
 
         my %env = (
             :REMOTE_ADDR<127.0.0.1>,
@@ -65,12 +67,11 @@ subtest {
             :REQUEST_METHOD<GET>,
             :REQUEST_URI</apache_pb.gif>,
             :SERVER_PROTOCOL<HTTP/1.1>,
-            "p6sgi.errors" => $io,
+            "p6w.errors" => $buf.supplier,
         );
 
         my @res = await $app(%env);
-        $io.seek(0, SeekFromBeginning);
-        my $s = $io.slurp-rest(:enc<ascii>);
+        my $s = $buf.result;
 
         ok $s.starts-with('127.0.0.1 - - ['), "starts with 127.0.0.1";
         is @res[0], 200, "should be 200";
@@ -94,7 +95,7 @@ subtest {
             sub (%env) { start { 200, [ 'Content-Type' => 'text/plain' ], [ 'Hello, World' ] } };
         }
 
-        my $io = IO::Blob.new;
+        my $buf = SupplierBuffer.new;
 
         my %env = (
             :REMOTE_ADDR<127.0.0.1>,
@@ -102,12 +103,11 @@ subtest {
             :REQUEST_METHOD<GET>,
             :REQUEST_URI</apache_pb.gif>,
             :SERVER_PROTOCOL<HTTP/1.1>,
-            "p6sgi.errors" => $io,
+            "p6w.errors" => $buf,
         );
 
         my @res = await $app(%env);
-        $io.seek(0, SeekFromBeginning);
-        my $s = $io.slurp-rest(:enc<ascii>);
+        my $s = $buf.result;
 
         is $s, '', 'empty logging';
         is @res[0], 200, "should be 200";

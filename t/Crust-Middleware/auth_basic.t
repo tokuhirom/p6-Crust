@@ -16,7 +16,7 @@ my $app = builder {
     -> %env { start { 200, [:Content-Type('text/plain')], ["Hello {%env<REMOTE_USER>}!"] } }
 };
 
-test-psgi
+test-p6w
     app => $app,
     client => -> $cb {
         my ($req, $res);

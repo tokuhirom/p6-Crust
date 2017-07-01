@@ -29,7 +29,7 @@ subtest {
         };
     };
 
-    test-psgi
+    test-p6w
         client => -> $cb {
             my $req = HTTP::Request.new(
                 GET => '/foo',
@@ -43,7 +43,7 @@ subtest {
         },
         app => $builder;
 
-    test-psgi
+    test-p6w
         client => -> $cb {
             my $req = HTTP::Request.new(
                 GET => '/bar',

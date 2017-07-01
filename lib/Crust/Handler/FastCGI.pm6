@@ -8,7 +8,7 @@ require FastCGI::NativeCall::PSGI;
 has $!psgi;
 
 method new(*%args) {
-    my $socket = %args<socket> // %*ENV<FCGI_SOCKET> // '/var/www/run/p6sgi-fcgi.sock';
+    my $socket = %args<socket> // %*ENV<FCGI_SOCKET> // '/var/www/run/p6w-fcgi.sock';
     my $backlog = %args<backlog> // %*ENV<FCGI_BACKLOG> // 5;
     self.bless()!initialize(:$socket, :$backlog);
 }
@@ -35,6 +35,6 @@ Crust::Handler::FastCGI - Crust adapter for FastCGI::NativeCall::PSGI
     crustup \
         -s FastCGI -MFastCGI::NativeCall -MFastCGI::NativeCall::PSGI \
         [--socket /PATH/TO/APP.SOCK] [--backlog INT] \
-        app.p6sgi
+        app.p6w
 
 =end pod

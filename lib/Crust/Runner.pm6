@@ -90,7 +90,7 @@ method !locate-app() {
     } elsif @!args.elems > 0 {
         EVALFILE(@!args.shift)
     } else {
-        EVALFILE('app.p6sgi')
+        EVALFILE('app.p6w')
     }
 }
 

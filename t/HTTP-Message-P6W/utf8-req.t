@@ -1,7 +1,7 @@
 use v6;
 use Test;
 use HTTP::Request;
-use HTTP::Message::PSGI;
+use HTTP::Message::P6W;
 use URI::Escape;
 
 BEGIN {
@@ -18,7 +18,7 @@ my @paths =
 
 for @paths -> $raw, $encoded {
     my $req = HTTP::Request.new(GET => "http://localhost/" ~ $raw);
-    my $env = $req.to-psgi;
+    my $env = $req.to-p6w;
     is $env<REQUEST_URI>, "/$encoded";
     is $env<PATH_INFO>, uri_unescape("/$encoded");
 }

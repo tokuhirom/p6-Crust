@@ -95,7 +95,7 @@ Crust::Middleware::Auth::Basic is a basic authentication handler for Crust.
 
     :authenticator(-> $user, $pass, %env { ... });
 
-A callback function that takes username, password and PSGI environment
+A callback function that takes username, password and P6W environment
 supplied and returns whether the authentication succeeds. Required.
 
 Authenticator can also be an object that responds to C<authenticate>
@@ -108,15 +108,15 @@ Realm name to display in the basic authentication dialog. Defaults to I<restrict
 =head1 LIMITATIONS
 
 This middleware expects that the application has a full access to the
-headers sent by clients in PSGI environment. That is normally the case
-with standalone P6SGI web servers .
+headers sent by clients in P6W environment. That is normally the case
+with standalone P6W web servers .
 
 However, in a web server configuration where you can't achieve this
 (i.e. using your application via Apache's mod_cgi), this middleware
 does not work since your application can't know the value of
 C<Authorization:> header.
 
-If you use Apache as a web server and CGI to run your PSGI
+If you use Apache as a web server and CGI to run your P6W
 application, you can either a) compile Apache with
 C<-DSECURITY_HOLE_PASS_AUTHORIZATION> option, or b) use mod_rewrite to
 pass the Authorization header to the application with the rewrite rule

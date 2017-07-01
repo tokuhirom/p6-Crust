@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Crust::Handler - Connects P6SGI applications and Web servers
+Crust::Handler - Connects P6W applications and Web servers
 
 =head1 SYNOPSIS
 
@@ -18,12 +18,12 @@ Crust::Handler - Connects P6SGI applications and Web servers
     }
 
     # then from command line
-    crustup -s AwesomeWebServer -a app.p6sgi
+    crustup -s AwesomeWebServer -a app.p6w
 
 
 =head1 DESCRIPTION
 
-Crust::Handler defines an adapter (connector) interface to adapt L<crustup> and L<Crust::Runner> to various PSGI web servers, such as FCGI and Standalone for HTTP::Server::PSGI.
+Crust::Handler defines an adapter (connector) interface to adapt L<crustup> and L<Crust::Runner> to various P6W web servers, such as FCGI and Standalone for HTTP::Server::PSGI.
 
 It is an empty class, and as long as they implement the methods defined as an Server adapter interface, they do not need to inherit Crust::Handler.
 

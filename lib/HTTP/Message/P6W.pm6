@@ -1,5 +1,5 @@
 use v6;
-unit class HTTP::Message::PSGI;
+unit class HTTP::Message::P6W;
 
 use HTTP::Response;
 use HTTP::Request;
@@ -7,7 +7,14 @@ use URI::Escape;
 use IO::Blob;
 use URI;
 
-our sub req-to-psgi($req, *%args) {
+sub supplier-for-io(IO::Handle $io --> Supplier) {
+    my $supplier = Supplier.new;
+    my $supply = $supplier.Supply;
+    $supply.tap(-> $v { $io.say($v) });
+    return $supplier;
+}
+
+our sub req-to-p6w($req, *%args) {
     my $uri = $req.uri;
     my IO::Blob $input .= new(
         ( $req.content ~~ Str ?? $req.content.encode !! $req.content ) || "".encode
@@ -25,15 +32,15 @@ our sub req-to-psgi($req, *%args) {
         REMOTE_PORT       => 64000.rand.Int + 1000,                   # not in RFC 3875
         REQUEST_URI       => $uri.path_query || '/',                  # not in RFC 3875
         REQUEST_METHOD    => $req.method,
-        'p6sgi.version'      => [ 1, 1 ],
-        'p6sgi.url-scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
-        'p6sgi.input'        => $input,
-        'p6sgi.errors'       => $*ERR,
-        'p6sgi.multithread'  => False,
-        'p6sgi.multiprocess' => False,
-        'p6sgi.run_once'     => True,
-        'p6sgi.streaming'    => True,
-        'p6sgi.nonblocking'  => False,
+        'p6w.version'      => Version.new("0.7.Draft"),
+        'p6w.url-scheme'   => $uri.scheme eq 'https' ?? 'https' !! 'http',
+        'p6w.input'        => $input,
+        'p6w.errors'       => supplier-for-io($*ERR),
+        'p6w.multithread'  => False,
+        'p6w.multiprocess' => False,
+        'p6w.run_once'     => True,
+        'p6w.streaming'    => True,
+        'p6w.nonblocking'  => False,
         |%args,
     };
 
@@ -46,7 +53,7 @@ our sub req-to-psgi($req, *%args) {
         }
     }
     unless $env<CONTENT_LENGTH>:exists {
-        my $len = $env<p6sgi.input>.data.elems;
+        my $len = $env<p6w.input>.data.elems;
         $env<CONTENT_LENGTH> = $len;
     }
 
@@ -63,7 +70,7 @@ our sub req-to-psgi($req, *%args) {
     return $env;
 }
 
-our sub res-from-psgi(Int $status, Array $headers, $body) {
+our sub res-from-p6w(Int $status, Array $headers, $body) {
     my $res = HTTP::Response.new($status);
     my @http-headers;
     for @($headers) -> $header {
@@ -95,13 +102,13 @@ our sub res-from-psgi(Int $status, Array $headers, $body) {
 BEGIN {
     # https://rt.perl.org/Public/Bug/Display.html?id=126341
     # per above ticket, add_method must be inside a BEGIN block
-    HTTP::Request.^add_method: 'to-psgi', method (HTTP::Request:D:) {
-        req-to-psgi(self);
+    HTTP::Request.^add_method: 'to-p6w', method (HTTP::Request:D:) {
+        req-to-p6w(self);
     };
 
-    HTTP::Response.^add_method: 'from-psgi', method (
+    HTTP::Response.^add_method: 'from-p6w', method (
         HTTP::Response:U: Int $status, Array $headers, $body) {
-        res-from-psgi($status, $headers, $body);
+        res-from-p6w($status, $headers, $body);
     };
 }
 
@@ -109,25 +116,25 @@ BEGIN {
 
 =head1 NAME
 
-HTTP::Message::PSGI - Converts HTTP::Request and HTTP::Response from/to PSGI env and response
+HTTP::Message::P6W - Converts HTTP::Request and HTTP::Response from/to P6W env and response
 
 =head1 SYNOPSIS
 
-  use HTTP::Message::PSGI;
+  use HTTP::Message::P6W;
   use HTTP::Request;
 
   my $req = HTTP::Request.new(GET => "http://example.com/foo");
-  my $psgi-env = $req.to-psgi;
+  my $p6w-env = $req.to-p6w;
 
-  my $psgi-res = 200, ['Content-Type' => 'text/plain'], ['ok'];
-  my $res = HTTP::Response.from-psgi(|$psgi-res);
+  my $p6w-res = 200, ['Content-Type' => 'text/plain'], ['ok'];
+  my $res = HTTP::Response.from-p6w(|$p6w-res);
 
 =head1 DESCRIPTION
 
-HTTP::Message::PSGI is perl6 port of perl5 HTTP::Message::PSGI.
+HTTP::Message::P6W is perl6 port of perl5 HTTP::Message::PSGI.
 
-HTTP::Message::PSGI gives you convenient methods to convert an L<HTTP::Request>
-object to a PSGI env hash and convert a PSGI response arrayref to
+HTTP::Message::P6W gives you convenient methods to convert an L<HTTP::Request>
+object to a P6W env hash and convert a P6W response arrayref to
 a L<HTTP::Response> object.
 
 =head1 AUTHOR
