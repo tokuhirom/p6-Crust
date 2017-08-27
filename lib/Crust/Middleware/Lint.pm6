@@ -64,10 +64,10 @@ my sub validate-ret(@ret) {
     my $copy = @ret[1];
 
     {
-        $copy.pairup();
+        $copy>>.pairup();
         CATCH {
             default {
-                die 'The number of response headers needs to be even, not odd(', $copy, ')';
+                die 'The number of response headers needs to be even, not odd(', $copy, ' )';
             }
         }
     }
