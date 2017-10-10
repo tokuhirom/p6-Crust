@@ -2,20 +2,31 @@ use v6;
 
 unit class Crust::Handler::FastCGI;
 
-require FastCGI::NativeCall;
 require FastCGI::NativeCall::PSGI;
 
 has $!psgi;
 
-method new(*%args) {
-    my $socket = %args<socket> // %*ENV<FCGI_SOCKET> // '/var/www/run/p6w-fcgi.sock';
-    my $backlog = %args<backlog> // %*ENV<FCGI_BACKLOG> // 5;
-    self.bless()!initialize(:$socket, :$backlog);
+proto method new(|c) { * }
+
+multi method new(Int:D :$sock!) {
+    self.bless()!initialize(:$sock);
 }
 
-method !initialize(:$socket, :$backlog) {
-    my $sock = &::("FastCGI::NativeCall::OpenSocket")($socket, $backlog);
-    $!psgi = ::("FastCGI::NativeCall::PSGI").new(::("FastCGI::NativeCall").new($sock));
+multi method new(*%args) {
+    my $path = %args<path> // %args<socket> // %*ENV<FCGI_SOCKET> // '/var/www/run/p6w-fcgi.sock';
+    my $backlog = %args<backlog> // %*ENV<FCGI_BACKLOG> // 5;
+    self.bless()!initialize(:$path, :$backlog);
+}
+
+method !initialize(:$path,:$backlog, :$sock) {
+    $!psgi = do {
+        if $sock.defined {
+            ::("FastCGI::NativeCall::PSGI").new(:$sock);
+        }
+        else {
+            ::("FastCGI::NativeCall::PSGI").new(:$path, :$backlog);
+        }
+    };
     self;
 }
 
@@ -33,7 +44,7 @@ Crust::Handler::FastCGI - Crust adapter for FastCGI::NativeCall::PSGI
 =head1 SYNOPSIS
 
     crustup \
-        -s FastCGI -MFastCGI::NativeCall -MFastCGI::NativeCall::PSGI \
+        -s FastCGI -MFastCGI::NativeCall::PSGI \
         [--socket /PATH/TO/APP.SOCK] [--backlog INT] \
         app.p6w
 
