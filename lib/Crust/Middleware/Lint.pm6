@@ -60,11 +60,10 @@ my sub validate-ret(@ret) {
     unless @ret[1].isa(List) {
         die "Headers needs to be an list: @ret[1]";
     }
-
     my $copy = @ret[1];
-
     {
-        $copy.pairup();
+	our %this-copy = $copy;
+        %this-copy.pairup();
         CATCH {
             default {
                 die 'The number of response headers needs to be even, not odd(', $copy, ')';
