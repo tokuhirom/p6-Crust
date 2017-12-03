@@ -1,3 +1,2 @@
 /blib/
-/lib/.precomp/
-/t/lib/.precomp/
+**/.precomp/
