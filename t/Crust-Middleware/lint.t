@@ -111,7 +111,7 @@ subtest {
             }
         );
         lives-ok({await $code(%env)});
-    }, 'Should works fine';
+    }, 'Should work fine';
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
@@ -125,7 +125,7 @@ subtest {
             sub (%env) { start { 'status!!', [], ['hello'] } }
         );
         dies-ok({await $code(%env)});
-    }, 'Should die because response has not numerical status code';
+    }, 'Should die because response has not got a numerical status code';
 
     subtest {
         my $code = Crust::Middleware::Lint.new(
