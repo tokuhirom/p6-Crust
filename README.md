@@ -110,6 +110,25 @@ AUTHORS
 
   * fayland
 
+INSTALL AND TEST
+================
+
+Install dependencies with 
+
+    zef install --deps-only .
+	
+And then test with
+
+    prove -Ilib --exec "perl6 -Ilib" -r t
+	
+(provided `prove` is installed via Perl5's `Test::Harness`)
+
+Or better
+
+    zef test .
+	
+(this will use available test facilities, including the one above)
+
 COPYRIGHT AND LICENSE
 =====================
 
