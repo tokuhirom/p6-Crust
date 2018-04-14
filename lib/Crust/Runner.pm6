@@ -37,6 +37,9 @@ method parse-options(@args) {
         .parse(@args);
 
     if $version {
+        my \CUDS := CompUnit::DependencySpecification;
+        my $comp_unit = $*REPO.resolve( CUDS.new(:short-name($?PACKAGE.^name)) );
+        say "Crust version {$comp_unit.distribution.meta<ver>} running under";
         say "perl6 version {$*PERL.compiler.version} built on {$*VM.name} version {$*VM.version}";
         # TODO: show crust's version. but I don't know how to get it.
         exit 1;
