@@ -57,5 +57,5 @@
   "source-url" : "git://github.com/tokuhirom/p6-Crust.git",
   "tags" : [ ],
   "test-depends" : [ ],
-  "version" : "0.0.1"
+  "version" : "0.0.1.a"
 }

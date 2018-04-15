@@ -39,9 +39,21 @@ method parse-options(@args) {
     if $version {
         my \CUDS := CompUnit::DependencySpecification;
         my $comp_unit = $*REPO.resolve( CUDS.new(:short-name($?PACKAGE.^name)) );
-        say "Crust version {$comp_unit.distribution.meta<ver>} running under";
+        my $version =
+        try {
+            CATCH {
+                when X::AdHoc { .throw unless .payload ~~ /Distribution/; };
+            }
+            # This works for installed distributions, but not local via PERL6LIB, e.g.
+            $comp_unit.distribution.meta<ver>;
+        } // try {
+            # This may work for loading the package via PERL6LIB
+            Rakudo::Internals::JSON.from-json(
+                $comp_unit.repo.prefix.parent.add('META6.json').slurp
+            )<version>;
+        }
+        say "Crust version $version running under" if $version;
         say "perl6 version {$*PERL.compiler.version} built on {$*VM.name} version {$*VM.version}";
-        # TODO: show crust's version. but I don't know how to get it.
         exit 1;
     }
 
