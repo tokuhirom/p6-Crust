@@ -27,13 +27,15 @@ method parse-options(@args) {
     my Bool $version;
 
     @args = Getopt::Tiny.new(:pass-through)
-        .str( 'e', Nil,         { $!eval      =   $^a })
-        .str( 'I', Nil,         { @!inc.push:     $^a })
-        .str( 'M', Nil,         { @!modules.push: $^a })
-        .bool(Nil, 'accesslog', { $!accesslog =   $^a })
-        .bool(Nil, 'lint',      { $!lint      =   $^a })
-        .bool('v', 'version',   { $version    =   $^a })
-        .str( 's', 'server',     { $!server    =   $^a })
+        .str( 'e', Nil,         { $!eval           =  $^a })
+        .str( 'I', Nil,         { @!inc.push:         $^a })
+        .str( 'M', Nil,         { @!modules.push:     $^a })
+        .bool(Nil, 'accesslog', { $!accesslog       = $^a })
+        .bool(Nil, 'lint',      { $!lint            = $^a })
+        .bool('v', 'version',   { $version          = $^a })
+        .str( 'h', 'host',      { %!options{'host'} = $^a })
+        .int( 'p', 'port',      { %!options{'port'} = $^a })
+        .str( 's', 'server',    { $!server          = $^a })
         .parse(@args);
 
     if $version {
@@ -120,4 +122,3 @@ multi method run() {
     my $httpd = ::($handler).new(|%!options);
     $httpd.run(&app);
 }
-
