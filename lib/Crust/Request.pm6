@@ -171,7 +171,7 @@ method !parse-multipart-parser(Blob $boundary) {
                     @parameters.push(%opts<name> => $content.subbuf(0));
                 }
                 $content = Buf.new;
-                undefine $headers;
+                $headers = Nil;
             }
         },
         on_error => sub (Str $err) {
