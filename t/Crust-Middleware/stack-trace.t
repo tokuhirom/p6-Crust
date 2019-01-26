@@ -61,7 +61,7 @@ subtest {
     is $ret[2].elems, 1;
     like $ret[2][0], rx{'Error:' \s+ 'in block  at ' \S+ ' line ' \d+};
 
-    like %env<crust.stacktrace.text>, rx{'in sub  at t/Crust-Middleware/stack-trace.t line 51'};
+    like %env<crust.stacktrace.text>, rx{'in sub  at t/Crust-Middleware/stack-trace.t line ' \d+};
     like %env<crust.stacktrace.html>, rx{'Error:   in block  at ' \S+ ' line ' \d+};
 
     like $buf.result, rx{'in sub  at t/Crust-Middleware/stack-trace.t line ' \d+};
