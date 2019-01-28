@@ -3,7 +3,7 @@ perl6:
   - latest
 install:
   - rakudobrew build-zef
-  - zef install --/test --depsonly .
+  - zef install --/test --test-depends --depsonly .
 script:
   - prove -vr -e 'perl6 -Ilib' t/
 sudo: false
