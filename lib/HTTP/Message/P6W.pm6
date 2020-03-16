@@ -21,7 +21,7 @@ our sub req-to-p6w($req, *%args) {
     );
 
     my $env = {
-        PATH_INFO         => uri_unescape($uri.path || '/'),
+        PATH_INFO         => uri-unescape($uri.path.Str || '/'),
         QUERY_STRING      => $uri.query || '',
         SCRIPT_NAME       => '',
         SERVER_NAME       => $uri.host,
