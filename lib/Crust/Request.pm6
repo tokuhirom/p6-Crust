@@ -83,10 +83,7 @@ method header(Str $name) {
 
 method content() {
     # TODO: we should support buffering in Crust layer
-    my $input = $!env<p6w.input>;
-    $input.seek(0, SeekFromBeginning); # rewind
-    my Blob $content = $input.slurp-rest(:bin);
-    return $content;
+    return await $!env<p6w.input>.Promise;
 }
 
 method user-agent() { self.headers.user-agent }

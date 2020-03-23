@@ -7,7 +7,7 @@ use Crust::Request;
 subtest {
     my $req = Crust::Request.new({
         :REMOTE_ADDR<127.0.0.1>,
-        'p6w.input' => open('t/crust/data/001-content.dat', :bin),
+        'p6w.input' => open('t/crust/data/001-content.dat', :bin).Supply,
         :HTTP_USER_AGENT<hoge>,
         :HTTP_REFERER<http://mixi.jp>,
         :HTTP_CONTENT_ENCODING<gzip>,
@@ -27,11 +27,29 @@ subtest {
     ok $upload2.path.slurp(:bin).decode('ascii') ~~ m:s/Hello World/;
 }, 'multipart/form-data';
 
+# content
+subtest {
+    my $req = Crust::Request.new({
+        :REMOTE_ADDR<127.0.0.1>,
+        'p6w.input' => open('t/crust/data/001-content.dat', :bin).Supply,
+        :HTTP_USER_AGENT<hoge>,
+        :HTTP_REFERER<http://mixi.jp>,
+        :HTTP_CONTENT_ENCODING<gzip>,
+        REQUEST_URI => '/iyan?foo=bar&foo=baz',
+        QUERY_STRING => 'foo=bar&foo=baz',
+        PATH_INFO => '/iyan',
+        HTTP_HOST => 'example.com',
+        CONTENT_TYPE => 'multipart/form-data; boundary="----------0xKhTmLbOuNdArY"',
+    });
+    my $content = $req.content;
+    ok $content.decode('ascii') ~~ m:s/Hello World/;
+}, 'Request#content';
+
 subtest {
     my $req = Crust::Request.new({
         :REMOTE_ADDR<127.0.0.1>,
         :QUERY_STRING<foo=bar&foo=baz>,
-        'p6w.input' => open('t/crust/request.t'),
+        'p6w.input' => open('t/crust/request.t', :bin).Supply,
         :HTTP_USER_AGENT<hoge>,
         :HTTP_REFERER<http://mixi.jp>,
         :HTTP_CONTENT_ENCODING<gzip>,
@@ -57,7 +75,7 @@ subtest {
     my $req = Crust::Request.new({
         :REMOTE_ADDR<127.0.0.1>,
         :QUERY_STRING<foo=bar&foo=baz>,
-        'p6w.input' => open('t/dat/query.txt'),
+        'p6w.input' => open('t/dat/query.txt', :bin).Supply,
         :HTTP_USER_AGENT<hoge>,
         :CONTENT_TYPE<application/x-www-form-urlencoded>
     });
